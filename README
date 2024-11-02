@@ -1,0 +1,9 @@
+Para ejecutar ghost en cada iteración de pruebas
+
+- docker stop ghost_1
+- docker rm ghost_1
+- docker run -d --name ghost_1 -e NODE_ENV=development -e url=http://localhost:3002 -p 3002:2368 ghost
+
+En una sola línea
+
+docker stop ghost_1 && docker rm ghost_1 && docker run -d --name ghost_1 -e NODE_ENV=development -e url=http://localhost:3002 -p 3002:2368 ghost

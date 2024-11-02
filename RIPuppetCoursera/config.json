@@ -1,0 +1,13 @@
+{
+  "url": "http://localhost:3002/ghost",
+  "headless": false,
+  "depthLevels": 2,
+  "inputValues": false,
+  "values": {
+    "blog-title": "Monkey Test Title",
+    "name": "Monkey Test Name",
+    "email": "equipo3@monkeytest.com",
+    "password": "ihEHubpNSTpUQS4#123"
+  },
+  "browsers": ["chromium"]
+}

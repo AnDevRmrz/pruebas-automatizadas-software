@@ -1,0 +1,22 @@
+{
+    "projectId":"TSDL-Monkey-with-cypress",
+    "baseUrl":"http://localhost:3002/ghost",
+    "env":{
+        "appName":"App prueba",
+        "events":1000,
+        "delay":300,
+        "seed":1234,
+        "pctClicks":19,
+        "pctScroll":17,
+        "pctSelectors":16,
+        "pctKeys":16,
+        "pctSpKeys":16,
+        "pctPgNav":16
+    },
+    "integrationFolder": "./cypress/integration/monkey",
+    "pluginsFile": "./cypress/plugins/index.js",
+    "pageLoadTimeout":10000,
+    "defaultCommandTimeout":10000,
+    "testFiles": "monkey.js",
+    "videosFolder":"./results"
+}
