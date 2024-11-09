@@ -13,6 +13,7 @@ Scenario: Delete Tag
   And I click on the row with "new-slug-test" tag slug
   And I wait for 1 seconds
   And I click on the delete tag button
+  And I wait for 1 seconds
   And I confirm the deletion of the tag
   Then I go to tags
   And I wait for 1 seconds
