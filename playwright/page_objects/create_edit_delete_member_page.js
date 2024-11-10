@@ -7,6 +7,7 @@ exports.CreateEditDeleteMemberPage = class CreateEditDeleteMemberPage {
     this.gearButton = scenario.getPage().locator("button[data-test-button=member-actions]");
     this.deleteMemberButton = scenario.getPage().locator("button[data-test-button=delete-member]");
     this.deleteMemberConfirmationButton = scenario.getPage().locator("button[data-test-button=confirm]");
+    this.leaveButton = scenario.getPage().locator("button[data-test-leave-button]");
   }
 
   async saveMember(memberName, memberEmail) {
@@ -25,6 +26,12 @@ exports.CreateEditDeleteMemberPage = class CreateEditDeleteMemberPage {
     await new Promise(r => setTimeout(r, 1000));
     await this.scenario.screenshot();
     await this.deleteMemberConfirmationButton.click();
+    await new Promise(r => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+  }
+
+  async confirmLeavingPage() {
+    await this.leaveButton.click();
     await new Promise(r => setTimeout(r, 1000));
     await this.scenario.screenshot();
   }

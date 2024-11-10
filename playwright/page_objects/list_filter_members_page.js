@@ -8,6 +8,9 @@ exports.ListFilterMembersPage = class ListFilterMembersPage {
     this.newMemberButton = scenario
       .getPage()
       .locator("a[data-test-new-member-button=true]");
+    this.filterMemberButton = scenario.getPage().locator("div[data-test-button=members-filter-actions]");
+    this.filterNameInput = scenario.getPage().locator("input[data-test-input=members-filter-value]");
+    this.applyFilterButton = scenario.getPage().locator("button[data-test-button=members-apply-filter]");
   }
 
   async goToNewMember() {
@@ -35,6 +38,8 @@ exports.ListFilterMembersPage = class ListFilterMembersPage {
     }
 
     element.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
     return new CreateEditDeleteMemberPage(this.scenario); 
   }
 
@@ -65,5 +70,16 @@ exports.ListFilterMembersPage = class ListFilterMembersPage {
     }
 
     return members;
+  }
+
+  async filterMemberByName(memberName) {
+    this.filterMemberButton.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+    await this.filterNameInput.fill(memberName);
+    await this.scenario.screenshot();
+    this.applyFilterButton.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
   }
 };

@@ -15,15 +15,15 @@ const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEma
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
 
-  // Scenario 12
+  // Scenario 11
   await createMember();
-  // Scenario 13
+  // Scenario 12
   await editMember();
-  // Scenario 14
+  // Scenario 13
   await deleteMember();
-  // Scenario 15
+  // Scenario 14
   await createMemberMemberWithInvalidEmail();
-  // Scenario 16
+  // Scenario 15
   await filterMember();
   
   await createTag();
