@@ -1,9 +1,10 @@
 const playwright = require("playwright");
 const { SignUpPage } = require("./page_objects/sign_up_page");
-const { createTag } = require("./test_scenarios/tag");
+const { createTag, editTag, deleteTag } = require("./test_scenarios/tag");
+const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./test_scenarios/settings");
 
 (async () => {
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 500});
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();
 
@@ -14,4 +15,8 @@ const { createTag } = require("./test_scenarios/tag");
   await browser.close();
 
   await createTag();
+  await editTag();
+  await deleteTag();
+  await settingsEditTitleAndDescription();
+  await settingsEditTimezone();
 })();

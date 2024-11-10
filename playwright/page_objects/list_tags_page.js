@@ -1,4 +1,4 @@
-const { CreateEditTag } = require("./create_edit_tag");
+const { CreateEditTag } = require("./create_edit_tag_page");
 
 exports.ListTags = class ListTags {
 
@@ -21,7 +21,7 @@ exports.ListTags = class ListTags {
   async getValueOrEmptyWhenError(tagHtml, selector) {
 
     try {
-        return await tagHtml.locator(selector, { timeout: 500 }).innerText();
+        return await tagHtml.locator(selector, { timeout: 50 }).innerText();
     } catch (e) {
         return "";
     }
@@ -29,7 +29,7 @@ exports.ListTags = class ListTags {
 
   async getListOfTags() {
 
-    var tagsHtml = await this.page.locator("li[class='gh-list-row gh-tags-list-item']").all();    
+    var tagsHtml = await this.page.locator("li[class='gh-list-row gh-tags-list-item']").all();
     var tags = await Promise.all(tagsHtml.map(async (tagHtml) =>  {
 
         let result = { 
@@ -42,9 +42,17 @@ exports.ListTags = class ListTags {
     return tags;
   }
 
+  async goToEditTag(tagSlug) {
+
+    var elements = await this.page.locator(`li[class='gh-list-row gh-tags-list-item'] a[href$='${tagSlug}/']`).all();    
+    await elements[0].click();
+    await new Promise((r) => setTimeout(r, 1000));
+    return new CreateEditTag(this.page);
+  }
+
   async goToNewTag() {
     await this.newTagButton.click();
     await new Promise((r) => setTimeout(r, 1000));
-    return new CreateEditTag(this.page)
+    return new CreateEditTag(this.page);
   }
 };
