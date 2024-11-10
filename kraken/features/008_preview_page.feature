@@ -15,7 +15,7 @@ Scenario: 08 - Preview Page
     And I click on Page settings
     And I wait for 2 seconds
     And I click on view Page
-    And I wait for 2 seconds
+    And I wait for 5 seconds
     Then I check the title on view page
     And I wait for 2 seconds
     And I check the description on view page
