@@ -14,18 +14,18 @@ const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./tes
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
 
-  // Scenario 17
+  // Scenario 16 - Create Tag
   await createTag();
 
-  // Scenario 18
+  // Scenario 17 - Edit Tag
   await editTag();
 
-  // Scenario 19
+  // Scenario 18 - Delete Tag
   await deleteTag();
 
-  // Scenario 20
+  // Scenario 19 - Settings - set title and description
   await settingsEditTitleAndDescription();
 
-  // Scenario 21
+  // Scenario 20 - Settings - set site timezone
   await settingsEditTimezone();
 })();
