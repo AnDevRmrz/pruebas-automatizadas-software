@@ -28,3 +28,5 @@ Scenario: Create Page
     And I wait for 1 seconds
     And I click on close
     And I wait for 1 seconds
+    And I check the title page is visible in list
+    And I wait for 1 seconds
