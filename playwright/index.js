@@ -2,7 +2,7 @@ const playwright = require("playwright");
 const { SignUpPage } = require("./page_objects/sign_up_page");
 const { createTag, editTag, deleteTag } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./test_scenarios/settings");
-const { createPage } = require("./test_scenarios/page");
+const { createPage, editPage} = require("./test_scenarios/page");
 const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEmail, filterMember } = require("./test_scenarios/members");
 
 (async () => {
@@ -18,30 +18,32 @@ const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEma
 
   // Scenario 6
   await createPage();
+  // Scenario 7
+  await editPage()
 
   // Scenario 11
-  await createMember();
+  // await createMember();
   // Scenario 12
-  await editMember();
+  // await editMember();
   // Scenario 13
-  await deleteMember();
+  // await deleteMember();
   // Scenario 14
-  await createMemberMemberWithInvalidEmail();
+  // await createMemberMemberWithInvalidEmail();
   // Scenario 15
-  await filterMember();
+  // await filterMember();
   
   // Scenario 16 - Create Tag
-  await createTag();
+  // await createTag();
 
   // Scenario 17 - Edit Tag
-  await editTag();
+  // await editTag();
 
   // Scenario 18 - Delete Tag
-  await deleteTag();
+  // await deleteTag();
 
   // Scenario 19 - Settings - set title and description
-  await settingsEditTitleAndDescription();
+  // await settingsEditTitleAndDescription();
 
   // Scenario 20 - Settings - set site timezone
-  await settingsEditTimezone();
+  // await settingsEditTimezone();
 })();
