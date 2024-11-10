@@ -1,7 +1,7 @@
 Feature: Post
 
 @user2 @web
-Scenario: Delete post
+Scenario: 02 - Create post
   Given I navigate to page "http://localhost:3002/ghost"
   And I wait for 2 seconds
   When I type email login "alguien@hotmail.com" 
@@ -19,5 +19,4 @@ Scenario: Delete post
   And I click in continue post
   And I click in confirm publish post
   And I wait for 2 seconds
-  And I click in post analytic
-  Then the post title is "Auto post"
+  Then there is a post with title "Auto post"

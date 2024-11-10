@@ -26,6 +26,11 @@ When('I click in publish post', async function () {
     return await element.click();
 });
 
+When('I click in post link', async function () {
+    let element = await this.driver.$('[data-test-link="posts"]');
+    return await element.click();
+});
+
 When('I click in continue post', async function () {
     let element = await this.driver.$("button[class='gh-btn gh-btn-black gh-btn-large']");
     return await element.click();
@@ -41,8 +46,13 @@ When('I click in post analytic', async function () {
     return await element.click();
 });
 
-When('I click in analytics button and delete post', async function () {
-    let element = await this.driver.$('button[data-test-button="delete-post"]');
+When('I click in close modal', async function () {
+    let element = await this.driver.$('button[data-test-button="close-publish-flow"]');
+    return await element.click();
+});
+
+When('I click in post name', async function () {
+    let element = await this.driver.$('a[class="ember-view permalink gh-list-data gh-post-list-title"]');
     return await element.click();
 });
 
@@ -53,8 +63,17 @@ Then('there is a post with title {string}', async function (postTitle) {
 });
 
 Then('the post title is {string}', async function (postTitle) {
-    let titleElements = await this.driver.$$("h2[class='gh-canvas-title gh-post-title]");
-    let titleValues = await Promise.all(titleElements.map(async (value) => await value.getText()));    
-    assert.equal(titleValues.includes(postTitle), true);
+    let element = await this.driver.$("div[class='flex flex-column flex-grow-1'] h2[class='gh-canvas-title gh-post-title']");
+    let titleElement = await element.getText();
+    assert.equal(titleElement,postTitle);
 });
 
+Then('I click in analytics button and delete post', async function () {
+    let element = await this.driver.$('button[data-test-button="delete-post"]');
+    return await element.click();
+});
+
+Then('I click in update post', async function () {
+    let element = await this.driver.$('[data-test-button="publish-save"]');
+    return await element.click();
+});

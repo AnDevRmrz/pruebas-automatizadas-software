@@ -1,7 +1,7 @@
 Feature: Post
 
 @user2 @web
-Scenario: Delete post
+Scenario: 04 - Edit post
   Given I navigate to page "http://localhost:3002/ghost"
   And I wait for 2 seconds
   When I type email login "alguien@hotmail.com" 
@@ -11,7 +11,6 @@ Scenario: Delete post
   And I click in posts
   And I wait for 2 seconds
   And I click in new post
-  And I wait for 2 seconds
   And I type post title "Auto post"
   And I wait for 2 seconds
   And I type post description "this is a new post"
@@ -22,7 +21,11 @@ Scenario: Delete post
   And I wait for 2 seconds
   And I click in confirm publish post
   And I wait for 2 seconds
-  And I click in post analytic
+  And I click in close modal
   And I wait for 2 seconds
-  And I click in analytics button and delete post
+  And I click in post name
+  And I wait for 2 seconds
+  And I type post description "update post"
+  And I wait for 2 seconds
+  Then I click in update post
   And I wait for 2 seconds
