@@ -1,7 +1,7 @@
 const { ListTags } = require("./list_tags_page");
 const { SettingsPage } = require("./settings_page");
 const { ListFilterMembersPage } = require("./list_filter_members_page");
-const { ListPages } = require("./list_pages");
+const { ListFilterDeletePage } = require("./list_filter_delete_page");
 
 exports.Dashboard = class Dashboard {
   constructor(scenario) {
@@ -36,7 +36,7 @@ exports.Dashboard = class Dashboard {
     await this.pageOption.click();
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
-    return new ListPages(this.scenario);
+    return new ListFilterDeletePage(this.scenario);
   }
 
   async goToMembers() {

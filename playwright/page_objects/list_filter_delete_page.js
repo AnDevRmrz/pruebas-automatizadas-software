@@ -1,7 +1,7 @@
-const { CreateAndFilterPageScenary } = require("./create_filter_page.js");
-const { EditPreviewPageScenary } = require("./edit_preview_page.js");
+const { CreatePagePage } = require("./create_page_page.js");
+const { EditPreviewPagePage } = require("./edit_preview_page_page.js");
 
-class ListPages {
+class ListFilterDeletePage {
     constructor(scenario) {
         this.scenario = scenario;
         this.selectors = {
@@ -14,6 +14,8 @@ class ListPages {
             pageListItem: "li.gh-posts-list-item",
             pageTitle: "h3.gh-content-entry-title",
             pageAttribute: "p.gh-content-entry-status",
+            deleteButton: '[data-test-button="delete"]',
+            confirmDeleteButton: '[data-test-button="confirm"]'
         };
     }
 
@@ -79,7 +81,7 @@ class ListPages {
             await this.scenario.getPage().locator(this.selectors.newPageButton).click();
             await this.waitForLoad();
             await this.scenario.screenshot();
-            return new CreateAndFilterPageScenary(this.scenario);
+            return new CreatePagePage(this.scenario);
         } catch (error) {
             throw new Error(`Failed to navigate to new page: ${error.message}`);
         }
@@ -98,7 +100,7 @@ class ListPages {
           await pageElement.click();
           await this.waitForLoad();
           await this.scenario.screenshot();
-          return new EditPreviewPageScenary(this.scenario);
+          return new EditPreviewPagePage(this.scenario);
       } catch (error) {
           throw new Error(`Failed to navigate to edit page: ${error.message}`);
       }
@@ -159,6 +161,63 @@ class ListPages {
           throw new Error(`Failed to get page attribute: ${error.message}`);
       }
   }
+
+  async verifyPageDeleted(deletedPageTitle) {
+    try {
+        // Esperamos a que la lista de páginas se actualice
+        await this.waitForLoad();
+        
+        // Buscamos la página en la lista actualizada
+        const page = await this.findPageByTitle(deletedPageTitle);
+        
+        // La página no debería existir
+        return page === undefined;
+    } catch (error) {
+        throw new Error(`Failed to verify page deletion: ${error.message}`);
+    }
 }
 
-module.exports = { ListPages };
+async rightClickOnPage(pageTitle) {
+  try {
+      const titleElement = this.scenario.getPage().locator(
+          `${this.selectors.pageTitle}:text-is("${pageTitle}")`
+      );
+      await titleElement.waitFor({ state: 'visible', timeout: 5000 });
+      console.log(`Right clicking on page: ${pageTitle}`);
+      await titleElement.click({ button: 'right' });
+      await this.waitForLoad();
+      await this.scenario.screenshot();
+  } catch (error) {
+      throw new Error(`Failed to right click on page: ${error.message}`);
+  }
+}
+
+async clickDeleteButton() {
+    try {
+        const deleteButton = this.scenario.getPage().locator(this.selectors.deleteButton);
+        await deleteButton.waitFor({ state: 'visible', timeout: 5000 });
+        console.log('Clicking delete button');
+        await deleteButton.click();
+        await this.waitForLoad();
+        await this.scenario.screenshot();
+    } catch (error) {
+        throw new Error(`Failed to click delete button: ${error.message}`);
+    }
+}
+
+async confirmDelete() {
+    try {
+        const confirmButton = this.scenario.getPage().locator(this.selectors.confirmDeleteButton);
+        await confirmButton.waitFor({ state: 'visible', timeout: 5000 });
+        console.log('Confirming deletion');
+        await confirmButton.click();
+        await this.waitForLoad();
+        await this.scenario.screenshot();
+    } catch (error) {
+        throw new Error(`Failed to confirm deletion: ${error.message}`);
+    }
+}
+
+}
+
+module.exports = { ListFilterDeletePage };

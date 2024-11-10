@@ -1,4 +1,4 @@
-exports.CreateAndFilterPageScenary = class CreateAndFilterPageScenary {
+exports.CreatePagePage = class CreatePagePage {
     constructor(scenario) {
         this.scenario = scenario;
         this.selectors = {

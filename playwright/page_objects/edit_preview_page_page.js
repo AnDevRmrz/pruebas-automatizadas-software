@@ -1,4 +1,4 @@
-class EditPreviewPageScenary {
+class EditPreviewPagePage {
     constructor(scenario) {
         this.scenario = scenario;
         this.selectors = {
@@ -136,13 +136,14 @@ class EditPreviewPageScenary {
             
             await this.scenario.screenshot();
     
-            return new EditPreviewPageScenary(this.scenario);
+            return new EditPreviewPagePage(this.scenario);
         } catch (error) {
             console.error("Error al intentar ver la página:", error);
             throw new Error(`No se pudo ver la página: ${error.message}`);
         }
     }
+
     
 }
 
-module.exports = { EditPreviewPageScenary };
+module.exports = { EditPreviewPagePage };

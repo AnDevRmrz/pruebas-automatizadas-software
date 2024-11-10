@@ -22,16 +22,16 @@ async function createPage() {
     const dashboard = await signInPage.signIn(email, password);
     
     // When
-    const listPagesPage = await dashboard.goToPages();
-    const createPagePage = await listPagesPage.goToNewPage();
+    const listFilterDeletePagePage = await dashboard.goToPages();
+    const createPagePage = await listFilterDeletePagePage.goToNewPage();
     await createPagePage.createPage(pageTitle, pageDescription,false);
     
     // Then
     expect(await createPagePage.verifyTitleInModal(pageTitle)).toBeTruthy();
     expect(await createPagePage.verifyDescriptionInModal(pageDescription)).toBeTruthy();
     await createPagePage.closePublishFlow();
-    await listPagesPage.goto();
-    expect(await listPagesPage.verifyTitleInList(pageTitle)).toBeTruthy();
+    await listFilterDeletePagePage.goto();
+    expect(await listFilterDeletePagePage.verifyTitleInList(pageTitle)).toBeTruthy();
     
   
     await browser.close();
@@ -58,15 +58,15 @@ async function createPage() {
     const dashboard = await signInPage.signIn(email, password);
     
     // When
-    const listPagesPage = await dashboard.goToPages();
-    const editPagePage = await listPagesPage.goToEditPage("Title");
+    const listFilterDeletePagePage = await dashboard.goToPages();
+    const editPagePage = await listFilterDeletePagePage.goToEditPage("Title");
     await editPagePage.changeTitle(newTitle);
     await editPagePage.changeDescription(newDescription);
     await editPagePage.clickUpdate();
     await editPagePage.goBack();
     
     // Then
-    expect(await listPagesPage.verifyTitleChanged(newTitle)).toBeTruthy();
+    expect(await listFilterDeletePagePage.verifyTitleChanged(newTitle)).toBeTruthy();
     
     await browser.close();
     scenario.successful();
@@ -91,8 +91,8 @@ async function previewPage() {
   const dashboard = await signInPage.signIn(email, password);
   
   // When
-  const listPagesPage = await dashboard.goToPages();
-  const editPreviewPagePage = await listPagesPage.goToEditPage("Title changed");
+  const listFilterDeletePagePage = await dashboard.goToPages();
+  const editPreviewPagePage = await listFilterDeletePagePage.goToEditPage("Title changed");
   await editPreviewPagePage.openSettings();
   const previewPage = await editPreviewPagePage.viewPage();
   
@@ -126,16 +126,16 @@ async function filterDraftPages() {
   const signInPage = new SignInPage(scenario);
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
-  const listPagesPage = await dashboard.goToPages();
-  const createPagePage = await listPagesPage.goToNewPage();
+  const listFilterDeletePagePage = await dashboard.goToPages();
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
   await createPagePage.createPage(pageTitle, pageDescription, true);
   await dashboard.goToPages();
 
   // When
-  await listPagesPage.filterByDraft();
+  await listFilterDeletePagePage.filterByDraft();
 
   // Then
-  const pageAttribute = await listPagesPage.getPageAttributeByTitle(draftPageTitle);
+  const pageAttribute = await listFilterDeletePagePage.getPageAttributeByTitle(draftPageTitle);
   expect(pageAttribute).toBe(expectedAttribute);
   await browser.close();
   scenario.successful();
@@ -143,5 +143,40 @@ async function filterDraftPages() {
   
 }
 
+async function deletePage() {
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 500 });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, "010 - Delete Page");
+  scenario.begin();
 
-module.exports = { createPage , editPage, previewPage, filterDraftPages};
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const pageToDelete = "Title changed";  // El título de la página que queremos eliminar
+
+
+    // Given
+    const signInPage = new SignInPage(scenario);
+    await signInPage.goto();
+    const dashboard = await signInPage.signIn(email, password);
+    
+    // When
+    const listFilterDeletePagePage = await dashboard.goToPages();
+        
+    await listFilterDeletePagePage.rightClickOnPage(pageToDelete);
+    await listFilterDeletePagePage.clickDeleteButton();
+    await listFilterDeletePagePage.confirmDelete();
+
+    // Then
+    await listFilterDeletePagePage.goto(); 
+    const isDeleted = await listFilterDeletePagePage.verifyTitleChanged(pageToDelete) === false; // Si no encuentra el título, está eliminado
+    expect(isDeleted).toBeTruthy();
+    
+    await browser.close();
+    scenario.successful();
+
+  
+}
+
+
+module.exports = { createPage , editPage, previewPage, filterDraftPages, deletePage};
