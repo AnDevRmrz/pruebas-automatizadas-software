@@ -1,7 +1,7 @@
 Feature: Page
 
 @user3 @web
-Scenario: Preview Page
+Scenario: 07 - Edit Page
     Given I navigate to page "http://localhost:3002/ghost"
     And I wait for 2 seconds
     When I type email login "alguien@hotmail.com"  
@@ -12,11 +12,13 @@ Scenario: Preview Page
     And I wait for 1 seconds
     And I click on Go to Editor
     And I wait for 1 seconds
-    And I click on Page settings
-    And I wait for 2 seconds
-    And I click on view Page
-    And I wait for 2 seconds
-    Then I check the title on view page
-    And I wait for 2 seconds
-    And I check the description on view page
-    And I wait for 2 seconds
+    And I change the title "Title changed"
+    And I wait for 1 seconds
+    And I change the description "Description changed"
+    And I wait for 1 seconds
+    And I click on Update
+    And I wait for 1 seconds
+    And I click on Go back
+    And I wait for 1 seconds
+    Then I check the Title changed
+    And I wait for 1 seconds
