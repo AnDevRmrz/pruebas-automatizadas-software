@@ -24,7 +24,7 @@ async function createPage() {
     // When
     const listPagesPage = await dashboard.goToPages();
     const createPagePage = await listPagesPage.goToNewPage();
-    await createPagePage.createPage(pageTitle, pageDescription);
+    await createPagePage.createPage(pageTitle, pageDescription,false);
     
     // Then
     expect(await createPagePage.verifyTitleInModal(pageTitle)).toBeTruthy();
@@ -73,8 +73,6 @@ async function createPage() {
     return;
 }
 
-
-
 async function previewPage() {
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 500 });
   const context = await browser.newContext();
@@ -108,4 +106,42 @@ async function previewPage() {
 }
 
 
-module.exports = { createPage , editPage, previewPage};
+async function filterDraftPages() {
+
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 500 });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, "009 - Filter Draft Pages");
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const draftPageTitle = "Title draft";
+  const expectedAttribute = "Draft";
+  const pageTitle = draftPageTitle;
+  const pageDescription = "Description draft";
+
+    
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listPagesPage = await dashboard.goToPages();
+  const createPagePage = await listPagesPage.goToNewPage();
+  await createPagePage.createPage(pageTitle, pageDescription, true);
+  await dashboard.goToPages();
+
+  // When
+  await listPagesPage.filterByDraft();
+
+  // Then
+  const pageAttribute = await listPagesPage.getPageAttributeByTitle(draftPageTitle);
+  expect(pageAttribute).toBe(expectedAttribute);
+  await browser.close();
+  scenario.successful();
+  
+  
+}
+
+
+module.exports = { createPage , editPage, previewPage, filterDraftPages};

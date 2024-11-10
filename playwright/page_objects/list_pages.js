@@ -1,4 +1,4 @@
-const { CreatePageScenary } = require("./create_page.js");
+const { CreateAndFilterPageScenary } = require("./create_filter_page.js");
 const { EditPreviewPageScenary } = require("./edit_preview_page.js");
 
 class ListPages {
@@ -6,6 +6,11 @@ class ListPages {
         this.scenario = scenario;
         this.selectors = {
             newPageButton: "[data-test-new-page-button]",
+            pageListItem: "li.gh-posts-list-item",
+            pageTitle: "h3.gh-content-entry-title",
+            pageAttribute: "p.gh-content-entry-status",
+            filterTrigger: '.ember-power-select-selected-item:has-text("All pages")',
+            draftFilterOption: '[data-option-index="1"]',
             pageListItem: "li.gh-posts-list-item",
             pageTitle: "h3.gh-content-entry-title",
             pageAttribute: "p.gh-content-entry-status",
@@ -25,6 +30,7 @@ class ListPages {
     async waitForLoad(ms = 1000) {
         await new Promise(resolve => setTimeout(resolve, ms));
     }
+
 
     async getListOfPages() {
       try {
@@ -73,7 +79,7 @@ class ListPages {
             await this.scenario.getPage().locator(this.selectors.newPageButton).click();
             await this.waitForLoad();
             await this.scenario.screenshot();
-            return new CreatePageScenary(this.scenario);
+            return new CreateAndFilterPageScenary(this.scenario);
         } catch (error) {
             throw new Error(`Failed to navigate to new page: ${error.message}`);
         }
@@ -125,6 +131,32 @@ class ListPages {
       } catch (error) {
           console.error('Error al verificar cambio de título:', error);
           throw new Error(`Failed to verify title change: ${error.message}`);
+      }
+  }
+
+  async filterByDraft() {
+    try {
+        const filterTrigger = this.scenario.getPage().locator(this.selectors.filterTrigger);
+        await filterTrigger.waitFor({ state: 'visible', timeout: 3000 });
+        await filterTrigger.click();
+        
+        const draftOption = this.scenario.getPage().locator(this.selectors.draftFilterOption);
+        await draftOption.waitFor({ state: 'visible', timeout: 3000 });
+        await draftOption.click();
+        
+        await this.waitForLoad();
+        await this.scenario.screenshot();
+    } catch (error) {
+        throw new Error(`Failed to filter draft pages: ${error.message}`);
+    }
+  }
+
+  async getPageAttributeByTitle(pageTitle) {
+      try {
+          const page = await this.findPageByTitle(pageTitle);
+          return page ? page.attribute : null;
+      } catch (error) {
+          throw new Error(`Failed to get page attribute: ${error.message}`);
       }
   }
 }

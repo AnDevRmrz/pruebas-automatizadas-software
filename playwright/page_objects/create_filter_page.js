@@ -1,4 +1,4 @@
-exports.CreatePageScenary = class CreatePageScenary {
+exports.CreateAndFilterPageScenary = class CreateAndFilterPageScenary {
     constructor(scenario) {
         this.scenario = scenario;
         this.selectors = {
@@ -9,7 +9,8 @@ exports.CreatePageScenary = class CreatePageScenary {
             confirmPublishButton: '[data-test-button="confirm-publish"]',
             closePublishButton: '[data-test-button="close-publish-flow"]',
             modalTitle: '.modal-body h2',
-            postExcerpt: '.post-excerpt'
+            postExcerpt: '.post-excerpt',
+            backButton: '[data-test-link="pages"]'
         };
     }
 
@@ -22,12 +23,30 @@ exports.CreatePageScenary = class CreatePageScenary {
         await new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async createPage(title, description) {
+    async goBack() {
         try {
-            await this.fillTitle(title);
-            await this.fillDescription(description);
-            await this.publishPage();
+            await this.scenario.getPage().locator(this.selectors.backButton).click();
             await this.waitForLoad();
+            await this.scenario.screenshot();
+        } catch (error) {
+            throw new Error(`Failed to go back: ${error.message}`);
+        }
+    }
+
+    async createPage(title, description, interrupt = false) {
+        try {
+            if (interrupt) {
+                // Si interrupt es true, solo llenamos los campos sin publicar
+                await this.fillTitle(title);
+                await this.fillDescription(description);
+                await this.goBack()
+            } else {
+                // Si interrupt es false, completamos todo el proceso
+                await this.fillTitle(title);
+                await this.fillDescription(description);
+                await this.publishPage();
+                await this.waitForLoad();
+            }
         } catch (error) {
             throw new Error(`Failed to create page: ${error.message}`);
         }
