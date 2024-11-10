@@ -1,7 +1,7 @@
 Feature: Settings
 
 @user1 @web
-Scenario: Set site timezone
+Scenario: 21 - Set site timezone
   Given I navigate to page "http://localhost:3002/ghost"
   And I wait for 1 seconds
   When I type email login "alguien@hotmail.com"  

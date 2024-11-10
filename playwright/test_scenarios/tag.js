@@ -8,7 +8,7 @@ async function createTag() {
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, "Create Tag");
+  const scenario = new Scenario(page, "017 - Create Tag");
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -41,7 +41,7 @@ async function editTag() {
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, "Edit Tag");
+  const scenario = new Scenario(page, "018 - Edit Tag");
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -75,7 +75,7 @@ async function deleteTag() {
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "Delete Tag");
+  const scenario = new Scenario(page, "019 - Delete Tag");
   scenario.begin();
 
   const email = "alguien@hotmail.com";

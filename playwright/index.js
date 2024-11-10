@@ -14,9 +14,18 @@ const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./tes
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
 
+  // Scenario 17
   await createTag();
+
+  // Scenario 18
   await editTag();
+
+  // Scenario 19
   await deleteTag();
+
+  // Scenario 20
   await settingsEditTitleAndDescription();
+
+  // Scenario 21
   await settingsEditTimezone();
 })();
