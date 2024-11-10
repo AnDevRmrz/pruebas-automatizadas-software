@@ -73,4 +73,39 @@ async function createPage() {
     return;
 }
 
-module.exports = { createPage , editPage};
+
+
+async function previewPage() {
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 500 });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, "008 - Preview Page");
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const expectedTitle = "Title changed";
+  const expectedDescription = "Description changed";
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  
+  // When
+  const listPagesPage = await dashboard.goToPages();
+  const editPreviewPagePage = await listPagesPage.goToEditPage("Title changed");
+  await editPreviewPagePage.openSettings();
+  const previewPage = await editPreviewPagePage.viewPage();
+  
+  // Then
+  expect(await previewPage.verifyPreviewTitle(expectedTitle)).toBeTruthy();
+  expect(await previewPage.verifyPreviewDescription(expectedDescription)).toBeTruthy();
+  
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+
+module.exports = { createPage , editPage, previewPage};

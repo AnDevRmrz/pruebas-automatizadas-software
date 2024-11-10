@@ -1,5 +1,5 @@
 const { CreatePageScenary } = require("./create_page.js");
-const { EditPageScenary} = require("./edit_page.js");
+const { EditPreviewPageScenary } = require("./edit_preview_page.js");
 
 class ListPages {
     constructor(scenario) {
@@ -92,7 +92,7 @@ class ListPages {
           await pageElement.click();
           await this.waitForLoad();
           await this.scenario.screenshot();
-          return new EditPageScenary(this.scenario);
+          return new EditPreviewPageScenary(this.scenario);
       } catch (error) {
           throw new Error(`Failed to navigate to edit page: ${error.message}`);
       }

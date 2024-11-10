@@ -1,4 +1,4 @@
-class EditPageScenary {
+class EditPreviewPageScenary {
     constructor(scenario) {
         this.scenario = scenario;
         this.selectors = {
@@ -7,8 +7,17 @@ class EditPageScenary {
             descriptionInput: 'div.kg-prose p[data-koenig-dnd-droppable="true"]',
             updateButton: '[data-test-button="publish-save"]',
             backButton: '[data-test-link="pages"]',
-            pageTitle: '.gh-content-entry-title'
+            pageTitle: '.gh-content-entry-title',
+            pagePreviewTitle: '.gh-article-title',
+            pagePreviewDescription: '.gh-content',
+            settingsButton: 'button.settings-menu-toggle[title="Settings"]',
+            viewPageButton: '.post-view-link'
         };
+    }
+    
+
+    setPage(newPage) {
+        this.scenario.page = newPage;
     }
 
     async goToEditor() {
@@ -75,6 +84,65 @@ class EditPageScenary {
     async waitForLoad(ms = 1000) {
         await new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    // Preview Page
+
+    async verifyPreviewTitle(expectedTitle) {
+        try {
+            const titleElement = await this.scenario.getPage().locator(this.selectors.pagePreviewTitle);
+            await titleElement.waitFor({ state: 'visible' });
+            const actualTitle = await titleElement.innerText();
+            return actualTitle === expectedTitle;
+        } catch (error) {
+            throw new Error(`Failed to verify preview title: ${error.message}`);
+        }
+    }
+
+    async verifyPreviewDescription(expectedDescription) {
+        try {
+            const descElement = await this.scenario.getPage().locator(this.selectors.pagePreviewDescription);
+            await descElement.waitFor({ state: 'visible' });
+            const actualDescription = await descElement.innerText();
+            return actualDescription === expectedDescription;
+        } catch (error) {
+            throw new Error(`Failed to verify preview description: ${error.message}`);
+        }
+    }
+
+    async openSettings() {
+        try {
+            const settingsButton = this.scenario.getPage().locator(this.selectors.settingsButton);
+            await settingsButton.waitFor({ state: 'visible' });
+            await settingsButton.click();
+            await this.waitForLoad();
+            await this.scenario.screenshot();
+        } catch (error) {
+            throw new Error(`Failed to open settings: ${error.message}`);
+        }
+    }
+    
+    async viewPage() {
+        try {
+            const viewButton = this.scenario.getPage().locator(this.selectors.viewPageButton);
+    
+            const [newPage] = await Promise.all([
+                this.scenario.getPage().context().waitForEvent('page'),
+                viewButton.click()
+            ]);
+    
+            await newPage.waitForLoadState('domcontentloaded');
+    
+            this.setPage(newPage);
+            
+            await this.scenario.screenshot();
+    
+            return new EditPreviewPageScenary(this.scenario);
+        } catch (error) {
+            console.error("Error al intentar ver la página:", error);
+            throw new Error(`No se pudo ver la página: ${error.message}`);
+        }
+    }
+    
 }
 
-module.exports = { EditPageScenary };
+module.exports = { EditPreviewPageScenary };
