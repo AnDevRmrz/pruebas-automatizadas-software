@@ -1,7 +1,7 @@
 Feature: Page
 
 @user3 @web
-Scenario: Preview Page
+Scenario: 08 - Preview Page
     Given I navigate to page "http://localhost:3002/ghost"
     And I wait for 2 seconds
     When I type email login "alguien@hotmail.com"  
