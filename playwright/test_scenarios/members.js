@@ -117,7 +117,7 @@ async function deleteMember() {
 }
 
 async function createMemberMemberWithInvalidEmail() {
-  const { browser, scenario } = await _before("014 - Create Member with Invalid Member");
+  const { browser, scenario } = await _before("014 - Create Member with Invalid Email");
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
