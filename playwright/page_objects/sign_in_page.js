@@ -2,15 +2,15 @@ const { Dashboard } = require("./dashboard");
 
 exports.SignInPage = class SignInPage {
   
-  constructor(page) {
-    this.page = page;
-    this.emailAddressInput = page.locator('#identification');
-    this.passwordInput = page.locator('#password');
-    this.signInButton = page.locator('#ember5');
+  constructor(scenario) {
+    this.scenario = scenario;
+    this.emailAddressInput = scenario.getPage().locator('#identification');
+    this.passwordInput = scenario.getPage().locator('#password');
+    this.signInButton = scenario.getPage().locator('#ember5');
   }
 
   async goto() {
-    await this.page.goto('http://localhost:3002/ghost/#/signin');
+    await this.scenario.getPage().goto('http://localhost:3002/ghost/#/signin');
     await new Promise(r => setTimeout(r, 1000));
   }
 
@@ -20,7 +20,8 @@ exports.SignInPage = class SignInPage {
     await this.passwordInput.fill(password);
     await this.signInButton.click();
     await new Promise(r => setTimeout(r, 1000));
-    return new Dashboard(this.page);
+    await this.scenario.screenshot();
+    return new Dashboard(this.scenario);
   }
 
 };

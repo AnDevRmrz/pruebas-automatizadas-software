@@ -1,6 +1,7 @@
 const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const playwright = require("playwright");
+const { Scenario } = require("../util/util");
 
 async function settingsEditTitleAndDescription() {
 
@@ -10,13 +11,16 @@ async function settingsEditTitleAndDescription() {
   });
   const context = await browser.newContext();
   const page = await context.newPage();
+  const scenario = new Scenario(page, "Settings - Edit Title And Description");
+  scenario.begin();
+
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
   const siteTitle = "New Site Title";
   const siteDescription = "New Site Description";
 
   // Given
-  const signInPage = new SignInPage(page);
+  const signInPage = new SignInPage(scenario);
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
   const settingsPage = await dashboard.goToSettings();
@@ -32,6 +36,7 @@ async function settingsEditTitleAndDescription() {
     currentTitleAndDescription.siteDescription === siteDescription
   ).toBeTruthy();
   await browser.close();
+  scenario.successful();
   return;
 }
 
@@ -42,13 +47,16 @@ async function settingsEditTimezone() {
   });
   const context = await browser.newContext();
   const page = await context.newPage();
+  const scenario = new Scenario(page, "Settings - Edit Timezone");
+  scenario.begin();
+
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
   const newTimezone = "Hawaii";
   const expectedTimezone = "(GMT -10:00) Hawaii";
 
   // Given
-  const signInPage = new SignInPage(page);
+  const signInPage = new SignInPage(scenario);
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
   const settingsPage = await dashboard.goToSettings();
@@ -60,6 +68,7 @@ async function settingsEditTimezone() {
   const currentTimezone = await settingsPage.getCurrentTimezone();
   expect(currentTimezone.includes(expectedTimezone)).toBeTruthy();
   await browser.close();
+  scenario.successful();
   return;
 }
 

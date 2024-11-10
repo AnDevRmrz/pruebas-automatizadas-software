@@ -1,13 +1,14 @@
 exports.SettingsPage = class SettingsPage {
 
-  constructor(page) {
-    this.page = page;
-    this.editTitleAndDescriptionButton = page.locator("div[data-testid='title-and-description'] button");
-    this.editTimezoneButton = page.locator("div[data-testid='timezone'] button");
+  constructor(scenario) {
+    this.scenario = scenario;
+    this.editTitleAndDescriptionButton = scenario.getPage().locator("div[data-testid='title-and-description'] button");
+    this.editTimezoneButton = scenario.getPage().locator("div[data-testid='timezone'] button");
   }
 
   async goto() {
-    await this.page.goto("http://localhost:3002/ghost/#/tags");
+    await this.scenario.getPage().goto("http://localhost:3002/ghost/#/tags");
+    await this.scenario.screenshot();
     await new Promise((r) => setTimeout(r, 1000));
   }
 
@@ -15,20 +16,22 @@ exports.SettingsPage = class SettingsPage {
 
     await this.editTitleAndDescriptionButton.click();
     await new Promise((r) => setTimeout(r, 1000));
-    let siteTitleInput = this.page.locator("div[data-testid='title-and-description'] input[placeholder='Site title']");    
-    let siteDescriptionInput = this.page.locator("div[data-testid='title-and-description'] input[placeholder='Site description']");
+    let siteTitleInput = this.scenario.getPage().locator("div[data-testid='title-and-description'] input[placeholder='Site title']");    
+    let siteDescriptionInput = this.scenario.getPage().locator("div[data-testid='title-and-description'] input[placeholder='Site description']");
 
     await siteTitleInput.fill(siteTitle);
     await siteDescriptionInput.fill(siteDescription);
+    await this.scenario.screenshot();
 
-    let saveButton = this.page.locator("div[data-testid='title-and-description'] button[class*='bg-green']");
+    let saveButton = this.scenario.getPage().locator("div[data-testid='title-and-description'] button[class*='bg-green']");
     await saveButton.click();
     await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
   }
 
   async getCurrentTitleAndDescription() {
 
-    let titleAndDescriptionValues = await this.page.locator("div[data-testid='title-and-description'] div[class='flex items-center mt-1']").all();    
+    let titleAndDescriptionValues = await this.scenario.getPage().locator("div[data-testid='title-and-description'] div[class='flex items-center mt-1']").all();    
     return {
         siteTitle: await titleAndDescriptionValues[0].innerText(),
         siteDescription: await titleAndDescriptionValues[1].innerText(),
@@ -39,21 +42,23 @@ exports.SettingsPage = class SettingsPage {
 
     await this.editTimezoneButton.click();
     await new Promise((r) => setTimeout(r, 1000));    
-    let timezoneSelect = this.page.locator("div[data-testid='timezone-select']");
+    let timezoneSelect = this.scenario.getPage().locator("div[data-testid='timezone-select']");
     await timezoneSelect.click();
     await new Promise((r) => setTimeout(r, 1000));
-    let timezoneInput = this.page.locator("div[data-testid='timezone'] input");
+    let timezoneInput = this.scenario.getPage().locator("div[data-testid='timezone'] input");
     await timezoneInput.fill(newTimezone);
     await timezoneInput.press("Enter");
+    await this.scenario.screenshot();
 
-    let saveButton = this.page.locator("div[data-testid='timezone'] button[class*='bg-green']");
+    let saveButton = this.scenario.getPage().locator("div[data-testid='timezone'] button[class*='bg-green']");
     await saveButton.click();
     await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
   }
 
   async getCurrentTimezone() {
 
-    let timezoneData = await this.page.locator("div[data-testid='timezone'] div[class='flex flex-col']").all();
+    let timezoneData = await this.scenario.getPage().locator("div[data-testid='timezone'] div[class='flex flex-col']").all();
     return await timezoneData[1].innerText();
   }
 };
