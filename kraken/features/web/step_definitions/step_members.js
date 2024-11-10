@@ -64,6 +64,21 @@ When("I click in the delete member confirmation button", async function () {
   return await element.click();
 });
 
+When("I click in filter members button", async function () {
+  let element = await this.driver.$("div[data-test-button=members-filter-actions]");
+  return await element.click();
+});
+
+When("I type the name of the member I want to show as {string}", async function (memberName) {
+  let element = await this.driver.$("input[data-test-input=members-filter-value]");
+  return await element.setValue(memberName);
+});
+
+When("I click apply changes filter members button", async function () {
+  let element = await this.driver.$("button[data-test-button=members-apply-filter]");
+  return await element.click();
+});
+
 Then("I go to members", async function () {
   let element = await this.driver.$("a[data-test-nav=members]");
   return await element.click();
