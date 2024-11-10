@@ -49,9 +49,7 @@ class ListFilterDeletePage {
               
               const title = await titleElement.innerText();
               const attribute = await this.getElementText(pageHtml, this.selectors.pageAttribute);
-              
-              console.log(`Página encontrada - Título: "${title}", Atributo: "${attribute}"`);
-              
+                            
               pages.push({
                   title: title,
                   attribute: attribute
@@ -126,7 +124,6 @@ class ListFilterDeletePage {
           
           // Usar findPageByTitle para buscar la página con el nuevo título
           const foundPage = await this.findPageByTitle(expectedTitle);
-          console.log('Página encontrada para verificación:', foundPage);
           
           // Si encontramos la página, significa que el título se cambió correctamente
           return foundPage !== undefined;
@@ -183,7 +180,6 @@ async rightClickOnPage(pageTitle) {
           `${this.selectors.pageTitle}:text-is("${pageTitle}")`
       );
       await titleElement.waitFor({ state: 'visible', timeout: 5000 });
-      console.log(`Right clicking on page: ${pageTitle}`);
       await titleElement.click({ button: 'right' });
       await this.waitForLoad();
       await this.scenario.screenshot();
@@ -196,7 +192,6 @@ async clickDeleteButton() {
     try {
         const deleteButton = this.scenario.getPage().locator(this.selectors.deleteButton);
         await deleteButton.waitFor({ state: 'visible', timeout: 5000 });
-        console.log('Clicking delete button');
         await deleteButton.click();
         await this.waitForLoad();
         await this.scenario.screenshot();
@@ -209,7 +204,6 @@ async confirmDelete() {
     try {
         const confirmButton = this.scenario.getPage().locator(this.selectors.confirmDeleteButton);
         await confirmButton.waitFor({ state: 'visible', timeout: 5000 });
-        console.log('Confirming deletion');
         await confirmButton.click();
         await this.waitForLoad();
         await this.scenario.screenshot();
