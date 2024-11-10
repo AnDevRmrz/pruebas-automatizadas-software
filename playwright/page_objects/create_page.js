@@ -1,4 +1,4 @@
-exports.CreateEditPreviewFilterDeletePage = class CreateEditPreviewFilterDeletePage {
+exports.CreatePageScenary = class CreatePageScenary {
     constructor(page) {
         this.page = page;
         this.selectors = {

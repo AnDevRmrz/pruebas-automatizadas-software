@@ -1,4 +1,4 @@
-const { CreateEditPreviewFilterDeletePage } = require("./create_edit_preview_filter_delete_page.js");
+const { CreatePageScenary } = require("./create_page.js");
 
 class ListPages {
     constructor(page) {
@@ -49,7 +49,7 @@ class ListPages {
         try {
             await this.page.locator(this.selectors.newPageButton).click();
             await this.waitForLoad();
-            return new CreateEditPreviewFilterDeletePage(this.page);
+            return new CreatePageScenary(this.page);
         } catch (error) {
             throw new Error(`Failed to navigate to new page: ${error.message}`);
         }
