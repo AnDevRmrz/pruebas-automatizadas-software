@@ -17,6 +17,27 @@ exports.ListFilterMembersPage = class ListFilterMembersPage {
     return new CreateEditDeleteMemberPage(this.scenario);
   }
 
+  async goToEditMember(memberName, memberEmail){
+    var membersRows = await this.scenario
+    .getPage()
+    .locator("tr[data-test-list=members-list-item]")
+    .all();
+
+    let element  = null;
+
+    for (const row of membersRows) {
+      let name = await this.getValueOrEmptyWhenError(row, "h3");
+      let email = await this.getValueOrEmptyWhenError(row, "p");
+      if (name == memberName && email == memberEmail){
+        element = row;
+        break;
+      }
+    }
+
+    element.click();
+    return new CreateEditDeleteMemberPage(this.scenario); 
+  }
+
   async getValueOrEmptyWhenError(tagHtml, selector) {
     try {
       let element = tagHtml.locator(selector);

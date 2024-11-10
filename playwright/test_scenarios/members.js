@@ -19,10 +19,11 @@ async function _before(scenarioName) {
 async function _after(browser, scenario) {
   await browser.close();
   scenario.successful();
+  return;
 }
 
 async function createMember() {
-  const { browser, scenario } = await _before("Create Member");
+  const { browser, scenario } = await _before("012 - Create Member");
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
@@ -49,18 +50,103 @@ async function createMember() {
     )
   ).toBeTruthy();
 
-  //await _after(browser, scenario);
-  await browser.close();
-  scenario.successful();
-  return ;
-
+  return await _after(browser, scenario);
 }
 
-async function editMember() {}
+async function editMember() {
+  const { browser, scenario } = await _before("013 - Edit Member");
 
-async function deleteMember() {}
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const oldMemberName = "Member Name Test";
+  const oldMemberEmail = "newmember@test.com";
+  const newMemberName = "Member New Name Test";
+  const newMemberEmail = "membernewemail@test.com";
 
-async function createMemberMemberWithInvalidEmail() {}
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+
+  // When
+  const dashboard = await signInPage.signIn(email, password);
+  const listFilterMembersPage = await dashboard.goToMembers();
+  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(oldMemberName, oldMemberEmail);
+  await createEditDeleteMemberPage.saveMember(newMemberName, newMemberEmail);
+
+  // Then
+  await dashboard.goToMembers();
+  const currentMembers = await listFilterMembersPage.getMembersList();
+  expect(
+    currentMembers.some(
+      (member) =>
+        member.name === newMemberName && member.email === newMemberEmail
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function deleteMember() {
+  const { browser, scenario } = await _before("014 - Delete Member");
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const memberName = "Member New Name Test";
+  const memberEmail = "membernewemail@test.com";
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+
+  // When
+  const dashboard = await signInPage.signIn(email, password);
+  const listFilterMembersPage = await dashboard.goToMembers();
+  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(memberName, memberEmail);
+  await createEditDeleteMemberPage.deleteMember();
+
+  // Then
+  await dashboard.goToMembers();
+  const currentMembers = await listFilterMembersPage.getMembersList();
+  expect(
+    currentMembers.every(
+      (member) =>
+        member.name !== memberName && member.email !== memberEmail
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function createMemberMemberWithInvalidEmail() {
+  const { browser, scenario } = await _before("012 - Create Member");
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const memberName = "Member Name Test";
+  const memberEmail = "newmember@test.com";
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+
+  // When
+  const dashboard = await signInPage.signIn(email, password);
+  const listFilterMembersPage = await dashboard.goToMembers();
+  const createEditDeleteMemberPage =
+    await listFilterMembersPage.goToNewMember();
+  await createEditDeleteMemberPage.saveMember(memberName, memberEmail);
+
+  // Then
+  await dashboard.goToMembers();
+  const currentMembers = await listFilterMembersPage.getMembersList();
+  expect(
+    currentMembers.some(
+      (member) => member.name === memberName && member.email === memberEmail
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
 
 async function filterMember() {}
 
