@@ -31,4 +31,8 @@ const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEma
   await deleteTag();
   await settingsEditTitleAndDescription();
   await settingsEditTimezone();
+  await editTag();
+  await deleteTag();
+  await settingsEditTitleAndDescription();
+  await settingsEditTimezone();
 })();
