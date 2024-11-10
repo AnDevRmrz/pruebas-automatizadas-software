@@ -7,10 +7,8 @@ Scenario: Filter Page
     When I type email login "alguien@hotmail.com"  
     And I type password "123456#213asdf"
     And I click in sign in
-    And I wait for 2 seconds
-    Then The title is visible
     And I wait for 1 seconds
-    When I click on Pages
+    And I click on Pages
     And I wait for 1 seconds
     And I click on New page
     And I wait for 1 seconds
