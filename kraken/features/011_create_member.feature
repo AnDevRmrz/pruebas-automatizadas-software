@@ -1,7 +1,7 @@
 Feature: Members
 
 @user1 @web
-Scenario: Create Member
+Scenario: 11 - Create Member
   Given I navigate to page "http://localhost:3002/ghost"
   And I wait for 1 seconds
   When I type email login "alguien@hotmail.com"  

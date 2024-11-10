@@ -26,14 +26,10 @@ async function createPage() {
         const createPagePage = await listPagesPage.goToNewPage();
         await createPagePage.createPage(pageTitle, pageDescription);
         
-        // Verify modal
+        // Then
         expect(await createPagePage.verifyTitleInModal(pageTitle)).toBeTruthy();
         expect(await createPagePage.verifyDescriptionInModal(pageDescription)).toBeTruthy();
-        
-        // Close publish flow
         await createPagePage.closePublishFlow();
-        
-        // Then verify in list
         await listPagesPage.goto();
         expect(await listPagesPage.verifyTitleInList(pageTitle)).toBeTruthy();
         
