@@ -1,7 +1,7 @@
 Feature: Settings
 
 @user1 @web
-Scenario: Set title and description
+Scenario: 20 - Set title and description
   Given I navigate to page "http://localhost:3002/ghost"
   And I wait for 1 seconds
   When I type email login "alguien@hotmail.com"  
