@@ -1,3 +1,5 @@
+const { Dashboard } = require("./dashboard");
+
 exports.SignInPage = class SignInPage {
   
   constructor(page) {
@@ -8,8 +10,8 @@ exports.SignInPage = class SignInPage {
   }
 
   async goto() {
-    await this.page.goto('http://localhost:3002/ghost/#/setup');
-    await new Promise(r => setTimeout(r, 2000));
+    await this.page.goto('http://localhost:3002/ghost/#/signin');
+    await new Promise(r => setTimeout(r, 1000));
   }
 
   async signIn(emailAddress, password) {
@@ -17,7 +19,8 @@ exports.SignInPage = class SignInPage {
     await this.emailAddressInput.fill(emailAddress);
     await this.passwordInput.fill(password);
     await this.signInButton.click();
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 1000));
+    return new Dashboard(this.page);
   }
 
 };

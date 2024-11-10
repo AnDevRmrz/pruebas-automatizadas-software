@@ -11,7 +11,7 @@ exports.SignUpPage = class SignUpPage {
 
   async goto() {
     await this.page.goto('http://localhost:3002/ghost/#/setup');
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 1000));
   }
 
   async fillForm(siteTitle, fullName, email, password) {
@@ -21,7 +21,7 @@ exports.SignUpPage = class SignUpPage {
     await this.emailAddressInput.fill(email);
     await this.passwordInput.fill(password);
     await this.createAccountButton.click();
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 1000));
   }
 
   async pageObjectModel() {

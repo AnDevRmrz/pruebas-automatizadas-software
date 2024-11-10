@@ -1,3 +1,6 @@
 /kraken/reports/
 /kraken/node_modules
 /kraken/.kraken
+/playwright/node_modules
+/playwright/test-results
+.vscode/
