@@ -1,7 +1,7 @@
 Feature: Page
 
 @user3 @web
-Scenario: Edit Page
+Scenario: 10 - Delete Page
     Given I navigate to page "http://localhost:3002/ghost"
     And I wait for 2 seconds
     When I type email login "alguien@hotmail.com"  
@@ -10,15 +10,11 @@ Scenario: Edit Page
     And I wait for 1 seconds
     And I click on Pages
     And I wait for 1 seconds
-    And I click on Go to Editor
+    And I do right click over the Title Changed
     And I wait for 1 seconds
-    And I change the title "Title changed"
+    And I click on delete
     And I wait for 1 seconds
-    And I change the description "Description changed"
+    And I click on big delete once again
     And I wait for 1 seconds
-    And I click on Update
-    And I wait for 1 seconds
-    And I click on Go back
-    And I wait for 1 seconds
-    Then I check the Title changed
+    Then I check that the deleted page is no longer existent
     And I wait for 1 seconds
