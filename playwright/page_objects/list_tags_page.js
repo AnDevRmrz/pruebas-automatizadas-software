@@ -12,16 +12,13 @@ exports.ListTags = class ListTags {
     await new Promise((r) => setTimeout(r, 1000));
   }
 
-  async verifyIfTagExists() {
-
-    let titleValues = await Promise.all(titleElements.map(async (value) => await value.getText()));    
-    assert.equal(titleValues.includes(tagName), true);
-  }
-
   async getValueOrEmptyWhenError(tagHtml, selector) {
 
     try {
-        return await tagHtml.locator(selector, { timeout: 50 }).innerText();
+
+      let element = tagHtml.locator(selector);
+      await element.waitFor({ timeout: 50 });
+      return await element.innerText();
     } catch (e) {
         return "";
     }
@@ -30,15 +27,20 @@ exports.ListTags = class ListTags {
   async getListOfTags() {
 
     var tagsHtml = await this.page.locator("li[class='gh-list-row gh-tags-list-item']").all();
-    var tags = await Promise.all(tagsHtml.map(async (tagHtml) =>  {
+    var tags = [];
 
-        let result = { 
-            name: await this.getValueOrEmptyWhenError(tagHtml, "h3[class='gh-tag-list-name']"),
-            description: await this.getValueOrEmptyWhenError(tagHtml, "p[class*='gh-tag-list-description']"),
-            slug: await this.getValueOrEmptyWhenError(tagHtml, "a[class*='gh-tag-list-slug'] span")
-        };
-        return result;
-    }));
+    for (const tagHtml of tagsHtml) {
+      
+      let name = await this.getValueOrEmptyWhenError(tagHtml, "h3[class='gh-tag-list-name']");
+      let description = await this.getValueOrEmptyWhenError(tagHtml, "p[class*='gh-tag-list-description']");
+      let slug = await this.getValueOrEmptyWhenError(tagHtml, "a[class*='gh-tag-list-slug'] span");
+      tags.push({
+        name: name,
+        description: description,
+        slug: slug
+      });
+    }
+    
     return tags;
   }
 
