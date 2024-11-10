@@ -1,7 +1,7 @@
 Feature: Settings
 
 @user1 @web
-Scenario: Set title and description
+Scenario: 20 - Set site timezone
   Given I navigate to page "http://localhost:3002/ghost"
   And I wait for 1 seconds
   When I type email login "alguien@hotmail.com"  
@@ -10,12 +10,11 @@ Scenario: Set title and description
   And I wait for 1 seconds
   And I click on the settings button
   And I wait for 1 seconds
-  And I click on the edit button of title & description
+  And I click on the edit button of site timezone
   And I wait for 1 seconds
-  And I type site title "New Site Title"
-  And I type site description "New Site Description"
-  And I click on the save button of title & description
+  And I click on the timezone combobox
+  And I select "Hawaii" timezone
+  And I click on the save button of site timezone
   And I wait for 1 seconds
-  Then I can see the site title as "New Site Title"
-  And I can see the site description as "New Site Description"
+  Then I can see the new site timezone as "(GMT -10:00) Hawaii"
   And I wait for 1 seconds

@@ -11,7 +11,7 @@ async function settingsEditTitleAndDescription() {
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "Settings - Edit Title And Description");
+  const scenario = new Scenario(page, "019 - Settings - Set Title And Description");
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -47,7 +47,7 @@ async function settingsEditTimezone() {
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "Settings - Edit Timezone");
+  const scenario = new Scenario(page, "020 - Settings - Set Site Timezone");
   scenario.begin();
 
   const email = "alguien@hotmail.com";
