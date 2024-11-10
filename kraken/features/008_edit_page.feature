@@ -20,5 +20,5 @@ Scenario: Edit Page
     And I wait for 1 seconds
     And I click on Go back
     And I wait for 1 seconds
-    Then I check the Title Changed
+    Then I check the Title changed
     And I wait for 1 seconds

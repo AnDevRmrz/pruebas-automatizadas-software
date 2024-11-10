@@ -1,5 +1,5 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
-// View page, first we need the previous test to have a page
+const assert = require('assert');
 
 
 When('I click on Page settings', async function () {
@@ -18,14 +18,14 @@ Then('I check the title on view page', async function () {
     let element = await this.driver.$('.gh-article-title');
     await element.waitForDisplayed();
     let titleText = await element.getText();
-    return titleText === "Title Changed";
+    assert.strictEqual(titleText, "Title changed", "The title text does not match 'Title changed'");
 });
 
 Then('I check the description on view page', async function () {
     let element = await this.driver.$('.gh-content');
     await element.waitForDisplayed();
     let descriptionText = await element.getText();
-    return descriptionText === "Description Changed";
+    assert.strictEqual(descriptionText, "Description changed", "The description text does not match 'Description changed'");
 });
 
 // Filter Page, first we need a Page with draft
@@ -46,14 +46,14 @@ Then('I check the title drafted', async function () {
     let element = await this.driver.$('.gh-content-entry-title');
     await element.waitForDisplayed();
     let titleText = await element.getText();
-    return titleText === "Title draft";
+    assert.strictEqual(titleText, "Title draft", "The title text does not match 'Title draft'");
 });
 
 Then('I check the attribute draft', async function () {
     let element = await this.driver.$('.gh-content-entry-status .draft');
     await element.waitForDisplayed();
     let statusText = await element.getText();
-    return statusText === "Draft";
+    assert.strictEqual(statusText, "Draft", "The status text does not match 'Draft'");
 });
 
 // Edit page, first we need the previous created page to edit it
@@ -86,11 +86,12 @@ When('I click on Go back', async function () {
     return await element.click();
 });
 
-Then('I check the Title Changed', async function () {
+Then('I check the Title changed', async function () {
     let element = await this.driver.$('.gh-content-entry-title');
     let titleText = await element.getText();
-    return titleText === "Title Changed";
+    assert.strictEqual(titleText, "Title changed", "The title text does not match 'Title changed'");
 });
+
 
 // Delete page, first we need the previous test to have a page
 
@@ -116,8 +117,9 @@ When('I click on big delete once again', async function () {
 
 Then('I check that the deleted page is no longer existent', async function () {
     let elements = await this.driver.$$('.gh-content-entry-title');
-    return elements.length === 2; // Predetermined page and drafted page
+    assert.strictEqual(elements.length, 2, "The number of pages does not match the expected count of 2");
 });
+
 
 
 //create page
@@ -142,7 +144,7 @@ When('I type page description {string}', async function (description) {
     return await element.setValue(description);
 });
 
-When('I click on Publish', async function () {
+When('I click on Publish Page', async function () {
     let element = await this.driver.$('[data-test-button="publish-flow"]');
     return await element.click();
 });
@@ -158,15 +160,15 @@ When('I click on Publish Page right now', async function () {
 });
 
 Then('the page title is visible', async function () {
-    let element = await this.driver.$('h2');
+    let element = await this.driver.$('.modal-body h2');
     const text = await element.getText();
-    return text === 'Title';
+    assert.strictEqual(text, 'Title', "The page title does not match 'Title'");
 });
 
 When('the page description is visible', async function () {
     let element = await this.driver.$('.post-excerpt');
     const text = await element.getText();
-    return text === 'Description';
+    assert.strictEqual(text, 'Description', "The page description does not match 'Description'");
 });
 
 When('I click on close', async function () {
@@ -177,5 +179,5 @@ When('I click on close', async function () {
 Then('I check the title page is visible in list', async function () {
     let element = await this.driver.$('.gh-content-entry-title');
     let titleText = await element.getText();
-    return titleText === "Title";
+    assert.strictEqual(titleText, "Title", "The title text does not match 'Title'");
 });

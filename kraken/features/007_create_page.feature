@@ -16,7 +16,7 @@ Scenario: Create Page
     And I wait for 1 seconds
     And I type page description "Description"  
     And I wait for 1 seconds
-    And I click on Publish
+    And I click on Publish Page
     And I wait for 1 seconds
     And I click on Final Review
     And I wait for 1 seconds
