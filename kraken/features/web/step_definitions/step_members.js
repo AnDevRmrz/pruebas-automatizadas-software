@@ -26,6 +26,29 @@ When("I click in the save member button", async function () {
   return await element.click();
 });
 
+When(
+  "I click in the row with member name {string} and member email {string}",
+  async function (memberName, memberEmail) {
+    let rowElements = await this.driver.$$(
+      "tr[data-test-list=members-list-item]"
+    );
+
+    let element = null;
+    for (const row of rowElements) {
+      const name = await row.$("h3").getText();
+      const email = await row.$("p").getText();
+      console.log("name: " + name + " email: " + email);
+      if (name === memberName && email === memberEmail) {
+        element = row;
+        break;
+      }
+    }
+
+    assert.notEqual(element, null);
+    return await element.click();
+  }
+);
+
 Then("I go to members", async function () {
   let element = await this.driver.$("a[data-test-nav=members]");
   return await element.click();
@@ -37,13 +60,16 @@ Then(
     let rowElements = await this.driver.$$(
       "tr[data-test-list=members-list-item]"
     );
-    let memberValues = await Promise.all(
-      rowElements.map(async (value) => {
-        const name = await value.$("h3").getText();
-        const email = await value.$("p").getText();
-        return name === memberName && email === memberEmail;
-      })
-    );
-    assert.equal(memberValues.includes(true), true);
+    let elementFound = false;
+    for (const row of rowElements) {
+      const name = await row.$("h3").getText();
+      const email = await row.$("p").getText();
+      console.log("name: " + name + " email: " + email);
+      if (name === memberName && email === memberEmail) {
+        elementFound = true;
+        break;
+      }
+    }
+    assert.equal(elementFound, true);
   }
 );
