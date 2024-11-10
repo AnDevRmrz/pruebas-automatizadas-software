@@ -1,3 +1,4 @@
+const { ListPages } = require("./list_pages");
 const { ListTags } = require("./list_tags");
 
 exports.Dashboard = class Dashboard {
@@ -19,8 +20,8 @@ exports.Dashboard = class Dashboard {
   }
 
   async goToPages() {
-    await this.tagOption.click();
+    await this.pageOption.click();
     await new Promise((r) => setTimeout(r, 1000));
-    return new ListTags(this.page);
+    return new ListPages(this.page);
   }
 };
