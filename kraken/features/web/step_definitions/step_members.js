@@ -108,3 +108,8 @@ Then(
     assert.equal(elementFound, false);
   }
 );
+
+Then("I confirm I want to leave member creation page", async function () {
+  let element = await this.driver.$("button[data-test-leave-button]");
+  return await element.click();
+});
