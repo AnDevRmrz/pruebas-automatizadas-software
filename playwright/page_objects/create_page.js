@@ -1,6 +1,6 @@
 exports.CreatePageScenary = class CreatePageScenary {
-    constructor(page) {
-        this.page = page;
+    constructor(scenario) {
+        this.scenario = scenario;
         this.selectors = {
             titleInput: '[data-test-editor-title-input]',
             descriptionInput: 'div.kg-prose p[data-koenig-dnd-droppable="true"]',
@@ -14,7 +14,7 @@ exports.CreatePageScenary = class CreatePageScenary {
     }
 
     async goto() {
-        await this.page.goto("http://localhost:3002/ghost/#/editor/post");
+        await this.scenario.getPage().goto("http://localhost:3002/ghost/#/editor/post");
         await this.waitForLoad();
     }
 
@@ -34,32 +34,41 @@ exports.CreatePageScenary = class CreatePageScenary {
     }
 
     async fillTitle(title) {
-        await this.page.locator(this.selectors.titleInput).fill(title);
+        await this.scenario.getPage().locator(this.selectors.titleInput).fill(title);
+        await this.scenario.screenshot();
+    
     }
 
     async fillDescription(description) {
-        await this.page.locator(this.selectors.descriptionInput).first().fill(description);
+        await this.scenario.getPage().locator(this.selectors.descriptionInput).first().fill(description);
+        await this.scenario.screenshot();
     }
 
     async publishPage() {
-        await this.page.locator(this.selectors.publishButton).first().click();
+        await this.scenario.getPage().locator(this.selectors.publishButton).first().click();
         await this.waitForLoad();
-        await this.page.locator(this.selectors.finalReviewButton).click();
+        await this.scenario.getPage().locator(this.selectors.finalReviewButton).click();
         await this.waitForLoad();
-        await this.page.locator(this.selectors.confirmPublishButton).click({ force: true });
+        await this.scenario.getPage().locator(this.selectors.confirmPublishButton).click({ force: true });
+        await this.scenario.screenshot();
     }
 
     async closePublishFlow() {
-        await this.page.locator(this.selectors.closePublishButton).click();
+        await this.scenario.getPage().locator(this.selectors.closePublishButton).click();
+        await this.scenario.screenshot();
     }
 
     async verifyTitleInModal(title) {
-        const modalTitle = await this.page.locator(this.selectors.modalTitle).innerText();
+        const modalTitle = await this.scenario.getPage().locator(this.selectors.modalTitle).innerText();
+        await this.scenario.screenshot();
         return modalTitle === title;
+        
     }
 
     async verifyDescriptionInModal(description) {
-        const modalDescription = await this.page.locator(this.selectors.postExcerpt).innerText();
+        const modalDescription = await this.scenario.getPage().locator(this.selectors.postExcerpt).innerText();
+        await this.scenario.screenshot();
         return modalDescription === description;
+        
     }
 }

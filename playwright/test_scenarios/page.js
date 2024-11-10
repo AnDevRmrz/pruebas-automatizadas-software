@@ -1,11 +1,15 @@
 const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require('@playwright/test');
 const playwright = require("playwright");
+const { Scenario } = require("../util/util");
 
 async function createPage() {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 500 });
     const context = await browser.newContext();
     const page = await context.newPage();
+    const scenario = new Scenario(page, "006 - Create Page");
+    scenario.begin();
+
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
     const pageTitle = "Title";
@@ -13,7 +17,7 @@ async function createPage() {
 
     try {
         // Given
-        const signInPage = new SignInPage(page);
+        const signInPage = new SignInPage(scenario);
         await signInPage.goto();
         const dashboard = await signInPage.signIn(email, password);
         
@@ -35,6 +39,8 @@ async function createPage() {
         
     } finally {
         await browser.close();
+        scenario.successful();
+        return ;
     }
 }
 

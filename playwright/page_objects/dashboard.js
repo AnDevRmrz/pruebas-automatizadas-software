@@ -1,27 +1,39 @@
+const { ListTags } = require("./list_tags_page");
+const { SettingsPage } = require("./settings_page");
 const { ListPages } = require("./list_pages");
-const { ListTags } = require("./list_tags");
 
 exports.Dashboard = class Dashboard {
-  constructor(page) {
-    this.page = page;
-    this.tagOption = page.locator("a[data-test-nav=tags]");
-    this.pageOption = page.locator("a[data-test-nav=pages]")
+  constructor(scenario) {
+    this.scenario = scenario;
+    this.tagOption = scenario.getPage().locator("a[data-test-nav=tags]");
+    this.settingsOption = scenario.getPage().locator("a[data-test-nav='settings']");
+    this.pageOption = scenario.getPage().locator("a[data-test-nav=pages]")
   }
 
   async goto() {
-    await this.page.goto("http://localhost:3002/ghost/#/dashboard");
+    await this.scenario.getPage().goto("http://localhost:3002/ghost/#/dashboard");
     await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
   }
 
   async goToTags() {
     await this.tagOption.click();
     await new Promise((r) => setTimeout(r, 1000));
-    return new ListTags(this.page);
+    await this.scenario.screenshot();
+    return new ListTags(this.scenario);    
+  }
+
+  async goToSettings() {
+    await this.settingsOption.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+    return new SettingsPage(this.scenario);
   }
 
   async goToPages() {
     await this.pageOption.click();
     await new Promise((r) => setTimeout(r, 1000));
-    return new ListPages(this.page);
+    await this.scenario.screenshot();
+    return new ListPages(this.scenario);
   }
 };

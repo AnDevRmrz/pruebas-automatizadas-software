@@ -1,8 +1,8 @@
 const { CreatePageScenary } = require("./create_page.js");
 
 class ListPages {
-    constructor(page) {
-        this.page = page;
+    constructor(scenario) {
+        this.scenario = scenario;
         this.selectors = {
             newPageButton: "[data-test-new-page-button]",
             pageListItem: "li.gh-posts-list-item-group",
@@ -13,8 +13,9 @@ class ListPages {
 
     async goto() {
         try {
-            await this.page.goto("http://localhost:3002/ghost/#/pages");
+            await this.scenario.getPage().goto("http://localhost:3002/ghost/#/pages");
             await this.waitForLoad();
+            await this.scenario.screenshot();
         } catch (error) {
             throw new Error(`Failed to navigate to pages: ${error.message}`);
         }
@@ -26,7 +27,7 @@ class ListPages {
 
     async getElementText(element, selector) {
         try {
-            return await element.locator(selector, { timeout: 500 }).innerText();
+            return await element.locator(selector, { timeout: 50 }).innerText();
         } catch {
             return "";
         }
@@ -34,12 +35,17 @@ class ListPages {
 
     async getListOfPages() {
         try {
-            const pagesHtml = await this.page.locator(this.selectors.pageListItem).all();
+            const pagesHtml = await this.scenario.getPage().locator(this.selectors.pageListItem).all();
             
-            return Promise.all(pagesHtml.map(async pageHtml => ({
-                title: await this.getElementText(pageHtml, this.selectors.pageTitle),
-                attribute: await this.getElementText(pageHtml, this.selectors.pageAttribute)
-            })));
+            const pages = [];
+            for (const pageHtml of pagesHtml) {
+                pages.push({
+                    title: await this.getElementText(pageHtml, this.selectors.pageTitle),
+                    attribute: await this.getElementText(pageHtml, this.selectors.pageAttribute)
+                });
+            }
+            
+            return pages;
         } catch (error) {
             throw new Error(`Failed to get list of pages: ${error.message}`);
         }
@@ -47,16 +53,17 @@ class ListPages {
 
     async goToNewPage() {
         try {
-            await this.page.locator(this.selectors.newPageButton).click();
+            await this.scenario.getPage().locator(this.selectors.newPageButton).click();
             await this.waitForLoad();
-            return new CreatePageScenary(this.page);
+            await this.scenario.screenshot();
+            return new CreatePageScenary(this.scenario);
         } catch (error) {
             throw new Error(`Failed to navigate to new page: ${error.message}`);
         }
     }
 
     async verifyTitleInList(expectedTitle) {
-        const titleElement = await this.page.locator(this.selectors.pageTitle).first();
+        const titleElement = await this.scenario.getPage().locator(this.selectors.pageTitle).first();
         const actualTitle = await titleElement.innerText();
         return actualTitle === expectedTitle;
     }
