@@ -27,6 +27,10 @@ Kraken:
 
 - Para iniciar, abra una terminal y ubíquese en la carpeta de kraken
 - Inicie la instancia de ghost desde cero utilizando el comando sugerido
+- Instala las dependencias del proyecto con el siguiente comando:
+
+npm install
+
 - Ejecute las pruebas de kraken con el siguiente comando:
 
 ./node_modules/kraken-node/bin/kraken-node run
@@ -35,10 +39,18 @@ Kraken:
 - Después de inicializar el administrador, se dará inicio a la ejecución de los 20 escenarios de prueba.
 - Los resultados los podrá ver en la carpeta reports.
 
-Playwright
+Playwright:
 
 - Para iniciar, abra una terminal y ubíquese en la carpeta de playwright
 - Inicie la instancia de ghost desde cero utilizando el comando sugerido
+- Instala las dependencias del proyecto con el siguiente comando:
+
+npm install
+
+- Instala los browsers requeridos para playwright con el siguiente comando:
+
+npx playwright install
+
 - Ejecute las pruebas de playwright con el siguiente comando:
 
 node index.js
