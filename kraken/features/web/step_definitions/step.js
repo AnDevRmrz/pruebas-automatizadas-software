@@ -41,3 +41,38 @@ Then('The title is visible', async function() {
     const text = await elements.getText();    
     return text === 'Let’s get started!';
 });
+
+When('I click in posts', async function () {
+    let element = await this.driver.$('[data-test-nav="posts"]'); // Reemplaza con el selector correcto
+    return await element.click();
+});
+
+When('I click in new post', async function () {
+    let element = await this.driver.$('[data-test-new-post-button]'); // Reemplaza con el selector correcto
+    return await element.click();
+});
+
+When('I type post title {string}', async function (title) {
+    let element = await this.driver.$('.gh-editor-title  ember-text-area gh-input ember-view'); // Reemplaza con el selector correcto
+    return await element.setValue(title);
+});
+
+When('I type some text {string}', async function (text) {
+    let element = await this.driver.$('.kg-prose'); // Reemplaza con el selector correcto
+    return await element.setValue(text);
+});
+
+Then('publish button is visible', async function () {
+    let element = await this.driver.$('.gh-btn gh-btn-editor darkgrey gh-publish-trigger'); // Reemplaza con el selector correcto
+    return await element.isDisplayed();
+});
+
+When('I click in publish', async function () {
+    let element = await this.driver.$('.gh-btn gh-btn-black gh-btn-large'); // Reemplaza con el selector correcto
+    return await element.click();
+});
+
+When('I click in continue', async function () {
+    let element = await this.driver.$('[data-test-button="confirm-publish"]'); // Reemplaza con el selector correcto
+    return await element.click();
+});
