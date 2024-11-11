@@ -1,4 +1,4 @@
-const { Dashboard } = require("./dashboard");
+const { DashboardPage } = require("./dashboard_page");
 
 exports.SignInPage = class SignInPage {
   
@@ -21,7 +21,7 @@ exports.SignInPage = class SignInPage {
     await this.signInButton.click();
     await new Promise(r => setTimeout(r, 1000));
     await this.scenario.screenshot();
-    return new Dashboard(this.scenario);
+    return new DashboardPage(this.scenario);
   }
 
 };
