@@ -4,6 +4,7 @@ const { createTag, editTag, deleteTag } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./test_scenarios/settings");
 const { createPage, editPage, previewPage, filterDraftPages, deletePage} = require("./test_scenarios/page");
 const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEmail, filterMember } = require("./test_scenarios/members");
+const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
 
 (async () => {
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
@@ -15,6 +16,17 @@ const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEma
   await signUpPage.goto();
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
+
+  // Scenario 1
+  await listPosts();
+  // Scenario 2
+  await createPost();
+  // Scenario 3
+  await analyticPost();
+  // Scenario 4
+  await editPost();
+  // Scenario 5
+  await deletePost();
 
   // Scenario 6
   await createPage();
@@ -40,16 +52,13 @@ const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEma
   
   // Scenario 16 - Create Tag
    await createTag();
-
   // Scenario 17 - Edit Tag
    await editTag();
-
   // Scenario 18 - Delete Tag
    await deleteTag();
-
   // Scenario 19 - Settings - set title and description
    await settingsEditTitleAndDescription();
-
   // Scenario 20 - Settings - set site timezone
    await settingsEditTimezone();
+
 })();

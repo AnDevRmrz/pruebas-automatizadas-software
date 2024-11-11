@@ -2,14 +2,16 @@ const { ListTags } = require("./list_tags_page");
 const { SettingsPage } = require("./settings_page");
 const { ListFilterMembersPage } = require("./list_filter_members_page");
 const { ListFilterDeletePage } = require("./list_filter_delete_page");
+const { ListPostsPage } = require("./list_posts_page");
 
-exports.Dashboard = class Dashboard {
+exports.DashboardPage = class DashboardPage {
   constructor(scenario) {
     this.scenario = scenario;
     this.tagOption = scenario.getPage().locator("a[data-test-nav=tags]");
     this.settingsOption = scenario.getPage().locator("a[data-test-nav='settings']");
     this.pageOption = scenario.getPage().locator("a[data-test-nav=pages]")
     this.membersOption = scenario.getPage().locator("a[data-test-nav=members]");
+    this.postsOption = scenario.getPage().locator("a[data-test-nav=posts]");
   }
 
   async goto() {
@@ -44,5 +46,12 @@ exports.Dashboard = class Dashboard {
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
     return new ListFilterMembersPage(this.scenario);
+  }
+
+  async goToPosts() {
+    await this.postsOption.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+    return new ListPostsPage(this.scenario);
   }
 };
