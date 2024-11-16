@@ -7,39 +7,39 @@ const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEma
 const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
 
 (async () => {
-  // const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
-  // const context = await browser.newContext();
-  // const page = await context.newPage();
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const context = await browser.newContext();
+  const page = await context.newPage();
 
-  // const signUpPage = new SignUpPage(page);
+  const signUpPage = new SignUpPage(page);
 
-  // await signUpPage.goto();
-  // await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
-  // await browser.close();
+  await signUpPage.goto();
+  await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
+  await browser.close();
 
   // // Scenario 1
   // await listPosts();
-  // // Scenario 2
-  // await createPost();
+  // Scenario 2
+  await createPost();
   // // Scenario 3
   // await analyticPost();
   // // Scenario 4
   // await editPost();
-  // // Scenario 5
-  // await deletePost();
+  // Scenario 5
+  await deletePost();
 
-  // // Scenario 6
-  // await createPage();
+  // Scenario 6
+  await createPage();
   // // Scenario 7
   // await editPage()
   // // Scenario 8
   // await previewPage()
   // // Scenario 9
   // await filterDraftPages()
-  // // Scenario 10
-  // await deletePage()
+  // Scenario 10
+  await deletePage()
 
-  // // Scenario 11
+  // Scenario 11
   await createMember();
   // // Scenario 12
   //  await editMember();
