@@ -1,6 +1,11 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const assert = require('assert');
 
+When('I click on create account button', async function () {
+    let element = await this.driver.$('a[href*="setup/two"]');
+    return await element.click();
+});
+
 When('I type title {string}', async function (title) {
     let element = await this.driver.$('#blog-title');
     return await element.setValue(title);
@@ -21,8 +26,13 @@ When('I type password {string}', async function (password) {
     return await element.setValue(password);
 });
 
-When('I click in create account', async function () {
-    let element = await this.driver.$('#ember4');    
+When('I click on last step button', async function () {
+    let element = await this.driver.$('button[tabindex="5"]');
+    return await element.click();
+});
+
+When('I click on take me to the site', async function () {
+    let element = await this.driver.$('button[class=gh-flow-skip]');
     return await element.click();
 });
 

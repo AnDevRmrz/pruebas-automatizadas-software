@@ -11,3 +11,4 @@ Scenario: 01 - List post
   And I click in posts
   And I wait for 2 seconds
   Then there is a post with title "Coming soon"
+  And I wait for 2 seconds
