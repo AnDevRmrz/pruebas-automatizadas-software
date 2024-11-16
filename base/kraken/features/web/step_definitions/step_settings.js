@@ -6,69 +6,62 @@ const assert = require('assert');
  */
 
 When('I click on the settings button', async function () {
-    let element = await this.driver.$("a[data-test-nav='settings']");
+    let element = await this.driver.$("a[href*='settings']");
     return await element.click();
 });
 
-When('I click on the edit button of title & description', async function () {
-    let element = await this.driver.$("div[data-testid='title-and-description'] button");
+When('I click on the general settings option button', async function () {
+    let element = await this.driver.$("a[href*='settings/general']");
+    return await element.click();
+});
+
+When('I click on the expand button of title & description', async function () {
+    let element = await this.driver.$$(".gh-expandable-header button")[0];
     return await element.click();
 });
 
 When('I type site title {string}', async function (siteTitle) {
-    let element = await this.driver.$("div[data-testid='title-and-description'] input[placeholder='Site title']");
+    let element = await this.driver.$$(".gh-setting-content-extended input")[0];
     return await element.setValue(siteTitle);
 });
 
 When('I type site description {string}', async function (siteDescription) {
-    let element = await this.driver.$("div[data-testid='title-and-description'] input[placeholder='Site description']");
+    let element = await this.driver.$$(".gh-setting-content-extended input")[1];
     return await element.setValue(siteDescription);
 });
 
-When('I click on the save button of title & description', async function () {
-    let element = await this.driver.$("div[data-testid='title-and-description'] button[class*='bg-green']");
+When('I click on the save settings button', async function () {
+    let element = await this.driver.$("section[class=view-actions] button");
     return await element.click();
 });
 
-When('I click on the edit button of site timezone', async function () {
-    let element = await this.driver.$("div[data-testid='timezone'] button");
+When('I click on the expand button of set timezone', async function () {
+    let element = await this.driver.$$(".gh-expandable-header button")[1];
     return await element.click();
 });
 
-When('I click on the timezone combobox', async function () {
-    let element = await this.driver.$("div[data-testid='timezone-select']");
-    return await element.click();
-});
-
-When('I select {string} timezone', async function (timezone) {
-    let element = await this.driver.$("div[data-testid='timezone'] input");
-    await element.setValue(timezone);
-    return element.keys('Enter');
-});
-
-When('I click on the save button of site timezone', async function () {
-    let element = await this.driver.$("div[data-testid='timezone'] button[class*='bg-green']");
-    return await element.click();
+When('I select the second option of the timezone that is Hawaii', async function () {
+    let element = await this.driver.$("#timezone");
+    await element.selectByIndex(1);
 });
 
 Then('I can see the site title as {string}', async function (siteTitle) {    
 
-    let elements = await this.driver.$$("div[data-testid='title-and-description'] div[class='flex items-center mt-1']");
-    let values = await Promise.all(elements.map(async (value) => await value.getText()));    
-    assert.equal(values.includes(siteTitle), true);
+    let element = await this.driver.$$(".gh-setting-content-extended input")[0];    
+    let elementValue = await element.getValue();    
+    assert.equal(elementValue.includes(siteTitle), true);
 });
 
-Then('I can see the site description as {string}', async function (siteTitle) {    
+Then('I can see the site description as {string}', async function (siteDescription) {    
 
-    let elements = await this.driver.$$("div[data-testid='title-and-description'] div[class='flex items-center mt-1']");
-    let values = await Promise.all(elements.map(async (value) => await value.getText()));    
-    assert.equal(values.includes(siteTitle), true);
+    let element = await this.driver.$$(".gh-setting-content-extended input")[1];    
+    let elementValue = await element.getValue();    
+    assert.equal(elementValue.includes(siteDescription), true);
 });
 
-Then('I can see the new site timezone as {string}', async function (siteTimezone) {    
+Then('I can see the new site timezone as Hawaii', async function () {
 
-    let elements = await this.driver.$$("div[data-testid='timezone'] div[class='flex flex-col']");
-    let values = await Promise.all(elements.map(async (value) => await value.getText()));
-    let includesSiteTimezone = values.some( value => value.includes(siteTimezone));    
-    assert.equal(includesSiteTimezone, true);
+    let element = await this.driver.$("#timezone");
+    let elementValue = await element.getValue();
+    assert.equal(elementValue.includes("Pacific/Honolulu"), true);
 });
