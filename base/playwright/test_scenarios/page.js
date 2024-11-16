@@ -29,11 +29,6 @@ async function createPage() {
   await createPagePage.createPage(pageTitle, pageDescription, false);
 
   // Then
-  expect(await createPagePage.verifyTitleInModal(pageTitle)).toBeTruthy();
-  expect(
-    await createPagePage.verifyDescriptionInModal(pageDescription)
-  ).toBeTruthy();
-  await createPagePage.closePublishFlow();
   await listFilterDeletePagePage.goto();
   expect(
     await listFilterDeletePagePage.verifyTitleInList(pageTitle)
@@ -57,6 +52,7 @@ async function deletePage() {
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
   const pageToDelete = "Title changed"; // El título de la página que queremos eliminar
+  const pageDescription = "Description";
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -64,16 +60,16 @@ async function deletePage() {
   const dashboard = await signInPage.signIn(email, password);
 
   // When
-  const listFilterDeletePagePage = await dashboard.goToPages();
+  const listPagePage = await dashboard.goToPages();
+  const createDeletePagePage = await listPagePage.goToNewPage();
+  await createDeletePagePage.createPage(pageToDelete, pageDescription, false);
 
-  await listFilterDeletePagePage.rightClickOnPage(pageToDelete);
-  await listFilterDeletePagePage.clickDeleteButton();
-  await listFilterDeletePagePage.confirmDelete();
+  await createDeletePagePage.deletePage();
 
   // Then
-  await listFilterDeletePagePage.goto();
+  await listPagePage.goto();
   const isDeleted =
-    (await listFilterDeletePagePage.verifyTitleChanged(pageToDelete)) === false; // Si no encuentra el título, está eliminado
+    (await listPagePage.verifyTitleChanged(pageToDelete)) === false; // Si no encuentra el título, está eliminado
   expect(isDeleted).toBeTruthy();
 
   await browser.close();

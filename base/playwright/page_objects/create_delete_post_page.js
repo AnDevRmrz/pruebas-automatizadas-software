@@ -1,4 +1,4 @@
-exports.CreateEditPostPage = class CreateEditPostPage {
+exports.CreateDeletePostPage = class CreateDeletePostPage {
 
     constructor(scenario) {
       this.scenario = scenario;

@@ -1,4 +1,4 @@
-const { CreateEditPostPage } = require("./create_post_page");
+const { CreateDeletePostPage } = require("./create_delete_post_page");
 
 exports.ListPostsPage = class ListPostsPage {
 
@@ -30,7 +30,7 @@ exports.ListPostsPage = class ListPostsPage {
     await this.newPostButton.click();
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
-    return new CreateEditPostPage(this.scenario);
+    return new CreateDeletePostPage(this.scenario);
   }
 
   async getListOfPosts() {

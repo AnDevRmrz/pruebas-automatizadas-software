@@ -1,7 +1,7 @@
 const { ListTags } = require("./list_tags_page");
 const { SettingsPage } = require("./settings_page");
 const { ListFilterMembersPage } = require("./list_filter_members_page");
-const { ListFilterDeletePage } = require("./list_filter_delete_page");
+const { ListFilterDeletePage } = require("./list_page_page");
 const { ListPostsPage } = require("./list_posts_page");
 
 exports.DashboardPage = class DashboardPage {
@@ -9,7 +9,7 @@ exports.DashboardPage = class DashboardPage {
     this.scenario = scenario;
     this.tagOption = scenario.getPage().locator("a[data-test-nav=tags]");
     this.settingsOption = scenario.getPage().locator("a[data-test-nav='settings']");
-    this.pageOption = scenario.getPage().locator("a[data-test-nav=pages]")
+    this.pageOption = scenario.getPage().locator('a[href="#/pages/"]').first();
     this.membersOption = scenario.getPage().locator("a[data-test-nav=members]");
     this.postsOption = scenario.getPage().locator('a[href="#/posts/"]').first();
   }

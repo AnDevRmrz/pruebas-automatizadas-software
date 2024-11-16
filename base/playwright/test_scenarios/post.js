@@ -23,10 +23,10 @@ async function createPost() {
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
   const listPostsPage = await dashboard.goToPosts();
-  const createPostPage = await listPostsPage.goToNewPost();
+  const createDeletePostPage = await listPostsPage.goToNewPost();
 
   // When
-  await createPostPage.savePost(postTitle, postContent);
+  await createDeletePostPage.savePost(postTitle, postContent);
   await listPostsPage.goto();
 
   // Then  
@@ -61,12 +61,12 @@ async function deletePost() {
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
   const listPostsPage = await dashboard.goToPosts();
-  const createPostPage = await listPostsPage.goToNewPost();
+  const createDeletePostPage = await listPostsPage.goToNewPost();
   
-  await createPostPage.savePost(postTitleToDelete, postContent);
+  await createDeletePostPage.savePost(postTitleToDelete, postContent);
 
   // When
-  await createPostPage.deletePost();
+  await createDeletePostPage.deletePost();
 
   // Then
   await listPostsPage.goto();

@@ -24,7 +24,7 @@ When('I type page description {string}', async function (description) {
 });
 
 When('I click in publish page menu', async function () {
-    let element = await this.driver.$('div[role="button"]');
+    let element = await this.driver.$('div[class="gh-publishmenu ember-view"] div');
     return await element.click();
 });
 
