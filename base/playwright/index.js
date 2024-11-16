@@ -37,10 +37,10 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
   // // Scenario 9
   // await filterDraftPages()
   // // Scenario 10
-  await deletePage()
+  // await deletePage()
 
   // // Scenario 11
-  //  await createMember();
+  await createMember();
   // // Scenario 12
   //  await editMember();
   // // Scenario 13
