@@ -1,5 +1,4 @@
 const { CreatePagePage } = require("./create_page_page.js");
-const { EditPreviewPagePage } = require("./edit_preview_page_page.js");
 
 class ListFilterDeletePage {
     constructor(scenario) {
@@ -84,25 +83,6 @@ class ListFilterDeletePage {
             throw new Error(`Failed to navigate to new page: ${error.message}`);
         }
     }
-
-    async goToEditPage(pageTitle) {
-      try {
-          const existingPage = await this.findPageByTitle(pageTitle);
-          if (!existingPage) {
-              throw new Error(`Page with title "${pageTitle}" not found in the list`);
-          }
-          const pageElement = await this.scenario.getPage()
-              .locator(`${this.selectors.pageListItem}:has(${this.selectors.pageTitle}:text-is("${pageTitle}"))`);
-          
-          await pageElement.waitFor({ state: 'visible', timeout: 5000 });
-          await pageElement.click();
-          await this.waitForLoad();
-          await this.scenario.screenshot();
-          return new EditPreviewPagePage(this.scenario);
-      } catch (error) {
-          throw new Error(`Failed to navigate to edit page: ${error.message}`);
-      }
-  }
 
     async verifyTitleInList(expectedTitle) {
         const titleElement = await this.scenario.getPage().locator(this.selectors.pageTitle).first();

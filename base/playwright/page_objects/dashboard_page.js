@@ -11,7 +11,7 @@ exports.DashboardPage = class DashboardPage {
     this.settingsOption = scenario.getPage().locator("a[data-test-nav='settings']");
     this.pageOption = scenario.getPage().locator("a[data-test-nav=pages]")
     this.membersOption = scenario.getPage().locator("a[data-test-nav=members]");
-    this.postsOption = scenario.getPage().locator("a[data-test-nav=posts]");
+    this.postsOption = scenario.getPage().locator('a[href="#/posts/"]').first();
   }
 
   async goto() {
