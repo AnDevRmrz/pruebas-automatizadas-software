@@ -12,16 +12,18 @@ exports.GeneralSettingsPage = class GeneralSettingsPage {
 
   async editTitleAndDescription(siteTitle, siteDescription) {
 
+    await this.scenario.screenshot();
     let editTitleAndDescriptionExpandButton = await this.scenario.getPage().locator("section[class=gh-expandable] button").all();
     await editTitleAndDescriptionExpandButton[0].click();
     await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
     let inputs = await this.scenario.getPage().locator(".gh-setting-content-extended input").all();
     let siteTitleInput = inputs[0];
     let siteDescriptionInput = inputs[1];
 
     await siteTitleInput.fill(siteTitle);
     await siteDescriptionInput.fill(siteDescription);
-    await this.scenario.screenshot();
+    
 
     let saveButton = this.scenario.getPage().locator("section[class=view-actions] button");
     await saveButton.click();
@@ -40,12 +42,13 @@ exports.GeneralSettingsPage = class GeneralSettingsPage {
 
   async editTimezone(newTimezone) {
 
+    await this.scenario.screenshot();
     let editTimezoneButton = await this.scenario.getPage().locator("section[class=gh-expandable] button").all();
     await editTimezoneButton[1].click();
-    await new Promise((r) => setTimeout(r, 1000));    
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
     let timezoneSelect = this.scenario.getPage().locator("#timezone");
     timezoneSelect.selectOption({index: newTimezone});
-    await this.scenario.screenshot();
 
     let saveButton = this.scenario.getPage().locator("section[class=view-actions] button");
     await saveButton.click();
