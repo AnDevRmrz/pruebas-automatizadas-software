@@ -37,12 +37,17 @@ When('I click on take me to the site', async function () {
 });
 
 When('I type email login {string}', async function (email) {
-    let element = await this.driver.$('#identification');
+    let element = await this.driver.$('input[name=identification]');
+    return await element.setValue(email);
+});
+
+When('I type password login {string}', async function (email) {
+    let element = await this.driver.$('input[name=password]');
     return await element.setValue(email);
 });
 
 When('I click in sign in', async function () {
-    let element = await this.driver.$('#ember5');    
+    let element = await this.driver.$('button[class*="login"]');    
     return await element.click();
 });
 
