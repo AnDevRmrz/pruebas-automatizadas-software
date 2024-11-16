@@ -10,11 +10,21 @@ Scenario: 10 - Delete Page
     And I wait for 1 seconds
     And I click on Pages
     And I wait for 1 seconds
-    And I do right click over the Title Changed
+    And I click on New page
     And I wait for 1 seconds
-    And I click on delete
+    And I type page title "Title 1"
     And I wait for 1 seconds
-    And I click on big delete once again
+    And I type page description "Description"  
     And I wait for 1 seconds
-    Then I check that the deleted page is no longer existent
+    And I click in publish page menu
     And I wait for 1 seconds
+    And I click in publish page button
+    And I wait for 2 seconds
+    And I click in post settings gear button
+    And I wait for 1 seconds
+    And I click in delete page button
+    And I wait for 1 seconds
+    And I click in delete page confirmation button
+    And I wait for 1 seconds
+    Then there is not a page with title "Title 1"
+    And I wait for 2 seconds

@@ -1,183 +1,61 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const assert = require('assert');
 
-
-When('I click on Page settings', async function () {
-    let element = await this.driver.$('button.settings-menu-toggle[title="Settings"]');
-    await element.waitForDisplayed();
-    return await element.click();
-});
-
-When('I click on view Page', async function () {
-    let element = await this.driver.$('.post-view-link');
-    await element.waitForDisplayed();
-    return await element.click();
-});
-
-Then('I check the title on view page', async function () {
-    let element = await this.driver.$('.gh-article-title');
-    await element.waitForDisplayed();
-    let titleText = await element.getText();
-    assert.strictEqual(titleText, "Title changed", "The title text does not match 'Title changed'");
-});
-
-Then('I check the description on view page', async function () {
-    let element = await this.driver.$('.gh-content');
-    await element.waitForDisplayed();
-    let descriptionText = await element.getText();
-    assert.strictEqual(descriptionText, "Description changed", "The description text does not match 'Description changed'");
-});
-
-// Filter Page, first we need a Page with draft
-
-When('I click on filter all Pages', async function () {
-    let element = await this.driver.$('.ember-power-select-trigger');
-    await element.waitForDisplayed();
-    return await element.click();
-});
-
-When('I click on draft Pages', async function () {
-    let element = await this.driver.$('[data-option-index="1"]');
-    await element.waitForDisplayed();
-    return await element.click();
-});
-
-Then('I check the title drafted', async function () {
-    let element = await this.driver.$('.gh-content-entry-title');
-    await element.waitForDisplayed();
-    let titleText = await element.getText();
-    assert.strictEqual(titleText, "Title draft", "The title text does not match 'Title draft'");
-});
-
-Then('I check the attribute draft', async function () {
-    let element = await this.driver.$('.gh-content-entry-status .draft');
-    await element.waitForDisplayed();
-    let statusText = await element.getText();
-    assert.strictEqual(statusText, "Draft", "The status text does not match 'Draft'");
-});
-
-// Edit page, first we need the previous created page to edit it
-
-When('I click on Go to Editor', async function () {
-    let element = await this.driver.$('[title="Go to Editor"]');
-    return await element.click();
-});
-
-When('I change the title {string}', async function (title) {
-    let element = await this.driver.$('[data-test-editor-title-input]');
-    return await element.setValue(title);
-});
-
-When('I change the description {string}', async function (description) {
-    let element = await this.driver.$('.kg-prose');
-    await element.click(); 
-    await this.driver.keys(['Control', 'a']);
-    await this.driver.keys('Backspace'); 
-    return await element.setValue(description);
-});
-
-When('I click on Update', async function () {
-    let element = await this.driver.$('[data-test-button="publish-save"]');
-    return await element.click();
-});
-
-When('I click on Go back', async function () {
-    let element = await this.driver.$('[data-test-link="pages"]');
-    return await element.click();
-});
-
-Then('I check the Title changed', async function () {
-    let element = await this.driver.$('.gh-content-entry-title');
-    let titleText = await element.getText();
-    assert.strictEqual(titleText, "Title changed", "The title text does not match 'Title changed'");
-});
-
-
-// Delete page, first we need the previous test to have a page
-
-When('I do right click over the Title Changed', async function () {
-    let element = await this.driver.$('.gh-content-entry-title');
-    await element.waitForDisplayed();
-    await element.click({ button: 'right' });
-});
-
-When('I click on delete', async function () {
-    // Selecciona el botón "Delete" y desplázate a él para asegurarte de que está visible en el viewport
-    let element = await this.driver.$('[data-test-button="delete"]');
-    await element.scrollIntoView();
-    await element.waitForDisplayed(); // Espera a que el botón "Delete" esté visible
-    await element.click(); // Intenta hacer clic en el botón "Delete"
-});
-
-
-When('I click on big delete once again', async function () {
-    let element = await this.driver.$('[data-test-button="confirm"]');
-    return await element.click();
-});
-
-Then('I check that the deleted page is no longer existent', async function () {
-    let elements = await this.driver.$$('.gh-content-entry-title');
-    assert.strictEqual(elements.length, 2, "The number of pages does not match the expected count of 2");
-});
-
-
-
-//create page
-
 When('I click on Pages', async function () {
-    let element = await this.driver.$('[data-test-nav="pages"]');
+    let element = await this.driver.$('a[href="#/pages/"]');
     return await element.click();
 });
 
 When('I click on New page', async function () {
-    let element = await this.driver.$('[data-test-new-page-button]');
+    let element = await this.driver.$('a[href="#/editor/page/"]'); 
     return await element.click();
 });
 
 When('I type page title {string}', async function (title) {
-    let element = await this.driver.$('[data-test-editor-title-input]');
+    let element = await this.driver.$('textarea[placeholder="Page Title"]'); 
     return await element.setValue(title);
 });
 
 When('I type page description {string}', async function (description) {
-    let element = await this.driver.$('.kg-prose');
+    let element = await this.driver.$('p[data-koenig-dnd-droppable="true"]');
+    element.click();
+    await new Promise(r => setTimeout(r, 500));
     return await element.setValue(description);
 });
 
-When('I click on Publish Page', async function () {
-    let element = await this.driver.$('[data-test-button="publish-flow"]');
+When('I click in publish page menu', async function () {
+    let element = await this.driver.$('div[role="button"]');
     return await element.click();
 });
 
-When('I click on Final Review', async function () {
-    let element = await this.driver.$('[data-test-button="continue"]');
+When('I click in publish page button', async function () {
+    let element = await this.driver.$(".gh-publishmenu-button");
     return await element.click();
 });
 
-When('I click on Publish Page right now', async function () {
-    let element = await this.driver.$('[data-test-button="confirm-publish"]');
+When('I click in page settings gear button', async function () {
+    let element = await this.driver.$('button[title="Settings"]');
     return await element.click();
 });
 
-Then('the page title is visible', async function () {
-    let element = await this.driver.$('.modal-body h2');
-    const text = await element.getText();
-    assert.strictEqual(text, 'Title', "The page title does not match 'Title'");
-});
-
-When('the page description is visible', async function () {
-    let element = await this.driver.$('.post-excerpt');
-    const text = await element.getText();
-    assert.strictEqual(text, 'Description', "The page description does not match 'Description'");
-});
-
-When('I click on close', async function () {
-    let element = await this.driver.$('[data-test-button="close-publish-flow"]');
+When('I click in delete page button', async function () {
+    let element = await this.driver.$('.settings-menu-delete-button');
     return await element.click();
 });
 
-Then('I check the title page is visible in list', async function () {
-    let element = await this.driver.$('.gh-content-entry-title');
-    let titleText = await element.getText();
-    assert.strictEqual(titleText, "Title", "The title text does not match 'Title'");
+When('I click in delete page confirmation button', async function () {
+    let element = await this.driver.$('button[class="gh-btn gh-btn-red gh-btn-icon ember-view"]');
+    return await element.click();
+});
+
+Then('there is a page with title {string}', async function (postTitle) {
+    let titleElements = await this.driver.$$("h3[class='gh-content-entry-title']");
+    let titleValues = await Promise.all(titleElements.map(async (value) => await value.getText()));    
+    assert.equal(titleValues.includes(postTitle), true);
+});
+
+Then('there is not a page with title {string}', async function (postTitle) {
+    let titleElements = await this.driver.$$("h3[class='gh-content-entry-title']");
+    let titleValues = await Promise.all(titleElements.map(async (value) => await value.getText()));    
+    assert.equal(titleValues.includes(postTitle), false);
 });

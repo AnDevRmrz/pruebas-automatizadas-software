@@ -12,11 +12,12 @@ Scenario: 02 - Create post
   And I wait for 2 seconds
   And I click in new post
   And I type post title "Auto post"
-  And I wait for 2 seconds
   And I type post description "this is a new post"
   And I wait for 2 seconds
-  And I click in publish post
-  And I click in continue post
-  And I click in confirm publish post
+  And I click in publish post menu
+  And I wait for 1 seconds
+  And I click in publish post button
+  And I wait for 2 seconds
+  And I click in posts
   And I wait for 2 seconds
   Then there is a post with title "Auto post"
