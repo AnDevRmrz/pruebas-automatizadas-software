@@ -4,9 +4,9 @@ exports.SignInPage = class SignInPage {
   
   constructor(scenario) {
     this.scenario = scenario;
-    this.emailAddressInput = scenario.getPage().locator('#identification');
-    this.passwordInput = scenario.getPage().locator('#password');
-    this.signInButton = scenario.getPage().locator('#ember5');
+    this.emailAddressInput = scenario.getPage().locator('input[name=identification]');
+    this.passwordInput = scenario.getPage().locator('input[name=password]');
+    this.signInButton = scenario.getPage().locator('button[class*="login"]');
   }
 
   async goto() {

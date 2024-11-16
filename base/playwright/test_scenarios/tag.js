@@ -29,7 +29,7 @@ async function createTag() {
 
   // Then
   await listTagsPage.goto();
-  const currentTags = await listTagsPage.getListOfTags();
+  const currentTags = await listTagsPage.getListOfTags();  
   expect(currentTags.some(tag => tag.name === tagName && tag.slug === tagSlug && tag.description === tagDescription)).toBeTruthy();  
   await browser.close();
   scenario.successful();
