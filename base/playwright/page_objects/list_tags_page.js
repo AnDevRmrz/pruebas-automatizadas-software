@@ -27,7 +27,7 @@ exports.ListTags = class ListTags {
 
   async getListOfTags() {
 
-    var tagsHtml = await this.scenario.getPage().locator("li[class='gh-list-row gh-tags-list-item']").all();
+    var tagsHtml = await this.scenario.getPage().locator("li[class='gh-list-row gh-tags-list-item ember-view']").all();
     var tags = [];
 
     for (const tagHtml of tagsHtml) {
@@ -47,7 +47,7 @@ exports.ListTags = class ListTags {
 
   async goToEditTag(tagSlug) {
 
-    var elements = await this.scenario.getPage().locator(`li[class='gh-list-row gh-tags-list-item'] a[href$='${tagSlug}/']`).all();    
+    var elements = await this.scenario.getPage().locator(`li[class='gh-list-row gh-tags-list-item ember-view'] a[href$='${tagSlug}/']`).all();    
     await elements[0].click();
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();

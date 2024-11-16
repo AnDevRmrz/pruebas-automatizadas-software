@@ -1,14 +1,14 @@
 const { ListTags } = require("./list_tags_page");
-const { SettingsPage } = require("./settings_page");
 const { ListFilterMembersPage } = require("./list_filter_members_page");
 const { ListFilterDeletePage } = require("./list_filter_delete_page");
 const { ListPostsPage } = require("./list_posts_page");
+const { SettingsOptionsPage } = require("./settings_options_page");
 
 exports.DashboardPage = class DashboardPage {
   constructor(scenario) {
     this.scenario = scenario;
-    this.tagOption = scenario.getPage().locator("a[data-test-nav=tags]");
-    this.settingsOption = scenario.getPage().locator("a[data-test-nav='settings']");
+    this.tagOption = scenario.getPage().locator("section[class='gh-nav-body'] a[href*='tags']");
+    this.settingsOption = scenario.getPage().locator("section[class='gh-nav-body'] a[href*='settings']");
     this.pageOption = scenario.getPage().locator("a[data-test-nav=pages]")
     this.membersOption = scenario.getPage().locator("a[data-test-nav=members]");
     this.postsOption = scenario.getPage().locator("a[data-test-nav=posts]");
@@ -31,7 +31,7 @@ exports.DashboardPage = class DashboardPage {
     await this.settingsOption.click();
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
-    return new SettingsPage(this.scenario);
+    return new SettingsOptionsPage(this.scenario);
   }
 
   async goToPages() {

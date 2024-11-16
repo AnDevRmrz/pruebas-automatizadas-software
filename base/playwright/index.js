@@ -50,15 +50,15 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
   // // Scenario 15
   //  await filterMember();
   
-  // // Scenario 16 - Create Tag
-  //  await createTag();
-  // // Scenario 17 - Edit Tag
-  //  await editTag();
-  // // Scenario 18 - Delete Tag
-  //  await deleteTag();
-  // // Scenario 19 - Settings - set title and description
-  //  await settingsEditTitleAndDescription();
-  // // Scenario 20 - Settings - set site timezone
-  //  await settingsEditTimezone();
+  // Scenario 16 - Create Tag
+   await createTag();
+  // Scenario 17 - Edit Tag
+   await editTag();
+  // Scenario 18 - Delete Tag
+   await deleteTag();
+  // Scenario 19 - Settings - set title and description
+   await settingsEditTitleAndDescription();
+  // Scenario 20 - Settings - set site timezone
+   await settingsEditTimezone();
 
 })();
