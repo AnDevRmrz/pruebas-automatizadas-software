@@ -24,13 +24,14 @@ async function settingsEditTitleAndDescription() {
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
   const settingsPage = await dashboard.goToSettings();
+  const generalSettingsPage = await settingsPage.goToGeneralSettings();
 
   // When
-  await settingsPage.editTitleAndDescription(siteTitle, siteDescription);
+  await generalSettingsPage.editTitleAndDescription(siteTitle, siteDescription);
 
   // Then
   const currentTitleAndDescription =
-    await settingsPage.getCurrentTitleAndDescription();
+    await generalSettingsPage.getCurrentTitleAndDescription();
   expect(currentTitleAndDescription.siteTitle === siteTitle).toBeTruthy();
   expect(
     currentTitleAndDescription.siteDescription === siteDescription
@@ -52,20 +53,21 @@ async function settingsEditTimezone() {
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
-  const newTimezone = "Hawaii";
-  const expectedTimezone = "(GMT -10:00) Hawaii";
+  const newTimezone = 1;
+  const expectedTimezone = "Pacific/Honolulu";
 
   // Given
   const signInPage = new SignInPage(scenario);
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
   const settingsPage = await dashboard.goToSettings();
+  const generalSettingsPage = await settingsPage.goToGeneralSettings();
 
   // When
-  await settingsPage.editTimezone(newTimezone);
+  await generalSettingsPage.editTimezone(newTimezone);
 
   // Then
-  const currentTimezone = await settingsPage.getCurrentTimezone();
+  const currentTimezone = await generalSettingsPage.getCurrentTimezone();
   expect(currentTimezone.includes(expectedTimezone)).toBeTruthy();
   await browser.close();
   scenario.successful();

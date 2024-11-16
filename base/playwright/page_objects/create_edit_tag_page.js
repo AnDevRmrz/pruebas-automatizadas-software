@@ -5,8 +5,8 @@ exports.CreateEditTag = class CreateEditTag {
     this.tagNameInput = scenario.getPage().locator('#tag-name');
     this.tagSlugInput = scenario.getPage().locator('#tag-slug');
     this.tagDescriptionInput = scenario.getPage().locator('#tag-description');
-    this.saveTagButton = scenario.getPage().locator('button[data-test-button=save]');
-    this.deleteButton = scenario.getPage().locator('button[data-test-button=delete-tag]');
+    this.saveTagButton = scenario.getPage().locator('section[class=view-actions] button');
+    this.deleteButton = scenario.getPage().locator('button[class*="gh-btn-red"]');
   }
 
   async goToNew() {
@@ -24,6 +24,7 @@ exports.CreateEditTag = class CreateEditTag {
   async saveTag(tagName, tagSlug, tagDescription) {
 
     await this.tagNameInput.fill(tagName);
+    await this.tagSlugInput.click();
     await this.tagSlugInput.fill(tagSlug);
     await this.tagDescriptionInput.fill(tagDescription);
     await this.saveTagButton.click();
@@ -36,7 +37,7 @@ exports.CreateEditTag = class CreateEditTag {
     await this.deleteButton.click();
     await new Promise(r => setTimeout(r, 1000));
     await this.scenario.screenshot();
-    let confirmButton = await this.scenario.getPage().locator("button[data-test-button=confirm]");
+    let confirmButton = await this.scenario.getPage().locator('.modal-footer button[class*="gh-btn-red"]');
     await confirmButton.click();    
   }
   
