@@ -10,14 +10,24 @@ Scenario: 18 - Delete Tag
   And I wait for 1 seconds
   And I click on tag main option
   And I wait for 1 seconds
-  And I click on the row with "new-slug-test" tag slug
+  And I click on new tag button
+  And I wait for 1 seconds
+  And I type in the tag name field "Tag Name Test"
+  And I wait for 1 seconds
+  And I clean the slug field
+  And I type in the slug field "slug-test"
+  And I type in the description field "Description Test"
+  And I click on the save tag button
+  And I wait for 1 seconds
+  And I click on tag main option
+  And I click on the row with "slug-test" tag slug
   And I wait for 1 seconds
   And I click on the delete tag button
   And I wait for 1 seconds
   And I confirm the deletion of the tag
   Then I go to tags
   And I wait for 1 seconds
-  And I cannot see a row with tag title name "New Tag Name Test"
-  And I cannot see a row with tag description "New Description Test"
-  And I cannot see a row with slug "new-slug-test"
+  And I cannot see a row with tag title name "Tag Name Test"
+  And I cannot see a row with tag description "Description Test"
+  And I cannot see a row with slug "slug-test"
   And I wait for 1 seconds
