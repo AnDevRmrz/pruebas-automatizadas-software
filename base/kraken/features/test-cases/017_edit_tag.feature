@@ -10,6 +10,16 @@ Scenario: 17 - Edit Tag
   And I wait for 1 seconds
   And I click on tag main option
   And I wait for 1 seconds
+  And I click on new tag button
+  And I wait for 1 seconds
+  And I type in the tag name field "Tag Name Test"
+  And I wait for 1 seconds
+  And I clean the slug field
+  And I type in the slug field "slug-test"
+  And I type in the description field "Description Test"
+  And I click on the save tag button
+  And I wait for 1 seconds
+  And I click on tag main option
   And I click on the row with "slug-test" tag slug
   And I wait for 1 seconds
   And I type in the tag name field "New Tag Name Test"
