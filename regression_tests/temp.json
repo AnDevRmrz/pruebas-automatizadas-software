@@ -1,0 +1,21 @@
+{
+  "imagesToCompare": [
+    {
+      "base": "asfdasdf.png",
+      "rc": "asfdasdf.png"
+    },
+    {
+      "base": "asfdasdf.png",
+      "rc": "asfdasdf.png"
+    },
+    {
+      "base": "asfdasdf.png",
+      "rc": "asfdasdf.png"
+    },
+    {
+      "base": "asfdasdf.png",
+      "rc": "asfdasdf.png"
+    }
+  ],
+  "outputResults": "asdfasdfasdfasdf/asdfasdfasdf/asdfasdf"
+}
