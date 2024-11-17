@@ -2,7 +2,7 @@ const fs = require("fs");
 const { executeKraken } = require("./e2e_tools/kraken_executor");
 const { executePlaywright } = require("./e2e_tools/playwright_executor");
 const path = require("path");
-const {outputResult} = require("./regression_tools/dummy_regression_tool");
+const {createPixelTestCaseReport} = require("./regression_tools/report_generation");
 
 const KRAKEN_ID = 1;
 const RESEMBLE_JS_ID = 1;
@@ -21,12 +21,9 @@ function executeRegressionComparison(scenario, e2eTool, regressionTool, screensh
   let result = prepareInputToGenerateRegressionTests(scenario, e2eTool, regressionTool, screenshots);
 
   if(regressionTool.id === RESEMBLE_JS_ID) {
-
-    outputResult(result);
-  }
-  else
-  {
-    outputResult(result);
+    createPixelTestCaseReport(result, 'RESEMBLE');
+  } else {
+    createPixelTestCaseReport(result, 'PIXEL');
   }
 }
 
