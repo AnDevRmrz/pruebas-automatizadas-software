@@ -12,7 +12,7 @@ exports.CreateDeletePostPage = class CreateDeletePostPage {
     }
   
     async goToNew() {
-      await this.scenario.getPage().goto("http://localhost:3002/ghost/#/editor/post");    
+      await this.scenario.getPage().goto("http://localhost:3003/ghost/#/editor/post");    
       await new Promise((r) => setTimeout(r, 1000));
       await this.scenario.screenshot();
     }

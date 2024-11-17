@@ -8,7 +8,7 @@ exports.ListTags = class ListTags {
   }
 
   async goto() {
-    await this.scenario.getPage().goto("http://localhost:3002/ghost/#/tags");
+    await this.scenario.getPage().goto("http://localhost:3003/ghost/#/tags");
     await this.scenario.screenshot();
     await new Promise((r) => setTimeout(r, 1000));
   }

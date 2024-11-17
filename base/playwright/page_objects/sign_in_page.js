@@ -10,7 +10,7 @@ exports.SignInPage = class SignInPage {
   }
 
   async goto() {
-    await this.scenario.getPage().goto('http://localhost:3002/ghost/#/signin');
+    await this.scenario.getPage().goto('http://localhost:3003/ghost/#/signin');
     await new Promise(r => setTimeout(r, 1000));
   }
 

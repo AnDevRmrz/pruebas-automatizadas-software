@@ -12,7 +12,7 @@ exports.SignUpPage = class SignUpPage {
   }
 
   async goto() {
-    await this.page.goto('http://localhost:3002/ghost/#/setup/one');
+    await this.page.goto('http://localhost:3003/ghost/#/setup/one');
     await new Promise(r => setTimeout(r, 1000));
   }
 

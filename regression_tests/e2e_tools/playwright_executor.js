@@ -1,3 +1,7 @@
+const fs = require("fs");
+const path = require("path");
+const { exec } = require("child_process");
+
 const DELETE_CONTENT_FOLDER = "rm -rf ./*";
 const PLAYWRIGHT_COMMAND = "node regression.js ";
 

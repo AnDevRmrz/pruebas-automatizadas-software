@@ -8,7 +8,7 @@ exports.SettingsOptionsPage = class SettingsOptionsPage {
   }
 
   async goto() {
-    await this.scenario.getPage().goto("http://localhost:3002/ghost/#/settings");
+    await this.scenario.getPage().goto("http://localhost:3003/ghost/#/settings");
     await this.scenario.screenshot();
     await new Promise((r) => setTimeout(r, 1000));
   }

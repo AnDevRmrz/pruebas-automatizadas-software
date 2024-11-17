@@ -1,18 +1,18 @@
 const readline = require('readline');
 const chalk = require('chalk');
 const availableTestCases = require("./available_test_cases.json");
-const availableE2ETools = require("./e2e_tools.json");
-const availableRegressionTools = require("./regression_tools.json");
+const availableE2ETools = require("./e2e_tools/e2e_tools.json");
+const availableRegressionTools = require("./regression_tools/regression_tools.json");
 const prompts = readline.createInterface(process.stdin, process.stdout);
-const {executeTestScenario} = require("./integrator");
+const {executeTestScenario, executeRegressionComparison} = require("./integrator");
 
 let e2eTool = null;
 let regressionTool = null;
 let testCaseToExecute = null;
 
-console.log(chalk.green("---------------------------------------------------------"));
-console.log(chalk.green("Bienvenido a nuestra herramienta de pruebas de regresión."));
-console.log(chalk.green("---------------------------------------------------------"));
+console.log(chalk.green("----------------------------------------------------------------"));
+console.log(chalk.green("Bienvenido a nuestra herramienta de pruebas de regresión visual."));
+console.log(chalk.green("----------------------------------------------------------------"));
 
 chooseE2ETool();
 
@@ -123,17 +123,13 @@ function confirmExecution() {
 
             console.log("Iniciando ejecución....");
 
-            let showScreenShots = (result) => {
+            let processScreenshots = (result) => {
                 
-                console.log("-----------------------------------------");
-                console.log(result.screenshotsBase);
-                console.log("-----------------------------------------");
-                console.log(result.screenshotsRC);
-                console.log("-----------------------------------------");
+                executeRegressionComparison(testCaseToExecute, e2eTool, regressionTool, result);
                 process.exit();
             }
 
-            executeTestScenario(testCaseToExecute, e2eTool, showScreenShots);
+            executeTestScenario(testCaseToExecute, e2eTool, processScreenshots);
         }
         else
         {

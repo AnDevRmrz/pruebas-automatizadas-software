@@ -12,7 +12,7 @@ class ListPage {
 
   async goto() {
     try {
-      await this.scenario.getPage().goto("http://localhost:3002/ghost/#/pages");
+      await this.scenario.getPage().goto("http://localhost:3003/ghost/#/pages");
       await this.waitForLoad();
       await this.scenario.screenshot();
     } catch (error) {

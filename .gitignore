@@ -3,4 +3,5 @@
 */kraken/.kraken
 */playwright/node_modules
 */playwright/test-results
+regression_tests/regression-results/
 .vscode/
