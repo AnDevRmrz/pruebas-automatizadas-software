@@ -10,10 +10,14 @@ let currentVersion = null;
 let screenshotsRC = [];
 let screenshotsBase = [];
 
-function init(featureToExecute, callback) {
+function executeKraken(featureToExecute, callback) {
+
+  let resolveCallback = () => {
+    callback(getResult());
+  }
 
   let screenshotBase = () => {
-    getScreenshots("base", callback);
+    getScreenshots("base", resolveCallback);
   };  
 
   let screenshotRc = () => {
@@ -32,7 +36,7 @@ function executeSteps(featureToExecute, version, callback) {
   cleanReports();
 
   let executeFeature = () => {
-    executeTestCase(callback);
+    executeTestScenario(callback);
   }
 
   let cleanAndRunTheNextFeature = () => {
@@ -41,7 +45,7 @@ function executeSteps(featureToExecute, version, callback) {
   };
 
   let executeSignUp = () => {
-    executeTestCase(cleanAndRunTheNextFeature);
+    executeTestScenario(cleanAndRunTheNextFeature);
   };
 
   copyFeatureToExecute(SIGN_UP_FEATURE, executeSignUp);
@@ -76,7 +80,7 @@ function copyFeatureToExecute(featureToExecute, callback) {
   });
 }
 
-function executeTestCase(callback) {  
+function executeTestScenario(callback) {  
 
   let directory = `../${currentVersion}/kraken`;
 
@@ -133,5 +137,5 @@ function getResult() {
 }
 
 module.exports = {
-  init, getResult
+  executeKraken
 };

@@ -1,13 +1,10 @@
 const readline = require('readline');
 const chalk = require('chalk');
-const fs = require('fs');
 const availableTestCases = require("./available_test_cases.json");
 const availableE2ETools = require("./e2e_tools.json");
 const availableRegressionTools = require("./regression_tools.json");
-const {initGhostInstances} = require("./initial_steps");
-const {init, getResult} = require("./kraken_execution");
-
 const prompts = readline.createInterface(process.stdin, process.stdout);
+const {executeTestScenario} = require("./integrator");
 
 let e2eTool = null;
 let regressionTool = null;
@@ -83,7 +80,7 @@ function chooseTestCase() {
 
     console.log("");
     console.log("");
-    console.log(chalk.green("Elige el caso de uso a ejecutar"));
+    console.log(chalk.green("Elige el escenario de prueba a ejecutar"));
     console.log("");
     for (let i = 0; i < availableTestCases.length; i++) {
         
@@ -116,7 +113,7 @@ function confirmExecution() {
     
     console.log(chalk.green("Herramienta E2E: ")+""+chalk.blue(e2eTool.name));
     console.log(chalk.green("Herramienta Regression: ")+""+chalk.blue(regressionTool.name));
-    console.log(chalk.green("Herramienta Caso de prueba: ")+""+chalk.blue(testCaseToExecute.name));
+    console.log(chalk.green("Escenario de prueba: ")+""+chalk.blue(testCaseToExecute.name));
 
     console.log("");
 
@@ -125,11 +122,9 @@ function confirmExecution() {
         if(response == 1){
 
             console.log("Iniciando ejecución....");
-            // initGhostInstances();
 
-            let showScreenShots = () => {
-
-                var result = getResult();
+            let showScreenShots = (result) => {
+                
                 console.log("-----------------------------------------");
                 console.log(result.screenshotsBase);
                 console.log("-----------------------------------------");
@@ -138,12 +133,11 @@ function confirmExecution() {
                 process.exit();
             }
 
-            init(testCaseToExecute.krakenFeature, showScreenShots);
+            executeTestScenario(testCaseToExecute, e2eTool, showScreenShots);
         }
         else
         {
             chooseE2ETool();
-        }
-        
+        }        
     });
 }
