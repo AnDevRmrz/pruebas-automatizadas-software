@@ -10,13 +10,13 @@ exports.CreateEditTag = class CreateEditTag {
   }
 
   async goToNew() {
-    await this.scenario.getPage().goto("http://localhost:3002/ghost/#/tags/new");    
+    await this.scenario.getPage().goto("http://localhost:3003/ghost/#/tags/new");    
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
   }
 
   async goToEdit(tagSlug) {
-    await this.scenario.getPage().goto("http://localhost:3002/ghost/#/tags/"+tagSlug);
+    await this.scenario.getPage().goto("http://localhost:3003/ghost/#/tags/"+tagSlug);
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
   }

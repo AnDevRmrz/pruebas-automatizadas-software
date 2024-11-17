@@ -15,7 +15,7 @@ exports.DashboardPage = class DashboardPage {
   }
 
   async goto() {
-    await this.scenario.getPage().goto("http://localhost:3002/ghost/#/dashboard");
+    await this.scenario.getPage().goto("http://localhost:3003/ghost/#/dashboard");
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
   }
