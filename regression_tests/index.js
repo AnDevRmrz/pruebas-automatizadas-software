@@ -5,7 +5,7 @@ const availableTestCases = require("./available_test_cases.json");
 const availableE2ETools = require("./e2e_tools.json");
 const availableRegressionTools = require("./regression_tools.json");
 const {initGhostInstances} = require("./initial_steps");
-const {init} = require("./kraken_execution");
+const {init, getResult} = require("./kraken_execution");
 
 const prompts = readline.createInterface(process.stdin, process.stdout);
 
@@ -125,9 +125,20 @@ function confirmExecution() {
         if(response == 1){
 
             console.log("Iniciando ejecución....");
-            process.exit();
-            initGhostInstances();
-            init(testCaseToExecute.krakenFeature, () => console.log("termino !!!!"));
+            // initGhostInstances();
+
+            let showScreenShots = () => {
+
+                var result = getResult();
+                console.log("-----------------------------------------");
+                console.log(result.screenshotsBase);
+                console.log("-----------------------------------------");
+                console.log(result.screenshotsRC);
+                console.log("-----------------------------------------");
+                process.exit();
+            }
+
+            init(testCaseToExecute.krakenFeature, showScreenShots);
         }
         else
         {

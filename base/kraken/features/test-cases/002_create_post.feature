@@ -2,7 +2,7 @@ Feature: Post
 
 @user2 @web
 Scenario: 02 - Create post
-  Given I navigate to page "http://localhost:3002/ghost"
+  Given I navigate to page "http://localhost:3003/ghost"
   And I wait for 2 seconds
   When I type email login "alguien@hotmail.com" 
   And I type password login "123456#213asdf"

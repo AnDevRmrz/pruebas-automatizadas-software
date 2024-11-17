@@ -39,7 +39,7 @@ function restartGhost45() {
             return;
         }
         // console.log(`stdout: ${stdout}`);
-        console.log("Ghost 4.5 Restarted !!!");
+        console.log("Ghost 4.5 Restarted !!!");        
     });
 }
 

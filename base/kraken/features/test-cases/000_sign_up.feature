@@ -2,7 +2,7 @@ Feature: Crear administrador ghost
 
 @user1 @web
 Scenario: Sign Up
-  Given I navigate to page "http://localhost:3002/ghost"
+  Given I navigate to page "http://localhost:3003/ghost"
   And I wait for 1 seconds
   When I click on create account button
   And I wait for 1 seconds
