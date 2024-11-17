@@ -5,3 +5,4 @@
 */playwright/test-results
 regression_tests/regression-results/
 .vscode/
+regression_tests/node_modules
