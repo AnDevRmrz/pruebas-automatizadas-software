@@ -46,6 +46,14 @@ La idea de este proyecto es permitir la ejecución de todas las pruebas E2E de l
 
 Para facilitar la ejecución, desarrollamos una línea de comandos en donde se le permitirá al usuario elegir la herramienta E2E testing, la herramienta de regression testing y también el escenario de prueba en particular que se desea analizar.
 
---IMAGEN--
+![image](https://github.com/user-attachments/assets/54605dc7-bd0c-4185-903c-639c0fa353db)
+
+Para iniciar esta línea de comandos, debemos ejecutar el siguiente comando en la ruta %ruta_instalacion%/regression_tests
+
+```
+node index.js
+```
 
 Es importante resaltar que, cada vez que se vaya a ejecutar una nueva automatización, es necesario reiniciar los contenedores de Ghosts con los comandos sugeridos.
+
+No se automatizó el reinicio de las versiones de Ghosts porque desconocemos si el usuario tenga configurado el proceso de docker con los permisos suficientes los cuales no requieran un super-usuario o root.
