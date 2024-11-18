@@ -24,7 +24,11 @@ Scenario: 05 - Delete post
   And I wait for 2 seconds
   And I click in close modal
   And I wait for 2 seconds
-  And I click in post analytic
-  And I wait for 2 seconds
-  Then I click in analytics button and delete post
-  And I wait for 2 seconds
+  And I do right click over the post
+  And I wait for 1 seconds
+  And I click in delete post
+  And I wait for 1 seconds
+  And I click in confirm delete post
+  And I wait for 1 seconds
+  Then I check that the deleted post with title "Auto post" is no longer existent
+  And I wait for 1 seconds

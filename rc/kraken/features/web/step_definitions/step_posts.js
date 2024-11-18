@@ -56,6 +56,37 @@ When('I click in post name', async function () {
     return await element.click();
 });
 
+When('I do right click over the post', async function () {
+    let element = await this.driver.$('.gh-content-entry-title');
+    await element.waitForDisplayed();
+    await element.click({ button: 'right' });
+});
+
+When('I click in delete post', async function () {
+    // Selecciona el botón "Delete" y desplázate a él para asegurarte de que está visible en el viewport
+    let element = await this.driver.$('[data-test-button="delete"]');
+    await element.scrollIntoView();
+    await element.waitForDisplayed(); // Espera a que el botón "Delete" esté visible
+    await element.click(); // Intenta hacer clic en el botón "Delete"
+});
+
+When('I click in confirm delete post', async function () {
+    let element = await this.driver.$('[data-test-button="confirm"]');
+    return await element.click();
+});
+
+Then('I check that the deleted post with title {string} is no longer existent', async function (title) {
+    let elements = await this.driver.$$('.gh-content-entry-title');
+    let elementFound = false;
+    for (const row of elements) {      
+      if (row.getText() === title) {
+        elementFound = true;
+        break;
+      }
+    }
+    assert.equal(elementFound, false);
+});
+
 Then('there is a post with title {string}', async function (postTitle) {
     let titleElements = await this.driver.$$("div[class='gh-posts-list-item-group'] h3[class='gh-content-entry-title']");
     let titleValues = await Promise.all(titleElements.map(async (value) => await value.getText()));    

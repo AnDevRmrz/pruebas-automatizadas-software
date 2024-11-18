@@ -143,13 +143,18 @@ async function deletePost() {
   
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf"
-    const postTitleToDelete = "Coming soon";
+    const postTitleToDelete = "Post to Delete";
+    const postContent = 'Description';
   
     // Given
     const signInPage = new SignInPage(scenario);
     await signInPage.goto();
     const dashboard = await signInPage.signIn(email, password);
     const listPostsPage = await dashboard.goToPosts();
+
+    const createPostPage = await listPostsPage.goToNewPost();  
+    await createPostPage.savePost(postTitleToDelete, postContent);
+    await listPostsPage.closeSuccessfulModal();
     const createEditPostPage = await listPostsPage.goToEditPost(postTitleToDelete);
   
     // When

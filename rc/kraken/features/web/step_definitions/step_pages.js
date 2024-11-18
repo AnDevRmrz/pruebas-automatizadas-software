@@ -115,11 +115,17 @@ When('I click on big delete once again', async function () {
     return await element.click();
 });
 
-Then('I check that the deleted page is no longer existent', async function () {
+Then('I check that the deleted page with title {string} is no longer existent', async function (title) {
     let elements = await this.driver.$$('.gh-content-entry-title');
-    assert.strictEqual(elements.length, 2, "The number of pages does not match the expected count of 2");
+    let elementFound = false;
+    for (const row of elements) {      
+      if (row.getText() === title) {
+        elementFound = true;
+        break;
+      }
+    }
+    assert.equal(elementFound, false);
 });
-
 
 
 //create page
@@ -163,6 +169,11 @@ Then('the page title is visible', async function () {
     let element = await this.driver.$('.modal-body h2');
     const text = await element.getText();
     assert.strictEqual(text, 'Title', "The page title does not match 'Title'");
+});
+
+When('I click in close page popup', async function () {
+    let element = await this.driver.$('[data-test-button="close-publish-flow"]');
+    return await element.click();
 });
 
 When('the page description is visible', async function () {

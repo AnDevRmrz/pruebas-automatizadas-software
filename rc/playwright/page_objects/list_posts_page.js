@@ -10,8 +10,8 @@ exports.ListPostsPage = class ListPostsPage {
 
   async goto() {
     await this.scenario.getPage().goto("http://localhost:3002/ghost/#/posts");
-    await this.scenario.screenshot();
     await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
   }
 
   async getValueOrEmptyWhenError(tagHtml, selector) {
