@@ -57,3 +57,14 @@ node index.js
 Es importante resaltar que, cada vez que se vaya a ejecutar una nueva automatización, es necesario reiniciar los contenedores de Ghosts con los comandos sugeridos.
 
 No se automatizó el reinicio de las versiones de Ghosts porque desconocemos si el usuario tenga configurado el proceso de docker con los permisos suficientes los cuales no requieran un super-usuario o root.
+
+### Resultados 
+
+Una vez ejecutado un escenario de pruebas, los resultados los podrá ver en la siguiente carpeta:
+
+- %ruta_instalacion%/regression_tests/regression-results
+
+![image](https://github.com/user-attachments/assets/411aa44f-edba-4cd5-b734-878c90cd90c1)
+
+![image](https://github.com/user-attachments/assets/1b484d55-1e88-4b1a-ac17-2195e47e372a)
+
