@@ -2,10 +2,23 @@ const { PNG } = require("pngjs");
 const pixelmatch = require("pixelmatch");
 const fs = require("fs");
 const compare = require("resemblejs").compare;
+const sharp = require("sharp");
 
 function createPixelTestCaseReport(reportObject, tool, callback) {
-  if (tool === "RESEMBLE") {
-    createDiffImagesResemble(reportObject, () => {
+  moveImagesToLocal(reportObject);
+  resizeImages(reportObject.imagesToCompare).then((result) =>{
+    if (tool === "RESEMBLE") {
+      createDiffImagesResemble(reportObject, () => {
+        const html = generateHTML(reportObject);
+        fs.writeFileSync(`${reportObject.outputResults}/report.html`, html);
+        fs.copyFileSync(
+          "./regression_tools/index-testcase.css",
+          `${reportObject.outputResults}/index.css`
+        );
+        callback();
+      });
+    } else {
+      createDiffImagesPixel(reportObject);
       const html = generateHTML(reportObject);
       fs.writeFileSync(`${reportObject.outputResults}/report.html`, html);
       fs.copyFileSync(
@@ -13,17 +26,45 @@ function createPixelTestCaseReport(reportObject, tool, callback) {
         `${reportObject.outputResults}/index.css`
       );
       callback();
-    });
-  } else {
-    createDiffImagesPixel(reportObject);
-    const html = generateHTML(reportObject);
-    fs.writeFileSync(`${reportObject.outputResults}/report.html`, html);
-    fs.copyFileSync(
-      "./regression_tools/index-testcase.css",
-      `${reportObject.outputResults}/index.css`
+    }
+  });
+}
+
+function moveImagesToLocal(reportObject) {
+  reportObject.imagesToCompare.forEach((images) => {
+    const basePath = `${reportObject.outputResults}/base_${images.base
+      .split("/")
+      .pop()}`;
+    fs.copyFileSync(images.base, basePath);
+    images.base = basePath;
+
+    const rcPath = `${reportObject.outputResults}/rc_${images.rc
+      .split("/")
+      .pop()}`;
+    fs.copyFileSync(images.rc, rcPath);
+    images.rc = rcPath;
+  });
+}
+
+function resizeImages(imagesToCompare) {
+  const arrayPromises = [];
+  
+  imagesToCompare.forEach(images => {
+    arrayPromises.push(
+      sharp(images.base)
+        .resize(1280, 720)
+        .toBuffer()
+        .then(buffer => sharp(buffer).toFile(images.base))
     );
-    callback();
-  }
+    arrayPromises.push(
+      sharp(images.rc)
+        .resize(1280, 720)
+        .toBuffer()
+        .then(buffer => sharp(buffer).toFile(images.rc))
+    );
+  });
+
+  return Promise.all(arrayPromises);
 }
 
 function createDiffImagesResemble(reportObject, callback) {
