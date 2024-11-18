@@ -16,14 +16,14 @@ function executeTestScenario(scenario, e2eTool, callback) {
   }
 }
 
-function executeRegressionComparison(scenario, e2eTool, regressionTool, screenshots) {
+function executeRegressionComparison(scenario, e2eTool, regressionTool, screenshots, callback) {
 
   let result = prepareInputToGenerateRegressionTests(scenario, e2eTool, regressionTool, screenshots);
 
   if(regressionTool.id === RESEMBLE_JS_ID) {
-    createPixelTestCaseReport(result, 'RESEMBLE');
+    createPixelTestCaseReport(result, 'RESEMBLE', callback);
   } else {
-    createPixelTestCaseReport(result, 'PIXEL');
+    createPixelTestCaseReport(result, 'PIXEL', callback);
   }
 }
 

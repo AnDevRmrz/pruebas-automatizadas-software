@@ -123,10 +123,14 @@ function confirmExecution() {
 
             console.log("Iniciando ejecución....");
 
+            let endProcess = () => {
+
+                process.exit();
+            }
+
             let processScreenshots = (result) => {
                 
-                executeRegressionComparison(testCaseToExecute, e2eTool, regressionTool, result);
-                process.exit();
+                executeRegressionComparison(testCaseToExecute, e2eTool, regressionTool, result, endProcess);
             }
 
             executeTestScenario(testCaseToExecute, e2eTool, processScreenshots);
