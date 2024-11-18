@@ -47,6 +47,9 @@ async function editTag() {
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf"
   const tagToEdit = "slug-test";
+  const oldTagName = "Tag Name Test";
+  const oldTagSlug = "slug-test";
+  const oldTagDescription = "Description Test";
   const tagName = "New Tag Name Test";
   const tagSlug = "new-slug-test";
   const tagDescription = "New Description Test";
@@ -56,7 +59,10 @@ async function editTag() {
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
   const listTagsPage = await dashboard.goToTags();
-  const createEditTagPage = await listTagsPage.goToEditTag(tagToEdit);
+  const createEditTagPage = await listTagsPage.goToNewTag();
+  await createEditTagPage.saveTag(oldTagName, oldTagSlug, oldTagDescription);
+  await dashboard.goToTags();
+  await listTagsPage.goToEditTag(tagToEdit);
 
   // When
   await createEditTagPage.saveTag(tagName, tagSlug, tagDescription);
@@ -90,7 +96,10 @@ async function deleteTag() {
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
   let listTagsPage = await dashboard.goToTags();
-  const createEditTagPage = await listTagsPage.goToEditTag(tagToDelete);  
+  const createEditTagPage = await listTagsPage.goToNewTag();
+  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription);
+  await dashboard.goToTags();
+  await listTagsPage.goToEditTag(tagToDelete);  
 
   // When
   listTagsPage = await createEditTagPage.deleteTag();
