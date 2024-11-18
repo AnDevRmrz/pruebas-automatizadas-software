@@ -68,3 +68,6 @@ Una vez ejecutado un escenario de pruebas, los resultados los podrá ver en la s
 
 ![image](https://github.com/user-attachments/assets/1b484d55-1e88-4b1a-ac17-2195e47e372a)
 
+### Generalidades
+
+Una de las principales razones que nos llevó a desarrollar esta línea de comandos fue la dificultad para identificar los resultados de las pruebas E2E de Kraken en un escenario específico. Por ello, decidimos enfocarnos en ejecutar un único escenario de prueba por cada ejecución.
