@@ -83,17 +83,21 @@ function getScreenshots(version, callback) {
           let result = [];
 
           screenshots.forEach(screenshot => {
-              
               result.push(path.resolve(absolutePath, screenshot));
           });
 
-          if(version === "rc") {
+          result.sort((a, b) => {
+            const numA = parseInt(a.match(/screenshot_(\d+)/)[1]);
+            const numB = parseInt(b.match(/screenshot_(\d+)/)[1]);
+            return numA - numB;
+          });
 
-              screenshotsRC = result;
+          if(version === "rc") {
+            screenshotsRC = result;
           }
           else
           {
-              screenshotsBase = result;
+            screenshotsBase = result;
           }
 
           callback();
@@ -102,7 +106,6 @@ function getScreenshots(version, callback) {
 }
 
 function getResult() {
-
   return {
       screenshotsRC: screenshotsRC,
       screenshotsBase: screenshotsBase
