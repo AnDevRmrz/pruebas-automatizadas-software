@@ -171,7 +171,7 @@ async function deletePage() {
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
-  const pageToDelete = "Title changed"; // El título de la página que queremos eliminar
+  const pageToDelete = "Title changed 1"; // El título de la página que queremos eliminar
   const pageDescription = "My description";
 
   // Given
