@@ -1,23 +1,41 @@
 const { PNG } = require("pngjs");
 const pixelmatch = require("pixelmatch");
 const fs = require("fs");
-const compareImages = require("resemblejs/compareImages");
+const compare = require("resemblejs").compare;
 
-function createPixelTestCaseReport(reportObject, tool) {
+function createPixelTestCaseReport(reportObject, tool, callback) {
   if (tool === "RESEMBLE") {
-    createDiffImagesResemble(reportObject).then();
+    createDiffImagesResemble(reportObject, () => {
+      const html = generateHTML(reportObject);
+      fs.writeFileSync(`${reportObject.outputResults}/report.html`, html);
+      fs.copyFileSync(
+        "./regression_tools/index-testcase.css",
+        `${reportObject.outputResults}/index.css`
+      );
+      callback();
+    });
   } else {
     createDiffImagesPixel(reportObject);
+    const html = generateHTML(reportObject);
+    fs.writeFileSync(`${reportObject.outputResults}/report.html`, html);
+    fs.copyFileSync(
+      "./regression_tools/index-testcase.css",
+      `${reportObject.outputResults}/index.css`
+    );
+    callback();
   }
-  const html = generateHTML(reportObject);
-  fs.writeFileSync(`${reportObject.outputResults}/report.html`, html);
-  fs.copyFileSync(
-    "./regression_tools/index-testcase.css",
-    `${reportObject.outputResults}/index.css`
+}
+
+function createDiffImagesResemble(reportObject, callback) {
+  compareImageResemble(
+    reportObject.imagesToCompare,
+    0,
+    reportObject.outputResults,
+    callback
   );
 }
 
-async function createDiffImagesResemble(reportObject) {
+function compareImageResemble(images, i, outputResults, callback) {
   const options = {
     output: {
       errorColor: {
@@ -34,18 +52,18 @@ async function createDiffImagesResemble(reportObject) {
     ignore: "antialiasing",
   };
 
-  let i = 0;
-  for (const images of reportObject.imagesToCompare) {
-    const data = await compareImages(
-      fs.readFileSync(images.base),
-      fs.readFileSync(images.rc),
-      options
-    );
-    fs.writeFileSync(
-      `${reportObject.outputResults}/diff-${i}.png`,
-      data.getBuffer()
-    );
-    i++;
+  if (i < images.length) {
+    let baseImage = fs.readFileSync(images[i].base);
+    let rcImage = fs.readFileSync(images[i].rc);
+
+    compare(baseImage, rcImage, options, (err, data) => {
+      fs.writeFileSync(`${outputResults}/diff-${i}.png`, data.getBuffer());
+
+      i = i+1;
+      compareImageResemble(images, i, outputResults, callback);
+    });
+  } else {
+    callback();
   }
 }
 
