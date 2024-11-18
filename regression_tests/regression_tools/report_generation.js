@@ -2,18 +2,52 @@ const { PNG } = require("pngjs");
 const pixelmatch = require("pixelmatch");
 const fs = require("fs");
 const compareImages = require("resemblejs/compareImages");
+const sharp = require("sharp");
 
-function createPixelTestCaseReport(reportObject, tool) {
+async function createPixelTestCaseReport(reportObject, tool) {
+  // Ensure asynchronous calls are awaited
+  moveImagesToLocal(reportObject); // Assuming this is synchronous
+  await resizeImages(reportObject.imagesToCompare); // Wait for resize to complete
+
   if (tool === "RESEMBLE") {
-    createDiffImagesResemble(reportObject).then();
+    await createDiffImagesResemble(reportObject); // Wait for diff creation
   } else {
-    createDiffImagesPixel(reportObject);
+    createDiffImagesPixel(reportObject); // Synchronous
   }
+
+  // Generate the HTML report
   const html = generateHTML(reportObject);
   fs.writeFileSync(`${reportObject.outputResults}/report.html`, html);
   fs.copyFileSync(
     "./regression_tools/index-testcase.css",
     `${reportObject.outputResults}/index.css`
+  );
+}
+
+function moveImagesToLocal(reportObject) {
+  reportObject.imagesToCompare.forEach((images) => {
+    const basePath = `${reportObject.outputResults}/base_${images.base
+      .split("/")
+      .pop()}`;
+    fs.copyFileSync(images.base, basePath);
+    images.base = basePath;
+
+    const rcPath = `${reportObject.outputResults}/rc_${images.rc
+      .split("/")
+      .pop()}`;
+    fs.copyFileSync(images.rc, rcPath);
+    images.rc = rcPath;
+  });
+}
+
+async function resizeImages(imagesToCompare) {
+  await Promise.all(
+    imagesToCompare.map((images) =>
+      Promise.all([
+        sharp(images.base).resize(1280, 720).toFile(images.base),
+        sharp(images.rc).resize(1280, 720).toFile(images.rc),
+      ])
+    )
   );
 }
 
