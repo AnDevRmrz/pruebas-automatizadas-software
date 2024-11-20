@@ -1,8 +1,3 @@
-*/kraken/reports/
-*/kraken/node_modules
-*/kraken/.kraken
-*/playwright/node_modules
-*/playwright/test-results
-regression_tests/regression-results/
+playwright/node_modules
+playwright/test-results
 .vscode/
-regression_tests/node_modules

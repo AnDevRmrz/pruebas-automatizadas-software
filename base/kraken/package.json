@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "kraken-node": "^1.0.24"
-  },
-  "devDependencies": {
-    "mocha": "^10.8.2"
-  }
-}
