@@ -18,7 +18,7 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
   await browser.close();
 
   // Scenario 1
-  await listPosts();
+  await createPostFaker();
   // Scenario 2
   await createPost();
   // Scenario 3
