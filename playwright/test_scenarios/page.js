@@ -2,12 +2,16 @@ const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
+const { faker } = require('@faker-js/faker');
 
-async function createPage(pageTitle,pageDescription,scenario_name) {
+async function createPage_ValidData(pageTitle,pageDescription,scenario_name) {
 
-  if (typeof pageTitle !== "string" || typeof pageDescription !== "string"|| typeof scenario_name !== "string") {
-    throw new TypeError("Both pageTitle, pageDescription and scenario_name must be strings");
-  }
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const pageTitle = faker.lorem.words(3); 
+  const pageDescription = faker.lorem.paragraph(); 
+  const scenario_name = "031 - Create Page Valid Data";
+
 
   const browser = await playwright["chromium"].launch({
     headless: false,
@@ -15,14 +19,9 @@ async function createPage(pageTitle,pageDescription,scenario_name) {
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  //const scenario = new Scenario(page, "006 - Create Page");
   const scenario = new Scenario(page, scenario_name);
   scenario.begin();
 
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  //const pageTitle = "Title";
-  //const pageDescription = "Description";
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -50,11 +49,78 @@ async function createPage(pageTitle,pageDescription,scenario_name) {
   return;
 }
 
+async function createPage_InvalidData(pageTitle,pageDescription,scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const pageTitle = faker.lorem.words(250); 
+  const pageDescription = faker.lorem.paragraph(); 
+  const scenario_name = "032 - Create Page Invalid Data";
+
+  
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 500,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenario_name);
+  scenario.begin();
+
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+
+  // When
+  const listFilterDeletePagePage = await dashboard.goToPages();
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
+  await createPagePage.createPage(pageTitle, pageDescription, false);
+
+  // Then
+  expect(await createPagePage.verifyTitleInModal(pageTitle)).toBeTruthy();
+  expect(
+    await createPagePage.verifyDescriptionInModal(pageDescription)
+  ).toBeTruthy();
+  await createPagePage.closePublishFlow();
+  await listFilterDeletePagePage.goto();
+  expect(
+    await listFilterDeletePagePage.verifyTitleInList(pageTitle)
+  ).toBeTruthy();
+
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 async function editPage(newTitle,newDescription,scenario_name) {
 
-  if (typeof newTitle !== "string" || typeof newDescription !== "string") {
-    throw new TypeError("Both newTitle and newDescription must be strings");
-  }
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const previousPageTitle= "Title for editPage"
+  const previousPageDescription = "Description for editpage"
+
+
 
   const browser = await playwright["chromium"].launch({
     headless: false,
@@ -66,17 +132,12 @@ async function editPage(newTitle,newDescription,scenario_name) {
   const scenario = new Scenario(page, scenario_name);
   scenario.begin();
 
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const previousPageTitle= "Title for editPage"
-  const previousPageDescription = "Description for editpage"
-  //const newTitle = "Title changed";
-  //const newDescription = "Description changed";
 
   // Given
   const signInPage = new SignInPage(scenario);
   await signInPage.goto();
   const dashboard = await signInPage.signIn(email, password);
+
   // When
   const listFilterDeletePagePage = await dashboard.goToPages();
   const createPagePage = await listFilterDeletePagePage.goToNewPage();
@@ -100,10 +161,12 @@ async function editPage(newTitle,newDescription,scenario_name) {
 }
 
 async function previewPage(pageTitle,pageDescription,scenario_name) {
-  // El expected title que se espera debe ser el que se edito o el que se creo sin editar, al igual que la descripcion
-  if (typeof pageTitle !== "string" || typeof pageDescription !== "string") {
-    throw new TypeError("Both newTitle and newDescription must be strings");
-  }
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+
+
 
   const browser = await playwright["chromium"].launch({
     headless: false,
@@ -111,14 +174,8 @@ async function previewPage(pageTitle,pageDescription,scenario_name) {
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  //const scenario = new Scenario(page, "008 - Preview Page");
   const scenario = new Scenario(page, scenario_name);
   scenario.begin();
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  //const expectedTitle = "Title changed";
-  //const expectedDescription = "Description changed";
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -150,9 +207,13 @@ async function previewPage(pageTitle,pageDescription,scenario_name) {
 
 async function filterDraftPages(draftPageTitle,pageDescription,scenario_name) {
 
-  if (typeof draftPageTitle !== "string" || typeof pageDescription !== "string") {
-    throw new TypeError("Both draftPageTitle and pageDescription must be strings");
-  }
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const expectedAttribute = "Draft";
+
+
+
 
   const browser = await playwright["chromium"].launch({
     headless: false,
@@ -160,15 +221,8 @@ async function filterDraftPages(draftPageTitle,pageDescription,scenario_name) {
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  //const scenario = new Scenario(page, "009 - Filter Draft Pages");
   const scenario = new Scenario(page, scenario_name);
   scenario.begin();
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  //const draftPageTitle = "Title draft";
-  const expectedAttribute = "Draft";
-  //const pageDescription = "Description draft";
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -192,20 +246,19 @@ async function filterDraftPages(draftPageTitle,pageDescription,scenario_name) {
 }
 
 async function deletePage(pageToDelete,pageDescription,scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  //const scenario = new Scenario(page, "010 - Delete Page");
   const scenario = new Scenario(page, scenario_name);
   scenario.begin();
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  //const pageToDelete = "Title changed 1"; 
-  //const pageDescription = "My description";
 
   // Given
   const signInPage = new SignInPage(scenario);
