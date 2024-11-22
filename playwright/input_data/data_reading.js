@@ -64,6 +64,6 @@ function getRandomValueFromJson(fileName, key) {
 // Instrucciones de USo
 //const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
 //console.log(getRandomValueFromApi(url, "url_button"));
-//console.log(getRandomValueFromJson("page.json", "page_title"));
+
 
 module.exports = { getRandomValueFromJson, getRandomValueFromApi };

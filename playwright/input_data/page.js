@@ -89,97 +89,177 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
   }
 
   //API
+  const MOCKAROO_API_URL = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+
 
   async function CreatePage_ValidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const pageTitle = await getRandomValueFromApi(url, "page_title");
-    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const pageTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const scenario_name = "041 - Create Page Valid Data - API";
     await createPage_ValidData(pageTitle,pageDescription,scenario_name);
   }
 
   async function CreatePage_InvalidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const pageTitle = await getRandomValueFromApi(url, "page_title_invalid");
-    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const pageTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title_invalid");
+    const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const scenario_name = "042 - Create Page Invalid Data - API";
     await createPage_InvalidData(pageTitle,pageDescription,scenario_name);
   }
 
   async function EditPage_ValidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const previousPageTitle= await getRandomValueFromApi(url, "page_title");
-    const previousPageDescription = await getRandomValueFromApi(url, "page_description");
-    const newTitle = await getRandomValueFromApi(url, "page_title");
-    const newDescription = await getRandomValueFromApi(url, "page_description");
+    const previousPageTitle= await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const previousPageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
+    const newTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const newDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const scenario_name = "043 - Edit Page valid Data - API";
     await editPage_validData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
   }
 
   async function EditPage_InvalidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const previousPageTitle= await getRandomValueFromApi(url, "page_title");
-    const previousPageDescription = await getRandomValueFromApi(url, "page_description");
-    const newTitle = await getRandomValueFromApi(url, "page_title_invalid");
-    const newDescription = await getRandomValueFromApi(url, "page_description");
+    const previousPageTitle= await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const previousPageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
+    const newTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title_invalid");
+    const newDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const scenario_name = "044 - Edit Page Invalid Data - API";
     await editPage_InvalidData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
   }
 
   async function PreviewPage_ValidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const pageTitle = await getRandomValueFromApi(url, "page_title");
-    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const pageTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const scenario_name = "045- Preview Page valid Data - API";
     await previewPage_ValidData(pageTitle, pageDescription, scenario_name)
   }
 
   async function PreviewPage_ButtonValidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const pageTitle = await getRandomValueFromApi(url, "page_title");
-    const pageDescription = await getRandomValueFromApi(url, "page_description");
-    const buttonName = await getRandomValueFromApi(url, "button_name");
-    const buttonUrl = await getRandomValueFromApi(url, "url_button");
+    const pageTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
+    const buttonName = await getRandomValueFromApi(MOCKAROO_API_URL, "button_name");
+    const buttonUrl = await getRandomValueFromApi(MOCKAROO_API_URL, "url_button");
     const scenario_name = "046 - Preview Page Button valid Data - API";
     await previewPage_ButtonValidData(pageTitle, pageDescription, buttonName, buttonUrl, scenario_name)
   }
 
   async function PreviewPage_ButtonInvalidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const pageTitle = await getRandomValueFromApi(url, "page_title");
-    const pageDescription = await getRandomValueFromApi(url, "page_description");
-    const buttonName = await getRandomValueFromApi(url, "button_name");
-    const buttonUrl = await getRandomValueFromApi(url, "url_button_invalid");
+    const pageTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
+    const buttonName = await getRandomValueFromApi(MOCKAROO_API_URL, "button_name");
+    const buttonUrl = await getRandomValueFromApi(MOCKAROO_API_URL, "url_button_invalid");
     const scenario_name = "047- Preview Page Button valid Data - API";
     await previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name)
   }
 
 
   async function FilterDraftPages_ValidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const draftPageTitle = await getRandomValueFromApi(url, "page_title");
-    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const draftPageTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const scenario_name = "048- Filter Draft Page valid Data - API";
     await filterDraftPages_ValidData(draftPageTitle,pageDescription,scenario_name) 
   }
 
 
   async function FilterDraftPages_InvalidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const draftPageTitle = await getRandomValueFromApi(url, "page_title_invalid");
-    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const draftPageTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title_invalid");
+    const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const scenario_name = "049 - Filter Draft Page Invalid Data - API";
     await filterDraftPages_InvalidData(draftPageTitle,pageDescription,scenario_name) 
   }
 
 
   async function DeletePage_ValidData_API(){
-    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-    const pageToDelete = await getRandomValueFromApi(url, "page_title");
-    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const pageToDelete = await getRandomValueFromApi(MOCKAROO_API_URL, "page_title");
+    const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const scenario_name = "050 - Delete Page Valid Data - API";
     await deletePage_ValidData(pageToDelete,pageDescription,scenario_name)
   }
+
+
+
+    //JSON
+    const FILE_NAME = "page.json"
+
+    async function CreatePage_ValidData_JSON(){
+        const pageTitle = getRandomValueFromJson(FILE_NAME, "page_title");
+        const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const scenario_name = "051 - Create Page Valid Data - JSON";
+        await createPage_ValidData(pageTitle,pageDescription,scenario_name);
+      }
+    
+      async function CreatePage_InvalidData_JSON(){
+        const pageTitle = getRandomValueFromJson(FILE_NAME, "page_title_invalid");
+        const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const scenario_name = "052 - Create Page Invalid Data - JSON";
+        await createPage_InvalidData(pageTitle,pageDescription,scenario_name);
+      }
+    
+      async function EditPage_ValidData_JSON(){
+        const previousPageTitle= getRandomValueFromJson(FILE_NAME, "page_title");
+        const previousPageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const newTitle = getRandomValueFromJson(FILE_NAME, "page_title");
+        const newDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const scenario_name = "045 - Edit Page valid Data - JSON";
+        await editPage_validData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
+      }
+    
+      async function EditPage_InvalidData_JSON(){
+        const previousPageTitle= getRandomValueFromJson(FILE_NAME, "page_title");
+        const previousPageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const newTitle = getRandomValueFromJson(FILE_NAME, "page_title_invalid");
+        const newDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const scenario_name = "054 - Edit Page Invalid Data - JSON";
+        await editPage_InvalidData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
+      }
+    
+      async function PreviewPage_ValidData_JSON(){
+        const pageTitle = getRandomValueFromJson(FILE_NAME, "page_title");
+        const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const scenario_name = "055- Preview Page valid Data - JSON";
+        await previewPage_ValidData(pageTitle, pageDescription, scenario_name)
+      }
+    
+      async function PreviewPage_ButtonValidData_JSON(){
+        const pageTitle = getRandomValueFromJson(FILE_NAME, "page_title");
+        const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const buttonName = getRandomValueFromJson(FILE_NAME, "button_name");
+        const buttonUrl = getRandomValueFromJson(FILE_NAME, "url_button");
+        const scenario_name = "056 - Preview Page Button valid Data - JSON";
+        await previewPage_ButtonValidData(pageTitle, pageDescription, buttonName, buttonUrl, scenario_name)
+      }
+    
+      async function PreviewPage_ButtonInvalidData_JSON(){
+        const pageTitle = getRandomValueFromJson(FILE_NAME, "page_title");
+        const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const buttonName = getRandomValueFromJson(FILE_NAME, "button_name");
+        const buttonUrl = getRandomValueFromJson(FILE_NAME, "url_button_invalid");
+        const scenario_name = "057- Preview Page Button valid Data - JSON";
+        await previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name)
+      }
+    
+    
+      async function FilterDraftPages_ValidData_JSON(){
+        const draftPageTitle = getRandomValueFromJson(FILE_NAME, "page_title");
+        const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const scenario_name = "058- Filter Draft Page valid Data - JSON";
+        await filterDraftPages_ValidData(draftPageTitle,pageDescription,scenario_name) 
+      }
+    
+    
+      async function FilterDraftPages_InvalidData_JSON(){
+        const draftPageTitle = getRandomValueFromJson(FILE_NAME, "page_title_invalid");
+        const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const scenario_name = "059 - Filter Draft Page Invalid Data - JSON";
+        await filterDraftPages_InvalidData(draftPageTitle,pageDescription,scenario_name) 
+      }
+    
+    
+      async function DeletePage_ValidData_JSON(){
+        const pageToDelete = getRandomValueFromJson(FILE_NAME, "page_title");
+        const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
+        const scenario_name = "060 - Delete Page Valid Data - JSON";
+        await deletePage_ValidData(pageToDelete,pageDescription,scenario_name)
+      }
+
+
 
   module.exports = {
     CreatePage_ValidData_Faker,
@@ -203,6 +283,18 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
     PreviewPage_ButtonInvalidData_API,
     FilterDraftPages_ValidData_API,
     FilterDraftPages_InvalidData_API,
-    DeletePage_ValidData_API
+    DeletePage_ValidData_API,
+
+
+    CreatePage_ValidData_JSON,
+    CreatePage_InvalidData_JSON,
+    EditPage_ValidData_JSON,
+    EditPage_InvalidData_JSON,
+    PreviewPage_ValidData_JSON,
+    PreviewPage_ButtonValidData_JSON,
+    PreviewPage_ButtonInvalidData_JSON,
+    FilterDraftPages_ValidData_JSON,
+    FilterDraftPages_InvalidData_JSON,
+    DeletePage_ValidData_JSON
   };
   

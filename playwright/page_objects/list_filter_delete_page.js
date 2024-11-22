@@ -178,7 +178,7 @@ async rightClickOnPage(pageTitle) {
   try {
       const titleElement = this.scenario.getPage().locator(
           `${this.selectors.pageTitle}:text-is("${pageTitle}")`
-      );
+      ).first();
       await titleElement.waitFor({ state: 'visible', timeout: 5000 });
       await titleElement.click({ button: 'right' });
       await this.waitForLoad();

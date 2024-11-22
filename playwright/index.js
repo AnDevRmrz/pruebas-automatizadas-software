@@ -2,8 +2,8 @@ const playwright = require("playwright");
 const { SignUpPage } = require("./page_objects/sign_up_page");
 const { createTag, editTag, deleteTag } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./test_scenarios/settings");
-
 const { CreatePage_ValidData_Faker, CreatePage_InvalidData_Faker, EditPage_ValidData_Faker, EditPage_InvalidData_Faker, PreviewPage_ValidData_Faker, FilterDraftPages_ValidData_Faker, FilterDraftPages_InvalidData_Faker, DeletePage_ValidData_Faker, PreviewPage_ButtonValidData_Faker, PreviewPage_ButtonInvalidData_Faker} = require("./input_data/page");
+const { CreatePage_ValidData_JSON, CreatePage_InvalidData_JSON, EditPage_ValidData_JSON, EditPage_InvalidData_JSON, PreviewPage_ValidData_JSON, FilterDraftPages_ValidData_JSON, FilterDraftPages_InvalidData_JSON, DeletePage_ValidData_JSON, PreviewPage_ButtonValidData_JSON, PreviewPage_ButtonInvalidData_JSON} = require("./input_data/page");
 const { CreatePage_ValidData_API, CreatePage_InvalidData_API, EditPage_ValidData_API, EditPage_InvalidData_API, PreviewPage_ValidData_API, FilterDraftPages_ValidData_API, FilterDraftPages_InvalidData_API, DeletePage_ValidData_API, PreviewPage_ButtonValidData_API, PreviewPage_ButtonInvalidData_API} = require("./input_data/page");
 
 
@@ -33,44 +33,43 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
 
   // Scenario 31
 
-  //await CreatePage_ValidData_Faker();
+  await CreatePage_ValidData_Faker();
 
 
   // Scenario 32
-  //await CreatePage_InvalidData_Faker();
+  await CreatePage_InvalidData_Faker();
 
 
   // Scenario 33
-  //await EditPage_ValidData_Faker();
+  await EditPage_ValidData_Faker();
 
 
   // Scenario 34
-  //await EditPage_InvalidData_Faker();
+  await EditPage_InvalidData_Faker();
 
 
   // Scenario 35
-  //await PreviewPage_ValidData_Faker();
+  await PreviewPage_ValidData_Faker();
 
 
   // Scenario 36
-  //await PreviewPage_ButtonValidData_Faker();
+  await PreviewPage_ButtonValidData_Faker();
 
 
   // Scenario 37
-  //await PreviewPage_ButtonInvalidData_Faker();
+  await PreviewPage_ButtonInvalidData_Faker();
 
 
   // Scenario 38
-  //await FilterDraftPages_ValidData_Faker();
+  await FilterDraftPages_ValidData_Faker();
 
 
   // Scenario 39
-  //await FilterDraftPages_InvalidData_Faker();
+  await FilterDraftPages_InvalidData_Faker();
 
 
   // Scenario 40
-  //await DeletePage_ValidData_Faker();
-
+  await DeletePage_ValidData_Faker();
 
   // Scenario 41
 
@@ -111,6 +110,47 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
 
   // Scenario 50
   await DeletePage_ValidData_API();
+
+  // Scenario 51
+
+  await CreatePage_ValidData_JSON();
+
+
+  // Scenario 52
+  await CreatePage_InvalidData_JSON();
+
+
+  // Scenario 53
+  await EditPage_ValidData_JSON();
+
+
+  // Scenario 54
+  await EditPage_InvalidData_JSON();
+
+
+  // Scenario 55
+  await PreviewPage_ValidData_JSON();
+
+
+  // Scenario 56
+  await PreviewPage_ButtonValidData_JSON();
+
+
+  // Scenario 57
+  await PreviewPage_ButtonInvalidData_JSON();
+
+
+  // Scenario 58
+  await FilterDraftPages_ValidData_JSON();
+
+
+  // Scenario 59
+  await FilterDraftPages_InvalidData_JSON();
+
+
+  // Scenario 60
+  await DeletePage_ValidData_JSON();
+
 
 
   
