@@ -171,9 +171,6 @@ async function previewPage_ValidData(pageTitle, pageDescription, scenario_name) 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
 
-
-
-
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
@@ -210,7 +207,6 @@ async function previewPage_ValidData(pageTitle, pageDescription, scenario_name) 
   scenario.successful();
   return;
 }
-
 
 
 async function previewPage_ButtonValidData(pageTitle, pageDescription, buttonName, buttonUrl, scenario_name) {
@@ -260,8 +256,6 @@ async function previewPage_ButtonValidData(pageTitle, pageDescription, buttonNam
   return;
 }
 
-
-
 async function previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name) {
 
   const email = "alguien@hotmail.com";
@@ -309,19 +303,11 @@ async function previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonNam
   return;
 }
 
-
-
-
 async function filterDraftPages_ValidData(draftPageTitle,pageDescription,scenario_name) {
-
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
   const expectedAttribute = "Draft";
-
-
-
-
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
@@ -357,11 +343,6 @@ async function filterDraftPages_InvalidData(draftPageTitle,pageDescription,scena
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
-  const expectedAttribute = "Draft";
-
-
-
-
 
   const browser = await playwright["chromium"].launch({
     headless: false,
@@ -398,8 +379,6 @@ async function deletePage_ValidData(pageToDelete,pageDescription,scenario_name) 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
 
-
-
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
@@ -433,44 +412,6 @@ async function deletePage_ValidData(pageToDelete,pageDescription,scenario_name) 
   await browser.close();
   scenario.successful();
 }
-
-/*
-async function deletePage_InvalidData() {
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const pageToDelete = faker.lorem.words(50).slice(0, 245) + faker.lorem.words(5);
-  const pageDescription = faker.lorem.paragraph(10); 
-  const scenario_name = "039 - Delete Page Invalid Data";
-
-
-  const browser = await playwright["chromium"].launch({
-    headless: false,
-    slowMo: 500,
-  });
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  const scenario = new Scenario(page, scenario_name);
-  scenario.begin();
-
-  // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
-  const dashboard = await signInPage.signIn(email, password);
-
-  // When
-  const listFilterDeletePagePage = await dashboard.goToPages();
-  const createPagePage = await listFilterDeletePagePage.goToNewPage();
-  await createPagePage.createPage(pageToDelete, pageDescription, true, true,false);
-  try {
-    await listFilterDeletePagePage.rightClickOnPage(pageToDelete);
-  }
-  catch (error) {
-    expect(error.message).toContain("Failed to right click on page");
-  }
-  await browser.close();
-  scenario.successful();
-}*/
 
 module.exports = {
   createPage_ValidData,
