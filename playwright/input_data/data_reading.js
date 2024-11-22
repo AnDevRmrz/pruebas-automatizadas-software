@@ -22,7 +22,7 @@ const getRandomValueFromApi = async (url, key) => {
         const randomIndex = Math.floor(Math.random() * data.length);
         const randomValue = data[randomIndex][key];
         
-        console.log(`Valor aleatorio para la clave "${key}":`, randomValue);
+        //console.log(`Valor aleatorio para la clave "${key}":`, randomValue);
         return randomValue;
         
     } catch (error) {
@@ -33,7 +33,7 @@ const getRandomValueFromApi = async (url, key) => {
 function getRandomValueFromJson(fileName, key) {
   try {
       const filePath = path.join(__dirname, '../data', fileName);
-      console.log("File path:", filePath);
+      //console.log("File path:", filePath);
       
       const fileContent = fs.readFileSync(filePath, 'utf8');
       const jsonData = JSON.parse(fileContent);
@@ -61,10 +61,9 @@ function getRandomValueFromJson(fileName, key) {
       throw new Error(`Error processing JSON file: ${error.message}`);
   }
 }
-
-const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
-
-console.log(getRandomValueFromApi(url, "url_button"));
+// Instrucciones de USo
+//const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+//console.log(getRandomValueFromApi(url, "url_button"));
 //console.log(getRandomValueFromJson("page.json", "page_title"));
 
 module.exports = { getRandomValueFromJson, getRandomValueFromApi };
