@@ -383,16 +383,12 @@ async function previewPage_ButtonInvalidData() {
 }
 
 
-
-
-
 async function filterDraftPages_ValidData() {
 
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
   const expectedAttribute = "Draft";
-
   const draftPageTitle = faker.lorem.words(3); 
   const pageDescription = faker.lorem.paragraph(); 
   const scenario_name = "038- Filter Draft Page valid Data";
