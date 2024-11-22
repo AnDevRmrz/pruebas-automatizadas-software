@@ -108,8 +108,6 @@ class EditPreviewPagePage {
             await textElement.waitFor({ state: 'visible', timeout: 5000 });
             
             const actualText = await textElement.textContent();
-            console.log('Expected button text:', expectedText);
-            console.log('Actual button text:', actualText);
             
             return actualText.trim() === expectedText.trim();
         } catch (error) {

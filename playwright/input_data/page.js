@@ -3,12 +3,7 @@ const { faker } = require('@faker-js/faker');
 const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const { createPage_ValidData, createPage_InvalidData, editPage_validData, editPage_InvalidData, previewPage_ValidData, filterDraftPages_ValidData, filterDraftPages_InvalidData, deletePage_ValidData, previewPage_ButtonValidData, previewPage_ButtonInvalidData} = require("../test_scenarios/page");
-
-
-
-
-
-
+const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
 
   //Faker
 
@@ -93,6 +88,99 @@ const { createPage_ValidData, createPage_InvalidData, editPage_validData, editPa
     await deletePage_ValidData(pageToDelete,pageDescription,scenario_name)
   }
 
+  //API
+
+  async function CreatePage_ValidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const pageTitle = await getRandomValueFromApi(url, "page_title");
+    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const scenario_name = "041 - Create Page Valid Data - API";
+    await createPage_ValidData(pageTitle,pageDescription,scenario_name);
+  }
+
+  async function CreatePage_InvalidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const pageTitle = await getRandomValueFromApi(url, "page_title_invalid");
+    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const scenario_name = "042 - Create Page Invalid Data - API";
+    await createPage_InvalidData(pageTitle,pageDescription,scenario_name);
+  }
+
+  async function EditPage_ValidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const previousPageTitle= await getRandomValueFromApi(url, "page_title");
+    const previousPageDescription = await getRandomValueFromApi(url, "page_description");
+    const newTitle = await getRandomValueFromApi(url, "page_title");
+    const newDescription = await getRandomValueFromApi(url, "page_description");
+    const scenario_name = "043 - Edit Page valid Data - API";
+    await editPage_validData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
+  }
+
+  async function EditPage_InvalidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const previousPageTitle= await getRandomValueFromApi(url, "page_title");
+    const previousPageDescription = await getRandomValueFromApi(url, "page_description");
+    const newTitle = await getRandomValueFromApi(url, "page_title_invalid");
+    const newDescription = await getRandomValueFromApi(url, "page_description");
+    const scenario_name = "044 - Edit Page Invalid Data - API";
+    await editPage_InvalidData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
+  }
+
+  async function PreviewPage_ValidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const pageTitle = await getRandomValueFromApi(url, "page_title");
+    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const scenario_name = "045- Preview Page valid Data - API";
+    await previewPage_ValidData(pageTitle, pageDescription, scenario_name)
+  }
+
+  async function PreviewPage_ButtonValidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const pageTitle = await getRandomValueFromApi(url, "page_title");
+    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const buttonName = await getRandomValueFromApi(url, "button_name");
+    const buttonUrl = await getRandomValueFromApi(url, "url_button");
+    const scenario_name = "046 - Preview Page Button valid Data - API";
+    await previewPage_ButtonValidData(pageTitle, pageDescription, buttonName, buttonUrl, scenario_name)
+  }
+
+  async function PreviewPage_ButtonInvalidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const pageTitle = await getRandomValueFromApi(url, "page_title");
+    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const buttonName = await getRandomValueFromApi(url, "button_name");
+    const buttonUrl = await getRandomValueFromApi(url, "url_button_invalid");
+    const scenario_name = "047- Preview Page Button valid Data - API";
+    await previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name)
+  }
+
+
+  async function FilterDraftPages_ValidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const draftPageTitle = await getRandomValueFromApi(url, "page_title");
+    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const scenario_name = "048- Filter Draft Page valid Data - API";
+    await filterDraftPages_ValidData(draftPageTitle,pageDescription,scenario_name) 
+  }
+
+
+  async function FilterDraftPages_InvalidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const draftPageTitle = await getRandomValueFromApi(url, "page_title_invalid");
+    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const scenario_name = "049 - Filter Draft Page Invalid Data - API";
+    await filterDraftPages_InvalidData(draftPageTitle,pageDescription,scenario_name) 
+  }
+
+
+  async function DeletePage_ValidData_API(){
+    const url = 'https://my.api.mockaroo.com/page.json?key=c9aaf1c0';
+    const pageToDelete = await getRandomValueFromApi(url, "page_title");
+    const pageDescription = await getRandomValueFromApi(url, "page_description");
+    const scenario_name = "050 - Delete Page Valid Data - API";
+    await deletePage_ValidData(pageToDelete,pageDescription,scenario_name)
+  }
+
   module.exports = {
     CreatePage_ValidData_Faker,
     CreatePage_InvalidData_Faker,
@@ -103,6 +191,18 @@ const { createPage_ValidData, createPage_InvalidData, editPage_validData, editPa
     PreviewPage_ButtonInvalidData_Faker,
     FilterDraftPages_ValidData_Faker,
     FilterDraftPages_InvalidData_Faker,
-    DeletePage_ValidData_Faker
+    DeletePage_ValidData_Faker,
+
+
+    CreatePage_ValidData_API,
+    CreatePage_InvalidData_API,
+    EditPage_ValidData_API,
+    EditPage_InvalidData_API,
+    PreviewPage_ValidData_API,
+    PreviewPage_ButtonValidData_API,
+    PreviewPage_ButtonInvalidData_API,
+    FilterDraftPages_ValidData_API,
+    FilterDraftPages_InvalidData_API,
+    DeletePage_ValidData_API
   };
   

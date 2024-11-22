@@ -20,7 +20,7 @@ const getRandomValueFromApi = async (url, key) => {
         }
         
         const randomIndex = Math.floor(Math.random() * data.length);
-        const randomValue = data[randomIndex][key];
+        const randomValue = data[randomIndex][key].toString();
         
         //console.log(`Valor aleatorio para la clave "${key}":`, randomValue);
         return randomValue;

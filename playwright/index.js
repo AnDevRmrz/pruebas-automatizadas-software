@@ -2,7 +2,11 @@ const playwright = require("playwright");
 const { SignUpPage } = require("./page_objects/sign_up_page");
 const { createTag, editTag, deleteTag } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./test_scenarios/settings");
+
 const { CreatePage_ValidData_Faker, CreatePage_InvalidData_Faker, EditPage_ValidData_Faker, EditPage_InvalidData_Faker, PreviewPage_ValidData_Faker, FilterDraftPages_ValidData_Faker, FilterDraftPages_InvalidData_Faker, DeletePage_ValidData_Faker, PreviewPage_ButtonValidData_Faker, PreviewPage_ButtonInvalidData_Faker} = require("./input_data/page");
+const { CreatePage_ValidData_API, CreatePage_InvalidData_API, EditPage_ValidData_API, EditPage_InvalidData_API, PreviewPage_ValidData_API, FilterDraftPages_ValidData_API, FilterDraftPages_InvalidData_API, DeletePage_ValidData_API, PreviewPage_ButtonValidData_API, PreviewPage_ButtonInvalidData_API} = require("./input_data/page");
+
+
 const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEmail, filterMember } = require("./test_scenarios/members");
 const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
 (async () => {
@@ -28,43 +32,85 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
   // await deletePost();
 
   // Scenario 31
-  await CreatePage_ValidData_Faker();
+
+  //await CreatePage_ValidData_Faker();
 
 
   // Scenario 32
-  await CreatePage_InvalidData_Faker();
+  //await CreatePage_InvalidData_Faker();
+
+
+  // Scenario 33
+  //await EditPage_ValidData_Faker();
 
 
   // Scenario 34
-  await EditPage_ValidData_Faker();
+  //await EditPage_InvalidData_Faker();
 
 
   // Scenario 35
-  await EditPage_InvalidData_Faker();
+  //await PreviewPage_ValidData_Faker();
 
 
   // Scenario 36
-  await PreviewPage_ValidData_Faker();
+  //await PreviewPage_ButtonValidData_Faker();
 
 
   // Scenario 37
-  await PreviewPage_ButtonValidData_Faker();
+  //await PreviewPage_ButtonInvalidData_Faker();
 
 
   // Scenario 38
-  await PreviewPage_ButtonInvalidData_Faker();
-
-
-  // Scenario 38
-  await FilterDraftPages_ValidData_Faker();
+  //await FilterDraftPages_ValidData_Faker();
 
 
   // Scenario 39
-  await FilterDraftPages_InvalidData_Faker();
+  //await FilterDraftPages_InvalidData_Faker();
 
 
   // Scenario 40
-  await DeletePage_ValidData_Faker();
+  //await DeletePage_ValidData_Faker();
+
+
+  // Scenario 41
+
+  await CreatePage_ValidData_API();
+
+
+  // Scenario 42
+  await CreatePage_InvalidData_API();
+
+
+  // Scenario 43
+  await EditPage_ValidData_API();
+
+
+  // Scenario 44
+  await EditPage_InvalidData_API();
+
+
+  // Scenario 45
+  await PreviewPage_ValidData_API();
+
+
+  // Scenario 46
+  await PreviewPage_ButtonValidData_API();
+
+
+  // Scenario 47
+  await PreviewPage_ButtonInvalidData_API();
+
+
+  // Scenario 48
+  await FilterDraftPages_ValidData_API();
+
+
+  // Scenario 49
+  await FilterDraftPages_InvalidData_API();
+
+
+  // Scenario 50
+  await DeletePage_ValidData_API();
 
 
   
