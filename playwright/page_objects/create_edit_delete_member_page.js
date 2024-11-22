@@ -3,29 +3,20 @@ exports.CreateEditDeleteMemberPage = class CreateEditDeleteMemberPage {
     this.scenario = scenario;
     this.memberNameInput = scenario.getPage().locator("#member-name");
     this.memberEmailInput = scenario.getPage().locator("#member-email");
+    this.memberLabelInput = scenario.getPage().locator("input[type=search]");
+    this.memberNoteTextArea = scenario.getPage().locator("#member-note");
+    
     this.saveMemberButton = scenario.getPage().locator("button[data-test-button=save]");
-    this.gearButton = scenario.getPage().locator("button[data-test-button=member-actions]");
-    this.deleteMemberButton = scenario.getPage().locator("button[data-test-button=delete-member]");
-    this.deleteMemberConfirmationButton = scenario.getPage().locator("button[data-test-button=confirm]");
+    
     this.leaveButton = scenario.getPage().locator("button[data-test-leave-button]");
   }
 
-  async saveMember(memberName, memberEmail) {
+  async saveMember(memberName, memberEmail, memberLabel, memberNote) {
     await this.memberNameInput.fill(memberName);
     await this.memberEmailInput.fill(memberEmail);
+    await this.memberLabelInput.fill(memberLabel);
+    await this.memberNoteTextArea.fill(memberNote);
     await this.saveMemberButton.click();
-    await new Promise(r => setTimeout(r, 1000));
-    await this.scenario.screenshot();
-  }
-
-  async deleteMember() {
-    await this.gearButton.click();
-    await new Promise(r => setTimeout(r, 1000));
-    await this.scenario.screenshot();
-    await this.deleteMemberButton.click();
-    await new Promise(r => setTimeout(r, 1000));
-    await this.scenario.screenshot();
-    await this.deleteMemberConfirmationButton.click();
     await new Promise(r => setTimeout(r, 1000));
     await this.scenario.screenshot();
   }

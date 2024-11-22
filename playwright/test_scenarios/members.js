@@ -2,6 +2,19 @@ const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
+const {
+  createMember_Valid_A_Priori,
+  createMember_Valid_PseudoRandom,
+  createMember_Valid_Random,
+  createMember_InvalidEmail_A_Priori,
+  createMember_InvalidEmail_PseudoRandom,
+  createMember_InvalidEmail_Random,
+} = require("../input_data/members");
+const dataGenerationTecniques = [
+  "A-priori Data Pool",
+  "Pseudo Random Data Pool",
+  "Random Data",
+];
 
 async function _before(scenarioName) {
   const browser = await playwright["chromium"].launch({
@@ -22,27 +35,177 @@ async function _after(browser, scenario) {
   return;
 }
 
-async function createMember() {
-  const { browser, scenario } = await _before("011 - Create Member");
-
+async function _login(scenario) {
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
-  const memberName = "Member Name Test";
-  const memberEmail = "newmember@test.com";
-
-  // Given
   const signInPage = new SignInPage(scenario);
   await signInPage.goto();
+  return await signInPage.signIn(email, password);
+}
 
-  // When
-  const dashboard = await signInPage.signIn(email, password);
+async function createMember(member, testId, dataGenerationTecnique) {
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(3, "0")} - Create Member With ${dataGenerationTecnique}`
+  );
+
+  // Given
+  const dashboard = await _login(scenario);
   const listFilterMembersPage = await dashboard.goToMembers();
   const createEditDeleteMemberPage =
     await listFilterMembersPage.goToNewMember();
-  await createEditDeleteMemberPage.saveMember(memberName, memberEmail);
+
+  // When
+  await createEditDeleteMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
 
   // Then
-  await dashboard.goToMembers();
+  await listFilterMembersPage.goto();
+  const currentMembers = await listFilterMembersPage.getMembersList();
+  expect(
+    currentMembers.some(
+      (m) => m.name === member.name && m.email === member.email
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function createMemberWithEmptyEmail(
+  member,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before("011 - Create Member");
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listFilterMembersPage = await dashboard.goToMembers();
+  const createEditDeleteMemberPage =
+    await listFilterMembersPage.goToNewMember();
+
+  // When
+  await createEditDeleteMemberPage.saveMember(
+    memberName,
+    memberEmail,
+    memberLabel,
+    memberNote
+  );
+
+  // Then
+  await listFilterMembersPage.goto();
+  const currentMembers = await listFilterMembersPage.getMembersList();
+  expect(
+    currentMembers.some(
+      (member) => member.name === memberName && member.email === memberEmail
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function createMemberWithInvalidEmail(
+  member,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(
+        3,
+        "0"
+      )} - Create Member With Invalid Email With ${dataGenerationTecnique}`
+  );
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listFilterMembersPage = await dashboard.goToMembers();
+  const createEditDeleteMemberPage =
+    await listFilterMembersPage.goToNewMember();
+
+  // When
+  await createEditDeleteMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
+
+  // Then
+  await listFilterMembersPage.goto();
+  await createEditDeleteMemberPage.confirmLeavingPage();
+  const currentMembers = await listFilterMembersPage.getMembersList();
+  expect(
+    currentMembers.every(
+      (m) => m.name !== member.name && m.email !== member.email
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function createMemberWithTooLongNote(
+  member,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before("011 - Create Member");
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listFilterMembersPage = await dashboard.goToMembers();
+  const createEditDeleteMemberPage =
+    await listFilterMembersPage.goToNewMember();
+
+  // When
+  await createEditDeleteMemberPage.saveMember(
+    memberName,
+    memberEmail,
+    memberLabel,
+    memberNote
+  );
+
+  // Then
+  await listFilterMembersPage.goto();
+  const currentMembers = await listFilterMembersPage.getMembersList();
+  expect(
+    currentMembers.some(
+      (member) => member.name === memberName && member.email === memberEmail
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function createMemberWithTooLongName(
+  member,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before("011 - Create Member");
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listFilterMembersPage = await dashboard.goToMembers();
+  const createEditDeleteMemberPage =
+    await listFilterMembersPage.goToNewMember();
+
+  // When
+  await createEditDeleteMemberPage.saveMember(
+    memberName,
+    memberEmail,
+    memberLabel,
+    memberNote
+  );
+
+  // Then
+  await listFilterMembersPage.goto();
   const currentMembers = await listFilterMembersPage.getMembersList();
   expect(
     currentMembers.some(
@@ -70,7 +233,10 @@ async function editMember() {
   // When
   const dashboard = await signInPage.signIn(email, password);
   const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(oldMemberName, oldMemberEmail);
+  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(
+    oldMemberName,
+    oldMemberEmail
+  );
   await createEditDeleteMemberPage.saveMember(newMemberName, newMemberEmail);
 
   // Then
@@ -101,47 +267,17 @@ async function deleteMember() {
   // When
   const dashboard = await signInPage.signIn(email, password);
   const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(memberName, memberEmail);
+  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(
+    memberName,
+    memberEmail
+  );
   await createEditDeleteMemberPage.deleteMember();
 
   // Then
   const currentMembers = await listFilterMembersPage.getMembersList();
   expect(
     currentMembers.every(
-      (member) =>
-        member.name !== memberName && member.email !== memberEmail
-    )
-  ).toBeTruthy();
-
-  return await _after(browser, scenario);
-}
-
-async function createMemberMemberWithInvalidEmail() {
-  const { browser, scenario } = await _before("014 - Create Member with Invalid Email");
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const memberName = "Member Name Test";
-  const invalidMemberEmail = "invalidemail@test-com";
-
-  // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
-
-  // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage =
-    await listFilterMembersPage.goToNewMember();
-  await createEditDeleteMemberPage.saveMember(memberName, invalidMemberEmail);
-
-  // Then
-  await dashboard.goToMembers();
-  await createEditDeleteMemberPage.confirmLeavingPage();
-  const currentMembers = await listFilterMembersPage.getMembersList();
-  expect(
-    currentMembers.every(
-      (member) => member.name !== memberName && member.email !== invalidMemberEmail
+      (member) => member.name !== memberName && member.email !== memberEmail
     )
   ).toBeTruthy();
 
@@ -165,14 +301,12 @@ async function filterMember() {
   // When
   const dashboard = await signInPage.signIn(email, password);
   const listFilterMembersPage = await dashboard.goToMembers();
-  let createEditDeleteMemberPage =
-  await listFilterMembersPage.goToNewMember();
+  let createEditDeleteMemberPage = await listFilterMembersPage.goToNewMember();
   await createEditDeleteMemberPage.saveMember(member1Name, member1Email);
 
   await dashboard.goToMembers();
 
-  createEditDeleteMemberPage =
-  await listFilterMembersPage.goToNewMember();
+  createEditDeleteMemberPage = await listFilterMembersPage.goToNewMember();
   await createEditDeleteMemberPage.saveMember(member2Name, member2Email);
 
   await dashboard.goToMembers();
@@ -196,10 +330,34 @@ async function filterMember() {
   return await _after(browser, scenario);
 }
 
+async function executeMembersTests() {
+  let i = 91;
+
+  // for (let [index, value] of dataGenerationTecniques.entries()) {
+  //   let member = {};
+  //   if (index == 0) {
+  //     member = createMember_Valid_A_Priori();
+  //   } else if (index == 1) {
+  //     member = createMember_Valid_PseudoRandom();
+  //   } else {
+  //     member = createMember_Valid_Random();
+  //   }
+  //   await createMember(member, i++, value);
+  // }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let member = {};
+    if (index == 0) {
+      member = createMember_InvalidEmail_A_Priori();
+    } else if (index == 1) {
+      member = createMember_InvalidEmail_PseudoRandom();
+    } else {
+      member = createMember_InvalidEmail_Random();
+    }
+    await createMemberWithInvalidEmail(member, i++, value);
+  }
+}
+
 module.exports = {
-  createMember,
-  editMember,
-  deleteMember,
-  createMemberMemberWithInvalidEmail,
-  filterMember,
+  executeMembersTests,
 };

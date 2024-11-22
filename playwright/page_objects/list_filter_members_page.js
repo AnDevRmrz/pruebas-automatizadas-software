@@ -13,6 +13,12 @@ exports.ListFilterMembersPage = class ListFilterMembersPage {
     this.applyFilterButton = scenario.getPage().locator("button[data-test-button=members-apply-filter]");
   }
 
+  async goto() {
+    await this.scenario.getPage().goto("http://localhost:3002/ghost/#/members");
+    await this.scenario.screenshot();
+    await new Promise((r) => setTimeout(r, 1000));
+  }
+
   async goToNewMember() {
     await this.newMemberButton.click();
     await new Promise((r) => setTimeout(r, 1000));
