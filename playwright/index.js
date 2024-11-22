@@ -2,10 +2,9 @@ const playwright = require("playwright");
 const { SignUpPage } = require("./page_objects/sign_up_page");
 const { createTag, editTag, deleteTag } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./test_scenarios/settings");
-const { createPage_ValidData, createPage_InvalidData, editPage_validData, editPage_InvalidData, previewPage_ValidData, filterDraftPages_ValidData, filterDraftPages_InvalidData, deletePage_ValidData, deletePage_InvalidData, createPage_EmptyData, previewPage_ButtonValidData, previewPage_ButtonInvalidData} = require("./test_scenarios/page");
+const { CreatePage_ValidData_Faker, CreatePage_InvalidData_Faker, EditPage_ValidData_Faker, EditPage_InvalidData_Faker, PreviewPage_ValidData_Faker, FilterDraftPages_ValidData_Faker, FilterDraftPages_InvalidData_Faker, DeletePage_ValidData_Faker, PreviewPage_ButtonValidData_Faker, PreviewPage_ButtonInvalidData_Faker} = require("./input_data/page");
 const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEmail, filterMember } = require("./test_scenarios/members");
 const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
-
 (async () => {
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
@@ -29,25 +28,45 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
   // await deletePost();
 
   // Scenario 31
-  await createPage_ValidData();
+  await CreatePage_ValidData_Faker();
+
+
   // Scenario 32
-  await createPage_InvalidData();
+  await CreatePage_InvalidData_Faker();
+
+
   // Scenario 34
-  await editPage_validData();
+  await EditPage_ValidData_Faker();
+
+
   // Scenario 35
-  await editPage_InvalidData();
+  await EditPage_InvalidData_Faker();
+
+
   // Scenario 36
-  await previewPage_ValidData();
+  await PreviewPage_ValidData_Faker();
+
+
   // Scenario 37
-  await previewPage_ButtonValidData();
+  await PreviewPage_ButtonValidData_Faker();
+
+
   // Scenario 38
-  await previewPage_ButtonInvalidData();
+  await PreviewPage_ButtonInvalidData_Faker();
+
+
   // Scenario 38
-  await filterDraftPages_ValidData();
+  await FilterDraftPages_ValidData_Faker();
+
+
   // Scenario 39
-  await filterDraftPages_InvalidData();
+  await FilterDraftPages_InvalidData_Faker();
+
+
   // Scenario 40
-  await deletePage_ValidData();
+  await DeletePage_ValidData_Faker();
+
+
   
 
   // Scenario 11
