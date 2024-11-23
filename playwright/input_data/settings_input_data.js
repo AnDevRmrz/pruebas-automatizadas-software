@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const settingsInputJson = require("./settings_input.json");
+const settingsInputJson = require("../data/settings_input.json");
 
 const TAG_SCHEMA_URL = "https://my.api.mockaroo.com/settings.json";
 const API_KEY = "75b08cb0";

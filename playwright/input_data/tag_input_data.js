@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const tagInputJson = require("./tag_input.json");
+const tagInputJson = require("../data/tag_input.json");
 
 const TAG_SCHEMA_URL = "https://my.api.mockaroo.com/tag.json";
 const API_KEY = "75b08cb0";
