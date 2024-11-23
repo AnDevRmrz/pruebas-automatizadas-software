@@ -7,15 +7,15 @@ const { executeMembersTests } = require("./test_scenarios/members");
 const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
 
 (async () => {
-  // const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
-  // const context = await browser.newContext();
-  // const page = await context.newPage();
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const context = await browser.newContext();
+  const page = await context.newPage();
 
-  // const signUpPage = new SignUpPage(page);
+  const signUpPage = new SignUpPage(page);
 
-  // await signUpPage.goto();
-  // await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
-  // await browser.close();
+  await signUpPage.goto();
+  await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
+  await browser.close();
 
   // // Scenario 1
   // await listPosts();

@@ -75,16 +75,34 @@ function createMember_InvalidEmail_Random() {
 /*
     Too Long Note
 */
-function createMember_TooLongNote_A_Priori() {}
+function createMember_TooLongNote_A_Priori() {
+  var member = {
+    name: faker.person.fullName(),
+    email: faker.internet.email(),
+    label: faker.word.noun(),
+    note: faker.lorem.paragraphs(10),
+  };
 
-function createMember_TooLongNote_PseudoRandom() {}
+  return member;
+}
+
+function createMember_TooLongNote_PseudoRandom() {
+  var member = {
+    name: faker.person.fullName(),
+    email: faker.internet.email(),
+    label: faker.word.noun(),
+    note: faker.lorem.paragraphs(10),
+  };
+
+  return member;
+}
 
 function createMember_TooLongNote_Random() {
   var member = {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.paragraphs(10),
   };
 
   return member;
@@ -93,13 +111,31 @@ function createMember_TooLongNote_Random() {
 /*
     Too Long Name
 */
-function createMember_TooLongName_A_Priori() {}
+function createMember_TooLongName_A_Priori() {
+  var member = {
+    name: faker.lorem.paragraphs(5),
+    email: faker.internet.email(),
+    label: faker.word.noun(),
+    note: faker.lorem.paragraphs(1),
+  };
 
-function createMember_TooLongName_PseudoRandom() {}
+  return member;
+}
+
+function createMember_TooLongName_PseudoRandom() {
+  var member = {
+    name: faker.lorem.paragraphs(5),
+    email: faker.internet.email(),
+    label: faker.word.noun(),
+    note: faker.lorem.paragraphs(1),
+  };
+
+  return member;
+}
 
 function createMember_TooLongName_Random() {
   var member = {
-    name: faker.person.fullName(),
+    name: faker.lorem.paragraphs(5),
     email: faker.internet.email(),
     label: faker.word.noun(),
     note: faker.lorem.paragraphs(1),

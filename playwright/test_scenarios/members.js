@@ -9,6 +9,12 @@ const {
   createMember_InvalidEmail_A_Priori,
   createMember_InvalidEmail_PseudoRandom,
   createMember_InvalidEmail_Random,
+  createMember_TooLongNote_A_Priori,
+  createMember_TooLongNote_PseudoRandom,
+  createMember_TooLongNote_Random,
+  createMember_TooLongName_A_Priori,
+  createMember_TooLongName_PseudoRandom,
+  createMember_TooLongName_Random,
 } = require("../input_data/members");
 const dataGenerationTecniques = [
   "A-priori Data Pool",
@@ -47,17 +53,16 @@ async function createMember(member, testId, dataGenerationTecnique) {
   const { browser, scenario } = await _before(
     `${testId
       .toString()
-      .padStart(3, "0")} - Create Member With ${dataGenerationTecnique}`
+      .padStart(3, "0")} - Create Member - ${dataGenerationTecnique}`
   );
 
   // Given
   const dashboard = await _login(scenario);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage =
-    await listFilterMembersPage.goToNewMember();
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  await createEditDeleteMemberPage.saveMember(
+  await createEditMemberPage.saveMember(
     member.name,
     member.email,
     member.label,
@@ -65,8 +70,8 @@ async function createMember(member, testId, dataGenerationTecnique) {
   );
 
   // Then
-  await listFilterMembersPage.goto();
-  const currentMembers = await listFilterMembersPage.getMembersList();
+  await listMembersPage.goto();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
       (m) => m.name === member.name && m.email === member.email
@@ -81,30 +86,37 @@ async function createMemberWithEmptyEmail(
   testId,
   dataGenerationTecnique
 ) {
-  const { browser, scenario } = await _before("011 - Create Member");
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(
+        3,
+        "0"
+      )} - Create Member With Empty Email - ${dataGenerationTecnique}`
+  );
 
   // Given
   const dashboard = await _login(scenario);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage =
-    await listFilterMembersPage.goToNewMember();
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  await createEditDeleteMemberPage.saveMember(
-    memberName,
-    memberEmail,
-    memberLabel,
-    memberNote
+  await createEditMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-email + p",
+    "Please enter an email."
   );
 
   // Then
-  await listFilterMembersPage.goto();
-  const currentMembers = await listFilterMembersPage.getMembersList();
-  expect(
-    currentMembers.some(
-      (member) => member.name === memberName && member.email === memberEmail
-    )
-  ).toBeTruthy();
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(currentMembers.every((m) => m.name !== member.name)).toBeTruthy();
 
   return await _after(browser, scenario);
 }
@@ -120,27 +132,30 @@ async function createMemberWithInvalidEmail(
       .padStart(
         3,
         "0"
-      )} - Create Member With Invalid Email With ${dataGenerationTecnique}`
+      )} - Create Member With Invalid Email - ${dataGenerationTecnique}`
   );
 
   // Given
   const dashboard = await _login(scenario);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage =
-    await listFilterMembersPage.goToNewMember();
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  await createEditDeleteMemberPage.saveMember(
+  await createEditMemberPage.saveMember(
     member.name,
     member.email,
     member.label,
     member.note
   );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-email + p",
+    "Invalid Email."
+  );
 
   // Then
-  await listFilterMembersPage.goto();
-  await createEditDeleteMemberPage.confirmLeavingPage();
-  const currentMembers = await listFilterMembersPage.getMembersList();
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.every(
       (m) => m.name !== member.name && m.email !== member.email
@@ -155,28 +170,39 @@ async function createMemberWithTooLongNote(
   testId,
   dataGenerationTecnique
 ) {
-  const { browser, scenario } = await _before("011 - Create Member");
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(
+        3,
+        "0"
+      )} - Create Member With A Note Longer Than 500 Characters - ${dataGenerationTecnique}`
+  );
 
   // Given
   const dashboard = await _login(scenario);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage =
-    await listFilterMembersPage.goToNewMember();
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  await createEditDeleteMemberPage.saveMember(
-    memberName,
-    memberEmail,
-    memberLabel,
-    memberNote
+  await createEditMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-note + p",
+    "Note is too long."
   );
 
   // Then
-  await listFilterMembersPage.goto();
-  const currentMembers = await listFilterMembersPage.getMembersList();
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
-    currentMembers.some(
-      (member) => member.name === memberName && member.email === memberEmail
+    currentMembers.every(
+      (m) => m.name !== member.name && m.email !== member.email
     )
   ).toBeTruthy();
 
@@ -188,142 +214,280 @@ async function createMemberWithTooLongName(
   testId,
   dataGenerationTecnique
 ) {
-  const { browser, scenario } = await _before("011 - Create Member");
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(
+        3,
+        "0"
+      )} - Create Member With A Name Longer Than 191 Characters - ${dataGenerationTecnique}`
+  );
 
   // Given
   const dashboard = await _login(scenario);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage =
-    await listFilterMembersPage.goToNewMember();
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  await createEditDeleteMemberPage.saveMember(
-    memberName,
-    memberEmail,
-    memberLabel,
-    memberNote
+  await createEditMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-name + p",
+    "Name cannot be longer than 191 characters."
   );
 
   // Then
-  await listFilterMembersPage.goto();
-  const currentMembers = await listFilterMembersPage.getMembersList();
-  expect(
-    currentMembers.some(
-      (member) => member.name === memberName && member.email === memberEmail
-    )
-  ).toBeTruthy();
-
-  return await _after(browser, scenario);
-}
-
-async function editMember() {
-  const { browser, scenario } = await _before("012 - Edit Member");
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const oldMemberName = "Member Name Test";
-  const oldMemberEmail = "newmember@test.com";
-  const newMemberName = "Member New Name Test";
-  const newMemberEmail = "membernewemail@test.com";
-
-  // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
-
-  // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(
-    oldMemberName,
-    oldMemberEmail
-  );
-  await createEditDeleteMemberPage.saveMember(newMemberName, newMemberEmail);
-
-  // Then
-  await dashboard.goToMembers();
-  const currentMembers = await listFilterMembersPage.getMembersList();
-  expect(
-    currentMembers.some(
-      (member) =>
-        member.name === newMemberName && member.email === newMemberEmail
-    )
-  ).toBeTruthy();
-
-  return await _after(browser, scenario);
-}
-
-async function deleteMember() {
-  const { browser, scenario } = await _before("013 - Delete Member");
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const memberName = "Member New Name Test";
-  const memberEmail = "membernewemail@test.com";
-
-  // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
-
-  // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(
-    memberName,
-    memberEmail
-  );
-  await createEditDeleteMemberPage.deleteMember();
-
-  // Then
-  const currentMembers = await listFilterMembersPage.getMembersList();
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.every(
-      (member) => member.name !== memberName && member.email !== memberEmail
+      (m) => m.name !== member.name && m.email !== member.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function filterMember() {
-  const { browser, scenario } = await _before("015 - Filter Member");
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const member1Name = "Member_test_1";
-  const member1Email = "newmember@test.com";
-  const member2Name = "Member_test_2";
-  const member2Email = "newmember2@test.com";
+async function editMember(
+  memberToCreate,
+  memberToEdit,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(3, "0")} - Edit Member - ${dataGenerationTecnique}`
+  );
 
   // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  let createEditDeleteMemberPage = await listFilterMembersPage.goToNewMember();
-  await createEditDeleteMemberPage.saveMember(member1Name, member1Email);
-
-  await dashboard.goToMembers();
-
-  createEditDeleteMemberPage = await listFilterMembersPage.goToNewMember();
-  await createEditDeleteMemberPage.saveMember(member2Name, member2Email);
-
-  await dashboard.goToMembers();
-
-  await listFilterMembersPage.filterMemberByName(member1Name);
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
 
   // Then
-  const currentMembers = await listFilterMembersPage.getMembersList();
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await listMembersPage.goto();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
-      (member) => member.name === member1Name && member.email === member1Email
+      (m) => m.name === memberToEdit.name && m.email === memberToEdit.email
     )
   ).toBeTruthy();
 
+  return await _after(browser, scenario);
+}
+
+async function editMemberWithEmptyEmail(
+  memberToCreate,
+  memberToEdit,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(3, "0")} - Edit Member With Empty Email - ${dataGenerationTecnique}`
+  );
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-email + p",
+    "Please enter an email."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(currentMembers.some((m) => m.name !== memberToEdit.name)).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function editMemberWithInvalidEmail(
+  memberToCreate,
+  memberToEdit,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(3, "0")} - Edit Member With Invalid Email - ${dataGenerationTecnique}`
+  );
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-email + p",
+    "Invalid Email."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
-    currentMembers.every(
-      (member) => member.name !== member2Name && member.email !== member2Email
+    currentMembers.some(
+      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function editMemberWithTooLongNote(
+  memberToCreate,
+  memberToEdit,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(3, "0")} - Edit Member With A Note Longer Than 500 Characters - ${dataGenerationTecnique}`
+  );
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-note + p",
+    "Note is too long."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(
+    currentMembers.some(
+      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function editMemberWithTooLongName(
+  memberToCreate,
+  memberToEdit,
+  testId,
+  dataGenerationTecnique
+) {
+  const { browser, scenario } = await _before(
+    `${testId
+      .toString()
+      .padStart(3, "0")} - Edit Member With A Name Longer Than 191 Characters - ${dataGenerationTecnique}`
+  );
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-name + p",
+    "Name cannot be longer than 191 characters."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(
+    currentMembers.some(
+      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
     )
   ).toBeTruthy();
 
@@ -333,17 +497,17 @@ async function filterMember() {
 async function executeMembersTests() {
   let i = 91;
 
-  // for (let [index, value] of dataGenerationTecniques.entries()) {
-  //   let member = {};
-  //   if (index == 0) {
-  //     member = createMember_Valid_A_Priori();
-  //   } else if (index == 1) {
-  //     member = createMember_Valid_PseudoRandom();
-  //   } else {
-  //     member = createMember_Valid_Random();
-  //   }
-  //   await createMember(member, i++, value);
-  // }
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let member = {};
+    if (index == 0) {
+      member = createMember_Valid_A_Priori();
+    } else if (index == 1) {
+      member = createMember_Valid_PseudoRandom();
+    } else {
+      member = createMember_Valid_Random();
+    }
+    await createMember(member, i++, value);
+  }
 
   for (let [index, value] of dataGenerationTecniques.entries()) {
     let member = {};
@@ -355,6 +519,128 @@ async function executeMembersTests() {
       member = createMember_InvalidEmail_Random();
     }
     await createMemberWithInvalidEmail(member, i++, value);
+  }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let member = {};
+    if (index == 0) {
+      member = createMember_Valid_A_Priori();
+      member.email = "";
+    } else if (index == 1) {
+      member = createMember_Valid_PseudoRandom();
+      member.email = "";
+    } else {
+      member = createMember_Valid_Random();
+      member.email = "";
+    }
+    await createMemberWithEmptyEmail(member, i++, value);
+  }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let member = {};
+    if (index == 0) {
+      member = createMember_TooLongNote_A_Priori();
+    } else if (index == 1) {
+      member = createMember_TooLongNote_PseudoRandom();
+    } else {
+      member = createMember_TooLongNote_Random();
+    }
+    await createMemberWithTooLongNote(member, i++, value);
+  }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let member = {};
+    if (index == 0) {
+      member = createMember_TooLongName_A_Priori();
+    } else if (index == 1) {
+      member = createMember_TooLongName_PseudoRandom();
+    } else {
+      member = createMember_TooLongName_Random();
+    }
+    await createMemberWithTooLongName(member, i++, value);
+  }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let memberToCreate = {};
+    let memberToEdit = {};
+    if (index == 0) {
+      memberToCreate = createMember_Valid_A_Priori();
+      memberToEdit = createMember_Valid_A_Priori();
+    } else if (index == 1) {
+      memberToCreate = createMember_Valid_PseudoRandom();
+      memberToEdit = createMember_Valid_PseudoRandom();
+    } else {
+      memberToCreate = createMember_Valid_Random();
+      memberToEdit = createMember_Valid_Random();
+    }
+    await editMember(memberToCreate, memberToEdit, i++, value);
+  }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let memberToCreate = {};
+    let memberToEdit = {};
+    if (index == 0) {
+      memberToCreate = createMember_Valid_A_Priori();
+      memberToEdit = createMember_Valid_A_Priori();
+      memberToEdit.email = "";
+    } else if (index == 1) {
+      memberToCreate = createMember_Valid_PseudoRandom();
+      memberToEdit = createMember_Valid_PseudoRandom();
+      memberToEdit.email = "";
+    } else {
+      memberToCreate = createMember_Valid_Random();
+      memberToEdit = createMember_Valid_Random();
+      memberToEdit.email = "";
+    }
+    await editMemberWithEmptyEmail(memberToCreate, memberToEdit, i++, value);
+  }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let memberToCreate = {};
+    let memberToEdit = {};
+    if (index == 0) {
+      memberToCreate = createMember_Valid_A_Priori();
+      memberToEdit = createMember_InvalidEmail_A_Priori();
+    } else if (index == 1) {
+      memberToCreate = createMember_Valid_PseudoRandom();
+      memberToEdit = createMember_InvalidEmail_PseudoRandom();
+    } else {
+      memberToCreate = createMember_Valid_Random();
+      memberToEdit = createMember_InvalidEmail_Random();
+    }
+    await editMemberWithInvalidEmail(memberToCreate, memberToEdit, i++, value);
+  }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let memberToCreate = {};
+    let memberToEdit = {};
+    if (index == 0) {
+      memberToCreate = createMember_Valid_A_Priori();
+      memberToEdit = createMember_TooLongNote_A_Priori();
+    } else if (index == 1) {
+      memberToCreate = createMember_Valid_PseudoRandom();
+      memberToEdit = createMember_TooLongNote_PseudoRandom();
+    } else {
+      memberToCreate = createMember_Valid_Random();
+      memberToEdit = createMember_TooLongNote_Random();
+    }
+    await editMemberWithTooLongNote(memberToCreate, memberToEdit, i++, value);
+  }
+
+  for (let [index, value] of dataGenerationTecniques.entries()) {
+    let memberToCreate = {};
+    let memberToEdit = {};
+    if (index == 0) {
+      memberToCreate = createMember_Valid_A_Priori();
+      memberToEdit = createMember_TooLongName_A_Priori();
+    } else if (index == 1) {
+      memberToCreate = createMember_Valid_PseudoRandom();
+      memberToEdit = createMember_TooLongName_PseudoRandom();
+    } else {
+      memberToCreate = createMember_Valid_Random();
+      memberToEdit = createMember_TooLongName_Random();
+    }
+    await editMemberWithTooLongName(memberToCreate, memberToEdit, i++, value);
   }
 }
 
