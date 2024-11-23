@@ -60,7 +60,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
     const pageDescription = faker.lorem.paragraph(); 
     const buttonName = faker.lorem.words(1); 
     const buttonUrl = faker.lorem.paragraph()
-    const scenario_name = "037- Preview Page Button valid Data";
+    const scenario_name = "037- Preview Page Button invalid Data";
     await previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name)
   }
 
@@ -145,7 +145,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
     const pageDescription = await getRandomValueFromApi(MOCKAROO_API_URL, "page_description");
     const buttonName = await getRandomValueFromApi(MOCKAROO_API_URL, "button_name");
     const buttonUrl = await getRandomValueFromApi(MOCKAROO_API_URL, "url_button_invalid");
-    const scenario_name = "047- Preview Page Button valid Data - API";
+    const scenario_name = "047- Preview Page Button invalid Data - API";
     await previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name)
   }
 
@@ -231,7 +231,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
         const pageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
         const buttonName = getRandomValueFromJson(FILE_NAME, "button_name");
         const buttonUrl = getRandomValueFromJson(FILE_NAME, "url_button_invalid");
-        const scenario_name = "057- Preview Page Button valid Data - JSON";
+        const scenario_name = "057- Preview Page Button invalid Data - JSON";
         await previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name)
       }
     
