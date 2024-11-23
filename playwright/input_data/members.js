@@ -1,6 +1,48 @@
 const { faker } = require("@faker-js/faker");
 
 /*
+    Util
+*/
+
+function generateRandomLongName() {
+  let name = "";
+  let lastName = "";
+  let sex = faker.helpers.arrayElement(["male", "female"]);
+
+  do {
+    name += faker.person.firstName(sex) + " ";
+    lastName += faker.person.lastName() + " ";
+  } while ((name + lastName).length <= 191);
+
+  return name + lastName;
+}
+
+function generateRandomLongNote() {
+  let note = "";
+
+  do {
+    note += faker.lorem.sentence() + " ";
+  } while (note.length <= 500);
+
+  return note;
+}
+
+function generateRandomInvalidEmail() {
+  const validEmail = faker.internet.email();
+  const invalidPatterns = [
+    () => validEmail.replace("@", ""), // Missing "@" Symbol
+    () => validEmail.split("@")[0], // Missing Domain Part
+    () => validEmail.split("@")[1], // Missing Local Part
+    () => validEmail + faker.string.symbol(), // Invalid Characters in Domain Part
+    () => validEmail.substring(0, validEmail.lastIndexOf(".")), // Missing Top-Level Domain
+    () =>
+      validEmail.substring(0, validEmail.lastIndexOf("@") + 1) +
+      validEmail.substring(validEmail.lastIndexOf("."), validEmail.length), // No Text Between "@" and Domain
+  ];
+  return faker.helpers.arrayElement(invalidPatterns)();
+}
+
+/*
     Valid Data
 */
 function createMember_Valid_A_Priori() {
@@ -8,7 +50,7 @@ function createMember_Valid_A_Priori() {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
@@ -19,7 +61,7 @@ function createMember_Valid_PseudoRandom() {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
@@ -30,7 +72,7 @@ function createMember_Valid_Random() {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
@@ -42,9 +84,9 @@ function createMember_Valid_Random() {
 function createMember_InvalidEmail_A_Priori() {
   var member = {
     name: faker.person.fullName(),
-    email: "invalidemail@test-com",
+    email: generateRandomInvalidEmail(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
@@ -53,9 +95,9 @@ function createMember_InvalidEmail_A_Priori() {
 function createMember_InvalidEmail_PseudoRandom() {
   var member = {
     name: faker.person.fullName(),
-    email: "invalidemail@test-com",
+    email: generateRandomInvalidEmail(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
@@ -64,9 +106,9 @@ function createMember_InvalidEmail_PseudoRandom() {
 function createMember_InvalidEmail_Random() {
   var member = {
     name: faker.person.fullName(),
-    email: "invalidemail@test-com",
+    email: generateRandomInvalidEmail(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
@@ -80,7 +122,7 @@ function createMember_TooLongNote_A_Priori() {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(10),
+    note: generateRandomLongNote(),
   };
 
   return member;
@@ -91,7 +133,7 @@ function createMember_TooLongNote_PseudoRandom() {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(10),
+    note: generateRandomLongNote(),
   };
 
   return member;
@@ -102,7 +144,7 @@ function createMember_TooLongNote_Random() {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(10),
+    note: generateRandomLongNote(),
   };
 
   return member;
@@ -113,10 +155,10 @@ function createMember_TooLongNote_Random() {
 */
 function createMember_TooLongName_A_Priori() {
   var member = {
-    name: faker.lorem.paragraphs(5),
+    name: generateRandomLongName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
@@ -124,10 +166,10 @@ function createMember_TooLongName_A_Priori() {
 
 function createMember_TooLongName_PseudoRandom() {
   var member = {
-    name: faker.lorem.paragraphs(5),
+    name: generateRandomLongName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
@@ -135,10 +177,10 @@ function createMember_TooLongName_PseudoRandom() {
 
 function createMember_TooLongName_Random() {
   var member = {
-    name: faker.lorem.paragraphs(5),
+    name: generateRandomLongName(),
     email: faker.internet.email(),
     label: faker.word.noun(),
-    note: faker.lorem.paragraphs(1),
+    note: faker.lorem.sentence(),
   };
 
   return member;
