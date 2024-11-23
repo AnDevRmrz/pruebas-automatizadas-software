@@ -1,11 +1,26 @@
 const { faker } = require("@faker-js/faker");
 const tagInputJson = require("./tag_input.json");
 
+const TAG_SCHEMA_URL = "https://my.api.mockaroo.com/tag.json";
+const API_KEY = "75b08cb0";
+
 class TagInput {
 
   constructor(tagInputJson) {
 
     this.tagInputJson = tagInputJson;
+  }
+
+  async getValueFromAPI() {
+
+    const headers = {"X-API-Key": API_KEY};
+    const result = await fetch(TAG_SCHEMA_URL, { method: 'GET', headers: headers });
+
+    if (!result.ok) {
+      throw new Error('Error al consultar los datos');
+    }
+
+    return await result.json();
   }
 
   getRandomInput(input) {
@@ -34,7 +49,7 @@ class TagInput {
   
     return {
       tagName: value.tagName,
-      tagSlug: value.tagSlug.toLowerCase(),
+      tagSlug: value.tagSlug.toLowerCase().trim(),
       tagDescription: value.tagDescription,
       tagHexColor: value.tagHexColor,
       metaTitle: value.metaTitle,
@@ -45,19 +60,31 @@ class TagInput {
     };
   }
   
-  createTagDynamicValues() {
+  async createTagDynamicValues() {
+
+    let value = await this.getValueFromAPI();
   
-    return this.createTagPrioriValues();
+    return {
+      tagName: value.tagName,
+      tagSlug: value.tagSlug.toLowerCase().trim(),
+      tagDescription: value.tagDescription,
+      tagHexColor: value.tagHexColor,
+      metaTitle: value.metaTitle,
+      metaDescription: value.metaDescription,
+      metaUrl: value.metaUrl,
+      xCardTitle: value.xCardTitle,
+      xCardDescription: value.xCardDescription,
+    };
   }
 
   editTagRandomValues() {
     return {
       tagName: faker.lorem.sentence(),
-      tagSlug: faker.lorem.word().toLowerCase(),
+      tagSlug: faker.lorem.word().toLowerCase().trim(),
       tagDescription: faker.lorem.paragraph(),
       tagHexColor: faker.color.rgb({prefix: ""}),
       oldTagName: faker.lorem.sentence(),
-      oldTagSlug: faker.lorem.word().toLowerCase(),
+      oldTagSlug: faker.lorem.word().toLowerCase().trim(),
       oldTagDescription: faker.lorem.paragraph(),
       oldTagHexColor: faker.color.rgb({prefix: ""}),      
     };
@@ -70,19 +97,31 @@ class TagInput {
   
     return {
       tagName: value.tagName,
-      tagSlug: value.tagSlug.toLowerCase(),
+      tagSlug: value.tagSlug.toLowerCase().trim(),
       tagDescription: value.tagDescription,
       tagHexColor: value.tagHexColor,
       oldTagName: oldValue.tagName,
-      oldTagSlug: oldValue.tagSlug.toLowerCase(),
+      oldTagSlug: oldValue.tagSlug.toLowerCase().trim(),
       oldTagDescription: oldValue.tagDescription,
       oldTagHexColor: oldValue.tagHexColor,
     };
   }
   
-  editTagDynamicValues() {
+  async editTagDynamicValues() {
   
-    return this.editTagPrioriValues();
+    let value = await this.getValueFromAPI();
+    let oldValue = await this.getValueFromAPI();
+  
+    return {
+      tagName: value.tagName,
+      tagSlug: value.tagSlug.toLowerCase().trim(),
+      tagDescription: value.tagDescription,
+      tagHexColor: value.tagHexColor,
+      oldTagName: oldValue.tagName,
+      oldTagSlug: oldValue.tagSlug.toLowerCase().trim(),
+      oldTagDescription: oldValue.tagDescription,
+      oldTagHexColor: oldValue.tagHexColor,
+    };
   }
 }
 

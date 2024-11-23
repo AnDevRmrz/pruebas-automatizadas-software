@@ -23,7 +23,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await createTag(tagInput.createTagRandomValues(), "061 - Create Tag Random Values");
 
   // Scenario 62 - Create Tag Dynamic Values
-  await createTag(tagInput.createTagDynamicValues(), "062 - Create Tag Dynamic Values");
+  await createTag(await tagInput.createTagDynamicValues(), "062 - Create Tag Dynamic Values");
 
   // Scenario 63 - Create Tag Priori Values
   await createTag(tagInput.createTagPrioriValues(), "063 - Create Tag Priori Values");
@@ -32,7 +32,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await editTag(tagInput.editTagRandomValues(), "064 - Edit Tag Random Values");
 
   // Scenario 65 - Edit Tag Dynamic Values
-  await editTag(tagInput.editTagDynamicValues(), "065 - Edit Tag Dynamic Values");
+  await editTag(await tagInput.editTagDynamicValues(), "065 - Edit Tag Dynamic Values");
 
   // Scenario 66 - Edit Tag Priori Values
   await editTag(tagInput.editTagPrioriValues(), "066 - Edit Tag Priori Values");
@@ -41,7 +41,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await deleteTag(tagInput.createTagRandomValues(), "067 - Delete Tag Random Values");
 
   // Scenario 68 - Delete Tag Dynamic Values
-  await deleteTag(tagInput.createTagDynamicValues(), "068 - Delete Tag Dynamic Values");
+  await deleteTag(await tagInput.createTagDynamicValues(), "068 - Delete Tag Dynamic Values");
 
   // Scenario 69 - Delete Tag Priori Values
   await deleteTag(tagInput.createTagPrioriValues(), "069 - Delete Tag Priori Values");
@@ -50,7 +50,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await createTagWithMetadata(tagInput.createTagRandomValues(), "070 - Create Tag With Metadata Random Values");
 
   // Scenario 71 - Create Tag With Metadata Dynamic Values
-  await createTagWithMetadata(tagInput.createTagDynamicValues(), "071 - Create Tag With Metadata Dynamic Values");
+  await createTagWithMetadata(await tagInput.createTagDynamicValues(), "071 - Create Tag With Metadata Dynamic Values");
 
   // Scenario 72 - Create Tag With Metadata Priori Values
   await createTagWithMetadata(tagInput.createTagPrioriValues(), "072 - Create Tag With Metadata Priori Values");
@@ -59,7 +59,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await createTagWithXCardValues(tagInput.createTagRandomValues(), "073 - Create Tag With X Card Random Values");
 
   // Scenario 74 - Create Tag With X Card Dynamic Values
-  await createTagWithXCardValues(tagInput.createTagDynamicValues(), "074 - Create Tag With X Card Dynamic Values");
+  await createTagWithXCardValues(await tagInput.createTagDynamicValues(), "074 - Create Tag With X Card Dynamic Values");
 
   // Scenario 75 - Create Tag With X Card Priori Values
   await createTagWithXCardValues(tagInput.createTagPrioriValues(), "075 - Create Tag With X Card Priori Values");  
@@ -68,7 +68,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await settingsEditTitleAndDescription(settingsInput.getRandomValues(), "076 - Settings - Set General Title and Description Random Values");
 
   // Scenario 77 - Settings - Set General Title and Description Dynamic Values
-  await settingsEditTitleAndDescription(settingsInput.getDynamicValues(), "077 - Settings - Set General Title and Description Dynamic Values");
+  await settingsEditTitleAndDescription(await settingsInput.getDynamicValues(), "077 - Settings - Set General Title and Description Dynamic Values");
 
   // Scenario 78 - Settings - Set General Title and Description Priori Values
   await settingsEditTitleAndDescription(settingsInput.getPrioriValues(), "078 - Settings - Set General Title and Description Priori Values");
@@ -77,7 +77,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await settingsEditGeneralLanguage(settingsInput.getRandomValues(), "079 - Settings - Set General Language Random Values");
 
   // Scenario 80 - Settings - Set General Language Dynamic Values
-  await settingsEditGeneralLanguage(settingsInput.getDynamicValues(), "080 - Settings - Set General Language Dynamic Values");
+  await settingsEditGeneralLanguage(await settingsInput.getDynamicValues(), "080 - Settings - Set General Language Dynamic Values");
 
   // Scenario 81 - Settings - Set General Language Priori Values
   await settingsEditGeneralLanguage(settingsInput.getPrioriValues(), "081 - Settings - Set General Language Priori Values");
@@ -86,7 +86,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await settingsEditMetaData(settingsInput.getRandomValues(), "082 - Settings - Edit Meta Data Random Values");
 
   // Scenario 83 - Settings - Edit Meta Data Dynamic Values
-  await settingsEditMetaData(settingsInput.getDynamicValues(), "083 - Settings - Edit Meta Data Dynamic Values");
+  await settingsEditMetaData(await settingsInput.getDynamicValues(), "083 - Settings - Edit Meta Data Dynamic Values");
 
   // Scenario 84 - Settings - Edit Meta Data Priori Values
   await settingsEditMetaData(settingsInput.getPrioriValues(), "084 - Settings - Edit Meta Data Priori Values");
@@ -95,7 +95,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await settingsEditXCardData(settingsInput.getRandomValues(), "085 - Settings - Edit X Card Data Random Values");
 
   // Scenario 86 - Settings - Edit X Card Data Dynamic Values
-  await settingsEditXCardData(settingsInput.getDynamicValues(), "086 - Settings - Edit X Card Data Dynamic Values");
+  await settingsEditXCardData(await settingsInput.getDynamicValues(), "086 - Settings - Edit X Card Data Dynamic Values");
 
   // Scenario 87 - Settings - Edit X Card Data Priori Values
   await settingsEditXCardData(settingsInput.getPrioriValues(), "087 - Settings - Edit X Card Data Priori Values");
@@ -104,7 +104,7 @@ const { settingsInput } = require("./input_data/settings_input_data");
   await settingsEditFacebookData(settingsInput.getRandomValues(), "088 - Settings - Edit Facebook Data Random Values");
 
   // Scenario 89 - Settings - Edit Facebook Data Dynamic Values
-  await settingsEditFacebookData(settingsInput.getDynamicValues(), "089 - Settings - Edit Facebook Data Dynamic Values");
+  await settingsEditFacebookData(await settingsInput.getDynamicValues(), "089 - Settings - Edit Facebook Data Dynamic Values");
 
   // Scenario 90 - Settings - Edit Facebook Data Priori Values
   await settingsEditFacebookData(settingsInput.getPrioriValues(), "090 - Settings - Edit Facebook Data Priori Values");

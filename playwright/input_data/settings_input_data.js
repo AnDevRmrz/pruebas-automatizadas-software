@@ -1,11 +1,26 @@
 const { faker } = require("@faker-js/faker");
 const settingsInputJson = require("./settings_input.json");
 
+const TAG_SCHEMA_URL = "https://my.api.mockaroo.com/settings.json";
+const API_KEY = "75b08cb0";
+
 class SettingsInput {
 
   constructor(settingsInputJson) {
 
     this.settingsInputJson = settingsInputJson;
+  }
+
+  async getValueFromAPI() {
+
+    const headers = {"X-API-Key": API_KEY};
+    const result = await fetch(TAG_SCHEMA_URL, { method: 'GET', headers: headers });
+
+    if (!result.ok) {
+      throw new Error('Error al consultar los datos');
+    }
+
+    return await result.json();
   }
 
   getRandomInput(input) {
@@ -45,9 +60,21 @@ class SettingsInput {
     }
   }
 
-  getDynamicValues() {
+  async getDynamicValues() {
 
-    return this.getPrioriValues();
+    let value = await this.getValueFromAPI();
+
+    return {
+      generalTitle: value.generalTitle,
+      generalDescription: value.generalDescription,
+      generalLanguage: value.generalLanguage,
+      xCardTitle: value.xCardTitle,
+      xCardDescription: value.xCardDescription,
+      facebookTitle: value.facebookTitle,
+      facebookDescription: value.facebookDescription,
+      metaTitle: value.metaTitle,
+      metaDescription: value.metaDescription,
+    }
   }
   
 }
