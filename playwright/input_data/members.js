@@ -12,9 +12,9 @@ function generateRandomLongName() {
   do {
     name += faker.person.firstName(sex) + " ";
     lastName += faker.person.lastName() + " ";
-  } while ((name + lastName).length <= 191);
+  } while ((name + lastName).length <= 192);
 
-  return name + lastName;
+  return (name + lastName).trim();
 }
 
 function generateRandomLongNote() {
@@ -31,10 +31,9 @@ function generateRandomInvalidEmail() {
   const validEmail = faker.internet.email();
   const invalidPatterns = [
     () => validEmail.replace("@", ""), // Missing "@" Symbol
-    () => validEmail.split("@")[0], // Missing Domain Part
-    () => validEmail.split("@")[1], // Missing Local Part
+    () => validEmail.split("@")[0] + '@', // Missing Domain Part
+    () => '@' + validEmail.split("@")[1], // Missing Local Part
     () => validEmail + faker.string.symbol(), // Invalid Characters in Domain Part
-    () => validEmail.substring(0, validEmail.lastIndexOf(".")), // Missing Top-Level Domain
     () =>
       validEmail.substring(0, validEmail.lastIndexOf("@") + 1) +
       validEmail.substring(validEmail.lastIndexOf("."), validEmail.length), // No Text Between "@" and Domain

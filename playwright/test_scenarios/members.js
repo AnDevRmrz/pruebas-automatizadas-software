@@ -307,7 +307,10 @@ async function editMemberWithEmptyEmail(
   const { browser, scenario } = await _before(
     `${testId
       .toString()
-      .padStart(3, "0")} - Edit Member With Empty Email - ${dataGenerationTecnique}`
+      .padStart(
+        3,
+        "0"
+      )} - Edit Member With Empty Email - ${dataGenerationTecnique}`
   );
 
   // Given
@@ -353,7 +356,10 @@ async function editMemberWithInvalidEmail(
   const { browser, scenario } = await _before(
     `${testId
       .toString()
-      .padStart(3, "0")} - Edit Member With Invalid Email - ${dataGenerationTecnique}`
+      .padStart(
+        3,
+        "0"
+      )} - Edit Member With Invalid Email - ${dataGenerationTecnique}`
   );
 
   // Given
@@ -403,7 +409,10 @@ async function editMemberWithTooLongNote(
   const { browser, scenario } = await _before(
     `${testId
       .toString()
-      .padStart(3, "0")} - Edit Member With A Note Longer Than 500 Characters - ${dataGenerationTecnique}`
+      .padStart(
+        3,
+        "0"
+      )} - Edit Member With A Note Longer Than 500 Characters - ${dataGenerationTecnique}`
   );
 
   // Given
@@ -453,7 +462,10 @@ async function editMemberWithTooLongName(
   const { browser, scenario } = await _before(
     `${testId
       .toString()
-      .padStart(3, "0")} - Edit Member With A Name Longer Than 191 Characters - ${dataGenerationTecnique}`
+      .padStart(
+        3,
+        "0"
+      )} - Edit Member With A Name Longer Than 191 Characters - ${dataGenerationTecnique}`
   );
 
   // Given
