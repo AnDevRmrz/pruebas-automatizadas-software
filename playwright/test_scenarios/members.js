@@ -15,7 +15,7 @@ const {
   createMember_TooLongName_A_Priori,
   createMember_TooLongName_PseudoRandom,
   createMember_TooLongName_Random,
-} = require("../input_data/members");
+} = require("../input_data/member_input_data");
 const dataGenerationTecniques = [
   "A-priori Data Pool",
   "Pseudo Random Data Pool",
