@@ -133,7 +133,9 @@ exports.CreatePagePage = class CreatePagePage {
 
     async fillButton(text,url) {
         await this.scenario.getPage().locator(this.selectors.markdownButton).click()
+        await this.scenario.screenshot();
         await this.scenario.getPage().locator(this.selectors.buttonMarkdownPageButton).click()
+        await this.scenario.screenshot();
         await this.scenario.getPage().locator(this.selectors.buttonInputText).fill(text);
         await this.scenario.screenshot();
         await this.fillUrlButton(url);
