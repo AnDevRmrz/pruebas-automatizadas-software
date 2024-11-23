@@ -4,20 +4,18 @@ const playwright = require("playwright");
 const { Scenario } = require("../util/util");
 const { faker } = require('@faker-js/faker');
 
-async function createPostValidData() {  
+async function createPostValidData(postTitle, postContent, scenario) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
-    const scenario = new Scenario(page, "001 - Create Post");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitle = faker.lorem.words(3); 
-    const postContent = faker.lorem.paragraph(); 
+    const postTitle = postTitle; 
+    const postContent = postContent; 
     const expectedPostStatus = "Published";
-
-    console.log(`Creating post: Title="${postTitle}", Content="${postContent}"`);
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -41,11 +39,11 @@ async function createPostValidData() {
     return;
 }
 
-async function createPostEmptyFields() {  
+async function createPostEmptyFields(scenario) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
-    const scenario = new Scenario(page, "002 - Create Post - Empty Fields");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -73,17 +71,17 @@ async function createPostEmptyFields() {
     return;
 }
 
-async function createPostExceedingLimits() {  
+async function createPostExceedingLimits(postTitle, postContent, scenario) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
-    const scenario = new Scenario(page, "003 - Create Post - Exceeding Limits");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitle = faker.lorem.words(500); 
-    const postContent = faker.lorem.paragraphs(50); 
+    const postTitle = postTitle; 
+    const postContent = postContent; 
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -105,18 +103,18 @@ async function createPostExceedingLimits() {
     return;
 }
 
-async function editPostValidData() {
+async function editPostValidData(newPostTitle, newPostContent, scenario) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, "004 - Edit Post - Valid Data");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
     const postTitleToEdit = "Auto post";
-    const newPostTitle = faker.lorem.words(5); 
-    const newPostContent = faker.lorem.paragraph(); 
+    const newPostTitle = newPostTitle; 
+    const newPostContent = newPostContent; 
     const expectedPostStatus = "Published";
 
     // Given
@@ -139,18 +137,18 @@ async function editPostValidData() {
     return;
 }
 
-async function editPostEmptyTitle() {
+async function editPostEmptyTitle(newPostContent, scenario) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, "005 - Edit Post - Empty Title");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
     const postTitleToEdit = "Auto post";
     const newPostTitle = ""; 
-    const newPostContent = faker.lorem.paragraph();
+    const newPostContent = newPostContent;
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -171,18 +169,18 @@ async function editPostEmptyTitle() {
     return;
 }
 
-async function editPostExceedingLimits() {
+async function editPostExceedingLimits(newPostTitle, newPostContent, scenario) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, "006 - Edit Post - Exceeding Limits");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
     const postTitleToEdit = "Auto post";
-    const newPostTitle = faker.lorem.words(500); 
-    const newPostContent = faker.lorem.paragraphs(50); 
+    const newPostTitle = newPostTitle; 
+    const newPostContent = newPostContent; 
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -204,17 +202,17 @@ async function editPostExceedingLimits() {
     return;
 }
 
-async function editPostEmptyContent() {
+async function editPostEmptyContent(postTitleToEdit, newPostTitle, scenario) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, "007 - Edit Post - Empty Content");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToEdit = "Auto post";
-    const newPostTitle = faker.lorem.words(5);
+    const postTitleToEdit = postTitleToEdit;
+    const newPostTitle = newPostTitle;
     const newPostContent = ""; 
 
     // Given
@@ -236,17 +234,17 @@ async function editPostEmptyContent() {
     return;
 }
 
-async function deleteNewlyCreatedPost() {
+async function deleteNewlyCreatedPost(postTitleToDelete, postContent, scenario) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, "008 - Delete Newly Created Post");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToDelete = faker.lorem.words(5); 
-    const postContent = faker.lorem.sentence(); 
+    const postTitleToDelete = postTitleToDelete; 
+    const postContent = postContent; 
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -273,16 +271,16 @@ async function deleteNewlyCreatedPost() {
     return;
 }
 
-async function deletePublishedPost() {
+async function deletePublishedPost(postTitleToDelete, scenario) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, "009 - Delete Published Post");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToDelete = "Published Post"; 
+    const postTitleToDelete = postTitleToDelete; 
     const expectedPostStatus = "Published";
 
     // Given
@@ -309,17 +307,17 @@ async function deletePublishedPost() {
     return;
 }
 
-async function deleteRandomGeneratedPost() {
+async function deleteRandomGeneratedPost(postTitleToDelete, postContent, scenario) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, "010 - Delete Randomly Generated Post");
+    const scenario = new Scenario(page, scenario);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToDelete = faker.lorem.words(3); 
-    const postContent = faker.lorem.paragraph(); 
+    const postTitleToDelete = postTitleToDelete; 
+    const postContent = postContent; 
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -346,7 +344,7 @@ async function deleteRandomGeneratedPost() {
     return;
 }
 
-const listTest = [
+module.exports = {
     createPostValidData,
     createPostEmptyFields,
     createPostExceedingLimits,
@@ -357,8 +355,4 @@ const listTest = [
     deleteNewlyCreatedPost,
     deletePublishedPost,
     deleteRandomGeneratedPost
-]
-
-module.exports = {
-    listTest
 }
