@@ -22,174 +22,376 @@ async function _after(browser, scenario) {
   return;
 }
 
-async function createMember() {
-  const { browser, scenario } = await _before("011 - Create Member");
-
+async function _login(scenario) {
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
-  const memberName = "Member Name Test";
-  const memberEmail = "newmember@test.com";
-
-  // Given
   const signInPage = new SignInPage(scenario);
   await signInPage.goto();
+  return await signInPage.signIn(email, password);
+}
+
+async function createMember(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage =
-    await listFilterMembersPage.goToNewMember();
-  await createEditDeleteMemberPage.saveMember(memberName, memberEmail);
+  await createEditMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
 
   // Then
-  await dashboard.goToMembers();
-  const currentMembers = await listFilterMembersPage.getMembersList();
+  await listMembersPage.goto();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
-      (member) => member.name === memberName && member.email === memberEmail
+      (m) => m.name === member.name && m.email === member.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function editMember() {
-  const { browser, scenario } = await _before("012 - Edit Member");
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const oldMemberName = "Member Name Test";
-  const oldMemberEmail = "newmember@test.com";
-  const newMemberName = "Member New Name Test";
-  const newMemberEmail = "membernewemail@test.com";
+async function createMemberWithEmptyEmail(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(oldMemberName, oldMemberEmail);
-  await createEditDeleteMemberPage.saveMember(newMemberName, newMemberEmail);
+  await createEditMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-email + p",
+    "Please enter an email."
+  );
 
   // Then
-  await dashboard.goToMembers();
-  const currentMembers = await listFilterMembersPage.getMembersList();
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(currentMembers.every((m) => m.name !== member.name)).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function createMemberWithInvalidEmail(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-email + p",
+    "Invalid Email."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(
+    currentMembers.every(
+      (m) => m.name !== member.name && m.email !== member.email
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function createMemberWithTooLongNote(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-note + p",
+    "Note is too long."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(
+    currentMembers.every(
+      (m) => m.name !== member.name && m.email !== member.email
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function createMemberWithTooLongName(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    member.name,
+    member.email,
+    member.label,
+    member.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-name + p",
+    "Name cannot be longer than 191 characters."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(
+    currentMembers.every(
+      (m) => m.name !== member.name && m.email !== member.email
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function editMember(memberToCreate, memberToEdit, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+
+  // Then
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await listMembersPage.goto();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
-      (member) =>
-        member.name === newMemberName && member.email === newMemberEmail
+      (m) => m.name === memberToEdit.name && m.email === memberToEdit.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function deleteMember() {
-  const { browser, scenario } = await _before("013 - Delete Member");
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const memberName = "Member New Name Test";
-  const memberEmail = "membernewemail@test.com";
+async function editMemberWithEmptyEmail(
+  memberToCreate,
+  memberToEdit,
+  scenarioDesc
+) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage = await listFilterMembersPage.goToEditMember(memberName, memberEmail);
-  await createEditDeleteMemberPage.deleteMember();
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-email + p",
+    "Please enter an email."
+  );
 
   // Then
-  const currentMembers = await listFilterMembersPage.getMembersList();
-  expect(
-    currentMembers.every(
-      (member) =>
-        member.name !== memberName && member.email !== memberEmail
-    )
-  ).toBeTruthy();
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(currentMembers.some((m) => m.name !== memberToEdit.name)).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function createMemberMemberWithInvalidEmail() {
-  const { browser, scenario } = await _before("014 - Create Member with Invalid Email");
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const memberName = "Member Name Test";
-  const invalidMemberEmail = "invalidemail@test-com";
-
-  // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
-
-  // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  const createEditDeleteMemberPage =
-    await listFilterMembersPage.goToNewMember();
-  await createEditDeleteMemberPage.saveMember(memberName, invalidMemberEmail);
-
-  // Then
-  await dashboard.goToMembers();
-  await createEditDeleteMemberPage.confirmLeavingPage();
-  const currentMembers = await listFilterMembersPage.getMembersList();
-  expect(
-    currentMembers.every(
-      (member) => member.name !== memberName && member.email !== invalidMemberEmail
-    )
-  ).toBeTruthy();
-
-  return await _after(browser, scenario);
-}
-
-async function filterMember() {
-  const { browser, scenario } = await _before("015 - Filter Member");
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const member1Name = "Member_test_1";
-  const member1Email = "newmember@test.com";
-  const member2Name = "Member_test_2";
-  const member2Email = "newmember2@test.com";
+async function editMemberWithInvalidEmail(
+  memberToCreate,
+  memberToEdit,
+  scenarioDesc
+) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
-  const signInPage = new SignInPage(scenario);
-  await signInPage.goto();
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
 
   // When
-  const dashboard = await signInPage.signIn(email, password);
-  const listFilterMembersPage = await dashboard.goToMembers();
-  let createEditDeleteMemberPage =
-  await listFilterMembersPage.goToNewMember();
-  await createEditDeleteMemberPage.saveMember(member1Name, member1Email);
-
-  await dashboard.goToMembers();
-
-  createEditDeleteMemberPage =
-  await listFilterMembersPage.goToNewMember();
-  await createEditDeleteMemberPage.saveMember(member2Name, member2Email);
-
-  await dashboard.goToMembers();
-
-  await listFilterMembersPage.filterMemberByName(member1Name);
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-email + p",
+    "Invalid Email."
+  );
 
   // Then
-  const currentMembers = await listFilterMembersPage.getMembersList();
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
-      (member) => member.name === member1Name && member.email === member1Email
+      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
     )
   ).toBeTruthy();
 
+  return await _after(browser, scenario);
+}
+
+async function editMemberWithTooLongNote(
+  memberToCreate,
+  memberToEdit,
+  scenarioDesc
+) {
+  const { browser, scenario } = await _before(scenarioDesc);
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-note + p",
+    "Note is too long."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
   expect(
-    currentMembers.every(
-      (member) => member.name !== member2Name && member.email !== member2Email
+    currentMembers.some(
+      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
+    )
+  ).toBeTruthy();
+
+  return await _after(browser, scenario);
+}
+
+async function editMemberWithTooLongName(
+  memberToCreate,
+  memberToEdit,
+  scenarioDesc
+) {
+  const { browser, scenario } = await _before(scenarioDesc);
+
+  // Given
+  const dashboard = await _login(scenario);
+  const listMembersPage = await dashboard.goToMembers();
+  const createEditMemberPage = await listMembersPage.goToNewMember();
+
+  // When
+  await createEditMemberPage.saveMember(
+    memberToCreate.name,
+    memberToCreate.email,
+    memberToCreate.label,
+    memberToCreate.note
+  );
+  await listMembersPage.goto();
+  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await createEditMemberPage.saveMember(
+    memberToEdit.name,
+    memberToEdit.email,
+    memberToEdit.label,
+    memberToEdit.note
+  );
+  await createEditMemberPage.errorMessageIsDisplayed(
+    "#member-name + p",
+    "Name cannot be longer than 191 characters."
+  );
+
+  // Then
+  await listMembersPage.goto();
+  await createEditMemberPage.confirmLeavingPage();
+  const currentMembers = await listMembersPage.getMembersList();
+  expect(
+    currentMembers.some(
+      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
     )
   ).toBeTruthy();
 
@@ -198,8 +400,13 @@ async function filterMember() {
 
 module.exports = {
   createMember,
+  createMemberWithInvalidEmail,
+  createMemberWithEmptyEmail,
+  createMemberWithTooLongNote,
+  createMemberWithTooLongName,
   editMember,
-  deleteMember,
-  createMemberMemberWithInvalidEmail,
-  filterMember,
+  editMemberWithEmptyEmail,
+  editMemberWithInvalidEmail,
+  editMemberWithTooLongNote,
+  editMemberWithTooLongName,
 };

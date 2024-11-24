@@ -1,7 +1,4 @@
-const playwright = require("playwright");
 const { faker } = require('@faker-js/faker');
-const { SignInPage } = require("../page_objects/sign_in_page");
-const { expect } = require("@playwright/test");
 const { deleteAllPages_testing_purpose, createPage_ValidData, createPage_InvalidData, editPage_validData, editPage_InvalidData, previewPage_ValidData, filterDraftPages_ValidData, filterDraftPages_InvalidData, deletePage_ValidData, previewPage_ButtonValidData, previewPage_ButtonInvalidData} = require("../test_scenarios/page");
 const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
 
