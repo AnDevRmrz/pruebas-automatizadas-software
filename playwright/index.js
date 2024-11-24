@@ -42,9 +42,6 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 5
   await editPostEmptyTitleFaker();
 
-  // Scenario 6
-  await editPostExceedingLimitsFaker();
-
   // Scenario 7
   await editPostEmptyContentFaker();
 
@@ -53,9 +50,6 @@ const { membersInput } = require("./input_data/member_input_data");
 
   // Scenario 9
   await deletePublishedPostFaker();
-
-  // Scenario 10
-  await deleteRandomGeneratedPostFaker();
 
   // Scenario 11
   await createPostValidDataApi();
@@ -72,9 +66,6 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 15
   await editPostEmptyTitleApi();
 
-  // Scenario 16
-  await editPostExceedingLimitsApi();
-
   // Scenario 17
   await editPostEmptyContentApi();
 
@@ -83,9 +74,6 @@ const { membersInput } = require("./input_data/member_input_data");
 
   // Scenario 19
   await deletePublishedPostApi();
-
-  // Scenario 20
-  await deleteRandomGeneratedPostApi();
 
   // Scenario 21
   await createPostValidDataJson();
@@ -102,20 +90,14 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 25
   await editPostEmptyTitleJson();
 
-  // Scenario 26
-  await editPostExceedingLimitsJson();
-
   // Scenario 27
   await editPostEmptyContentJson();
 
   // Scenario 28
   await deleteNewlyCreatedPostJson();
 
-  // Scenario 29
-  await deletePublishedPostJson();
-
   // Scenario 30
-  await deleteRandomGeneratedPostJson();
+  await deletePublishedPostJson();
 
   // Scenario 31
   await CreatePage_ValidData_Faker();

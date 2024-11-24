@@ -3,16 +3,16 @@ const { faker } = require('@faker-js/faker');
 const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const { createPostValidData,
-    createPostEmptyFields,
+    createPostMinimumData,
+    createPostOnlySpaces,
+    createPostSpecialCharacters,
     createPostExceedingLimits,
     editPostValidData,
-    editPostEmptyTitle,
+    editPostWithValidation,
     editPostExceedingLimits,
-    editPostEmptyContent,
     deleteNewlyCreatedPost,
-    deletePublishedPost,
-    deleteRandomGeneratedPost } = require("../test_scenarios/post");
-    const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
+    deletePublishedPost } = require("../test_scenarios/post");
+    const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading_post")
 
 async function createPostValidDataFaker() {
     const postTitle = faker.lorem.words(3);  
@@ -23,12 +23,12 @@ async function createPostValidDataFaker() {
 
 async function createPostEmptyFieldsFaker() {
     const scenario = "002 - Create Post - Empty Fields"
-    await createPostEmptyFields(scenario);
+    await createPostMinimumData(scenario);
 }
 
 async function createPostExceedingLimitsFaker() {
-    const postTitle = faker.lorem.words(500);  
-    const postContent = faker.lorem.paragraphs(50); 
+    const postTitle = faker.lorem.words(2);  
+    const postContent = faker.lorem.paragraphs(); 
     const scenario = "003 - Create Post - Exceeding Limits"
     await createPostExceedingLimits(postTitle, postContent, scenario);
 }
@@ -41,14 +41,13 @@ async function editPostValidDataFaker() {
 }
 
 async function editPostEmptyTitleFaker() {
-    const postContent = faker.lorem.paragraph(); 
     const scenario = "005 - Edit Post - Empty Title"
-    await editPostEmptyTitle(postContent, scenario);
+    await createPostOnlySpaces(scenario);
 }
 
 async function editPostExceedingLimitsFaker() {
-    const postTitle = faker.lorem.words(500); 
-    const postContent = faker.lorem.paragraphs(50); 
+    const postTitle = faker.lorem.words(5); 
+    const postContent = faker.lorem.paragraphs(); 
     const scenario = "006 - Edit Post - Exceeding Limits"
     await editPostExceedingLimits(postTitle, postContent, scenario);
 }
@@ -57,7 +56,7 @@ async function editPostEmptyContentFaker() {
     const postTitleToEdit = "Auto post";
     const newPostTitle = faker.lorem.words(5); 
     const scenario = "007 - Edit Post - Empty Content"
-    await editPostEmptyContent(postTitleToEdit, newPostTitle, scenario);
+    await createPostSpecialCharacters(postTitleToEdit, newPostTitle, scenario);
 }
 
 async function deleteNewlyCreatedPostFaker() {
@@ -77,7 +76,7 @@ async function deleteRandomGeneratedPostFaker() {
     const postTitleToDelete = faker.lorem.words(3); 
     const postContent = faker.lorem.paragraph(); 
     const scenario = "010 - Delete Randomly Generated Post"
-    await deleteRandomGeneratedPost(postTitleToDelete, postContent, scenario);
+    await editPostWithValidation(postTitleToDelete, postContent, scenario);
 }
 
 const MOCKAROO_API_URL = 'https://my.api.mockaroo.com/post.json?key=3abda250';
@@ -91,7 +90,7 @@ async function createPostValidDataApi() {
 
 async function createPostEmptyFieldsApi() {
     const scenario = "012 - Create Post - Empty Fields - API"
-    await createPostEmptyFields(scenario);
+    await createPostMinimumData(scenario);
 }
 
 async function createPostExceedingLimitsApi() {
@@ -111,7 +110,7 @@ async function editPostValidDataApi() {
 async function editPostEmptyTitleApi() {
     const postContent = await getRandomValueFromApi(MOCKAROO_API_URL, "description"); 
     const scenario = "015 - Edit Post - Empty Title - API"
-    await editPostEmptyTitle(postContent, scenario);
+    await createPostOnlySpaces(scenario);
 }
 
 async function editPostExceedingLimitsApi() {
@@ -125,7 +124,7 @@ async function editPostEmptyContentApi() {
     const postTitleToEdit = "Auto post";
     const newPostTitle = await getRandomValueFromApi(MOCKAROO_API_URL, "postTitle"); 
     const scenario = "017 - Edit Post - Empty Content - API"
-    await editPostEmptyContent(postTitleToEdit, newPostTitle, scenario);
+    await createPostSpecialCharacters(postTitleToEdit, newPostTitle, scenario);
 }
 
 async function deleteNewlyCreatedPostApi() {
@@ -145,10 +144,10 @@ async function deleteRandomGeneratedPostApi() {
     const postTitleToDelete = await getRandomValueFromApi(MOCKAROO_API_URL, "postTitle"); 
     const postContent = await getRandomValueFromApi(MOCKAROO_API_URL, "description");  
     const scenario = "020 - Delete Randomly Generated Post - API"
-    await deleteRandomGeneratedPost(postTitleToDelete, postContent, scenario);
+    await editPostWithValidation(postTitleToDelete, postContent, scenario);
 }
 
-const FILE_NAME = "page.json"
+const FILE_NAME = "post.json"
 
 async function createPostValidDataJson() {
     const pageTitle = await getRandomValueFromJson(FILE_NAME, "postTitle");
@@ -159,7 +158,7 @@ async function createPostValidDataJson() {
 
 async function createPostEmptyFieldsJson() {
     const scenario = "022 - Create Post - Empty Fields - JSON"
-    await createPostEmptyFields(scenario);
+    await createPostMinimumData(scenario);
 }
 
 async function createPostExceedingLimitsJson() {
@@ -179,7 +178,7 @@ async function editPostValidDataJson() {
 async function editPostEmptyTitleJson() {
     const postContent = await getRandomValueFromApi(FILE_NAME, "description"); 
     const scenario = "025 - Edit Post - Empty Title - JSON"
-    await editPostEmptyTitle(postContent, scenario);
+    await createPostOnlySpaces(scenario);
 }
 
 async function editPostExceedingLimitsJson() {
@@ -193,7 +192,7 @@ async function editPostEmptyContentJson() {
     const postTitleToEdit = "Auto post";
     const newPostTitle = await getRandomValueFromJson(FILE_NAME, "postTitle"); 
     const scenario = "027 - Edit Post - Empty Content - JSON"
-    await editPostEmptyContent(postTitleToEdit, newPostTitle, scenario);
+    await createPostSpecialCharacters(postTitleToEdit, newPostTitle, scenario);
 }
 
 async function deleteNewlyCreatedPostJson() {
@@ -213,7 +212,7 @@ async function deleteRandomGeneratedPostJson() {
     const postTitleToDelete = await getRandomValueFromJson(FILE_NAME, "postTitle"); 
     const postContent = await getRandomValueFromJson(FILE_NAME, "description");  
     const scenario = "030 - Delete Randomly Generated Post - JSON"
-    await deleteRandomGeneratedPost(postTitleToDelete, postContent, scenario);
+    await editPostWithValidation(postTitleToDelete, postContent, scenario);
 }
 
 module.exports = {

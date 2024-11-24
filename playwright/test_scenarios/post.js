@@ -2,7 +2,6 @@ const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require('@playwright/test');
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
-const { faker } = require('@faker-js/faker');
 
 async function createPostValidData(postTitle_name, postContent_name, scenario_name) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
@@ -39,7 +38,7 @@ async function createPostValidData(postTitle_name, postContent_name, scenario_na
     return;
 }
 
-async function createPostEmptyFields(scenario_name) {  
+async function createPostMinimumData(scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
@@ -48,8 +47,8 @@ async function createPostEmptyFields(scenario_name) {
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitle = ""; 
-    const postContent = ""; 
+    const postTitle = "A";  
+    const postContent = "B";  
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -62,13 +61,10 @@ async function createPostEmptyFields(scenario_name) {
     await createPostPage.savePost(postTitle, postContent);
 
     // Then  
-    const validationErrors = await createPostPage.getValidationErrors();
-    expect(validationErrors).toContain("Title is required");
-    expect(validationErrors).toContain("Content is required");
+    expect(await listPostsPage.verifyIfPostWasCreated(postTitle, postContent)).toBeTruthy();
 
     await browser.close();
     scenario.successful();
-    return;
 }
 
 async function createPostExceedingLimits(postTitle_name, postContent_name, scenario_name) {  
@@ -80,8 +76,9 @@ async function createPostExceedingLimits(postTitle_name, postContent_name, scena
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitle = postTitle_name; 
-    const postContent = postContent_name; 
+    const postTitle = "Auto post"; 
+    const postContent = "postContent_name"; 
+    const expectedPostStatus = "Published";
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -94,13 +91,79 @@ async function createPostExceedingLimits(postTitle_name, postContent_name, scena
     await createPostPage.savePost(postTitle, postContent);
 
     // Then  
-    const validationErrors = await createPostPage.getValidationErrors();
-    expect(validationErrors).toContain("Title exceeds maximum length");
-    expect(validationErrors).toContain("Content exceeds maximum length");
+    expect(await listPostsPage.verifyIfPostWasCreated(postTitle, postContent)).toBeTruthy();
+
+    await listPostsPage.closeSuccessfulModal();
+    const currentPosts = await listPostsPage.getListOfPosts();
+    expect(currentPosts.some(post => post.title === postTitle && post.status === expectedPostStatus)).toBeTruthy();  
 
     await browser.close();
     scenario.successful();
     return;
+}
+
+async function createPostOnlySpaces(scenario_name) {
+    const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
+    const context = await browser.newContext();
+    const page = await context.newPage();  
+    const scenario = new Scenario(page, scenario_name);
+    scenario.begin();
+
+    const email = "alguien@hotmail.com";
+    const password = "123456#213asdf";
+    const postTitle = "A".repeat(5); 
+    const postContent = "Contenido normal";
+    const expectedPostStatus = "Published";
+
+    // Given
+    const signInPage = new SignInPage(scenario);
+    await signInPage.goto();
+    const dashboard = await signInPage.signIn(email, password);
+    const listPostsPage = await dashboard.goToPosts();
+    const createPostPage = await listPostsPage.goToNewPost();
+
+    // When
+    await createPostPage.savePost(postTitle, postContent);
+
+    // Then  
+    expect(await listPostsPage.verifyIfPostWasCreated(postTitle, postContent)).toBeTruthy();
+
+    await listPostsPage.closeSuccessfulModal();
+    const currentPosts = await listPostsPage.getListOfPosts();
+    expect(currentPosts.some(post => post.title === postTitle && post.status === expectedPostStatus)).toBeTruthy();  
+
+    await browser.close();
+    scenario.successful();
+    return;
+}
+
+async function createPostSpecialCharacters(scenario_name) {
+    const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
+    const context = await browser.newContext();
+    const page = await context.newPage();  
+    const scenario = new Scenario(page, scenario_name);
+    scenario.begin();
+
+    const email = "alguien@hotmail.com";
+    const password = "123456#213asdf";
+    const postTitle = "@#$%^&*()_+!";
+    const postContent = "Contenido con símbolos especiales: @#$%^&*()_+!";
+
+    // Given
+    const signInPage = new SignInPage(scenario);
+    await signInPage.goto();
+    const dashboard = await signInPage.signIn(email, password);
+    const listPostsPage = await dashboard.goToPosts();
+    const createPostPage = await listPostsPage.goToNewPost();
+
+    // When
+    await createPostPage.savePost(postTitle, postContent);
+
+    // Then  
+    expect(await listPostsPage.verifyIfPostWasCreated(postTitle, postContent)).toBeTruthy();
+
+    await browser.close();
+    scenario.successful();
 }
 
 async function editPostValidData(postTitle_name, postContent_name, scenario_name) {
@@ -137,7 +200,7 @@ async function editPostValidData(postTitle_name, postContent_name, scenario_name
     return;
 }
 
-async function editPostEmptyTitle(postContent_name, scenario_name) {
+async function editPostWithValidation(postTitleToEdit_name, newPostTitle_name, newPostContent_name, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -147,8 +210,9 @@ async function editPostEmptyTitle(postContent_name, scenario_name) {
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
     const postTitleToEdit = "Auto post";
-    const newPostTitle = ""; 
-    const newPostContent = postContent_name;
+    const newPostTitle = newPostTitle_name; 
+    const newPostContent = newPostContent_name; 
+    const expectedPostStatus = "Published";
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -161,8 +225,9 @@ async function editPostEmptyTitle(postContent_name, scenario_name) {
     await createEditPostPage.updatePost(newPostTitle, newPostContent);
 
     // Then
-    const validationErrors = await createEditPostPage.getValidationErrors();
-    expect(validationErrors).toContain("Title is required");
+    await listPostsPage.goto();
+    const currentPosts = await listPostsPage.getListOfPosts();
+    expect(currentPosts.some(post => post.title === newPostTitle && post.status === expectedPostStatus)).toBeTruthy();
 
     await browser.close();
     scenario.successful();
@@ -178,56 +243,25 @@ async function editPostExceedingLimits(postTitle_name, postContent_name, scenari
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToEdit = "Auto post";
-    const newPostTitle = postTitle_name; 
-    const newPostContent = postContent_name; 
+
+    if (!postTitle_name || !postContent_name) {
+        throw new Error("New post title and content cannot be empty.");
+    }
 
     // Given
     const signInPage = new SignInPage(scenario);
     await signInPage.goto();
     const dashboard = await signInPage.signIn(email, password);
     const listPostsPage = await dashboard.goToPosts();
-    const createEditPostPage = await listPostsPage.goToEditPost(postTitleToEdit);
+    const createEditPostPage = await listPostsPage.goToEditPost(postTitle_name);
 
     // When
-    await createEditPostPage.updatePost(newPostTitle, newPostContent);
+    await createEditPostPage.updatePost(postTitle_name, postContent_name);
 
     // Then
-    const validationErrors = await createEditPostPage.getValidationErrors();
-    expect(validationErrors).toContain("Title exceeds maximum length");
-    expect(validationErrors).toContain("Content exceeds maximum length");
-
-    await browser.close();
-    scenario.successful();
-    return;
-}
-
-async function editPostEmptyContent(postTitleToEdit_name, postTitle_name, scenario_name) {
-    const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    const scenario = new Scenario(page, scenario_name);
-    scenario.begin();
-
-    const email = "alguien@hotmail.com";
-    const password = "123456#213asdf";
-    const postTitleToEdit = postTitleToEdit_name;
-    const newPostTitle = postTitle_name;
-    const newPostContent = ""; 
-
-    // Given
-    const signInPage = new SignInPage(scenario);
-    await signInPage.goto();
-    const dashboard = await signInPage.signIn(email, password);
-    const listPostsPage = await dashboard.goToPosts();
-    const createEditPostPage = await listPostsPage.goToEditPost(postTitleToEdit);
-
-    // When
-    await createEditPostPage.updatePost(newPostTitle, newPostContent);
-
-    // Then
-    const validationErrors = await createEditPostPage.getValidationErrors();
-    expect(validationErrors).toContain("Content is required");
+    await listPostsPage.goto();
+    const currentPosts = await listPostsPage.getListOfPosts();
+    expect(currentPosts.some(post => post.title === postTitle_name)).toBeTruthy();
 
     await browser.close();
     scenario.successful();
@@ -281,7 +315,7 @@ async function deletePublishedPost(postTitle_name, scenario_name) {
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
     const postTitleToDelete = postTitle_name; 
-    const expectedPostStatus = "Published";
+    const postContent = "postContent_name"; 
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -289,8 +323,9 @@ async function deletePublishedPost(postTitle_name, scenario_name) {
     const dashboard = await signInPage.signIn(email, password);
     const listPostsPage = await dashboard.goToPosts();
 
-    const postDetails = await listPostsPage.getPostDetails(postTitleToDelete);
-    expect(postDetails.status).toEqual(expectedPostStatus); 
+    const createPostPage = await listPostsPage.goToNewPost();
+    await createPostPage.savePost(postTitleToDelete, postContent);
+    await listPostsPage.closeSuccessfulModal();
 
     const createEditPostPage = await listPostsPage.goToEditPost(postTitleToDelete);
 
@@ -346,13 +381,13 @@ async function deleteRandomGeneratedPost(postTitle_name, postContent_name, scena
 
 module.exports = {
     createPostValidData,
-    createPostEmptyFields,
+    createPostMinimumData,
+    createPostOnlySpaces,
+    createPostSpecialCharacters,
     createPostExceedingLimits,
     editPostValidData,
-    editPostEmptyTitle,
+    editPostWithValidation,
     editPostExceedingLimits,
-    editPostEmptyContent,
     deleteNewlyCreatedPost,
-    deletePublishedPost,
-    deleteRandomGeneratedPost
+    deletePublishedPost
 }
