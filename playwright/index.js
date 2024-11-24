@@ -7,9 +7,12 @@ const { clean_pages } = require("./input_data/page");
 const { createTag, editTag, deleteTag, createTagWithMetadata, createTagWithXCardValues } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData } = require("./test_scenarios/settings");
 const { createMember, createMemberWithInvalidEmail, createMemberWithEmptyEmail, createMemberWithTooLongNote, createMemberWithTooLongName, editMember, editMemberWithEmptyEmail, editMemberWithInvalidEmail, editMemberWithTooLongNote, editMemberWithTooLongName } = require("./test_scenarios/members");
-const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
 const { tagInput } = require("./input_data/tag_input_data");
-const { postInput } = require("./input_data/post");
+const { createPostValidDataFaker, createPostEmptyFieldsFaker, createPostExceedingLimitsFaker, editPostValidDataFaker, editPostEmptyTitleFaker, editPostExceedingLimitsFaker,
+  editPostEmptyContentFaker, deleteNewlyCreatedPostFaker, deletePublishedPostFaker, deleteRandomGeneratedPostFaker, createPostValidDataApi, createPostEmptyFieldsApi,
+  createPostExceedingLimitsApi, editPostValidDataApi, editPostEmptyTitleApi, editPostExceedingLimitsApi, editPostEmptyContentApi, deleteNewlyCreatedPostApi,
+  deletePublishedPostApi, deleteRandomGeneratedPostApi, createPostValidDataJson, createPostEmptyFieldsJson, createPostExceedingLimitsJson, editPostValidDataJson,
+  editPostEmptyTitleJson, editPostExceedingLimitsJson, editPostEmptyContentJson, deleteNewlyCreatedPostJson, deletePublishedPostJson, deleteRandomGeneratedPostJson } = require("./input_data/post");
 const { settingsInput } = require("./input_data/settings_input_data");
 const { membersInput } = require("./input_data/member_input_data");
 
@@ -25,94 +28,94 @@ const { membersInput } = require("./input_data/member_input_data");
   await browser.close();
 
   // Scenario 1
-  await postInput.createPostValidDataFaker();
+  await createPostValidDataFaker();
 
   // Scenario 2
-  await postInput.createPostEmptyFieldsFaker();
+  await createPostEmptyFieldsFaker();
 
   // Scenario 3
-  await postInput.createPostExceedingLimitsFaker();
+  await createPostExceedingLimitsFaker();
 
   // Scenario 4
-  await postInput.editPostValidDataFaker();
+  await editPostValidDataFaker();
 
   // Scenario 5
-  await postInput.editPostEmptyTitleFaker();
+  await editPostEmptyTitleFaker();
 
   // Scenario 6
-  await postInput.editPostExceedingLimitsFaker();
+  await editPostExceedingLimitsFaker();
 
   // Scenario 7
-  await postInput.editPostEmptyContentFaker();
+  await editPostEmptyContentFaker();
 
   // Scenario 8
-  await postInput.deleteNewlyCreatedPostFaker();
+  await deleteNewlyCreatedPostFaker();
 
   // Scenario 9
-  await postInput.deletePublishedPostFaker();
+  await deletePublishedPostFaker();
 
   // Scenario 10
-  await postInput.deleteRandomGeneratedPostFaker();
+  await deleteRandomGeneratedPostFaker();
 
   // Scenario 11
-  await postInput.createPostValidDataApi();
+  await createPostValidDataApi();
 
   // Scenario 12
-  await postInput.createPostEmptyFieldsApi();
+  await createPostEmptyFieldsApi();
 
   // Scenario 13
-  await postInput.createPostExceedingLimitsApi();
+  await createPostExceedingLimitsApi();
 
   // Scenario 14
-  await postInput.editPostValidDataApi();
+  await editPostValidDataApi();
 
   // Scenario 15
-  await postInput.editPostEmptyTitleApi();
+  await editPostEmptyTitleApi();
 
   // Scenario 16
-  await postInput.editPostExceedingLimitsApi();
+  await editPostExceedingLimitsApi();
 
   // Scenario 17
-  await postInput.editPostEmptyContentApi();
+  await editPostEmptyContentApi();
 
   // Scenario 18
-  await postInput.deleteNewlyCreatedPostApi();
+  await deleteNewlyCreatedPostApi();
 
   // Scenario 19
-  await postInput.deletePublishedPostApi();
+  await deletePublishedPostApi();
 
   // Scenario 20
-  await postInput.deleteRandomGeneratedPostApi();
+  await deleteRandomGeneratedPostApi();
 
   // Scenario 21
-  await postInput.createPostValidDataJson();
+  await createPostValidDataJson();
 
   // Scenario 22
-  await postInput.createPostEmptyFieldsJson();
+  await createPostEmptyFieldsJson();
 
   // Scenario 23
-  await postInput.createPostExceedingLimitsJson();
+  await createPostExceedingLimitsJson();
 
   // Scenario 24
-  await postInput.editPostValidDataJson();
+  await editPostValidDataJson();
 
   // Scenario 25
-  await postInput.editPostEmptyTitleJson();
+  await editPostEmptyTitleJson();
 
   // Scenario 26
-  await postInput.editPostExceedingLimitsJson();
+  await editPostExceedingLimitsJson();
 
   // Scenario 27
-  await postInput.editPostEmptyContentJson();
+  await editPostEmptyContentJson();
 
   // Scenario 28
-  await postInput.deleteNewlyCreatedPostJson();
+  await deleteNewlyCreatedPostJson();
 
   // Scenario 29
-  await postInput.deletePublishedPostJson();
+  await deletePublishedPostJson();
 
   // Scenario 30
-  await postInput.deleteRandomGeneratedPostJson();
+  await deleteRandomGeneratedPostJson();
 
   // Scenario 31
   await CreatePage_ValidData_Faker();
