@@ -43,6 +43,16 @@ class SettingsInput {
     }
   }
 
+  getHugeLanguageRandomValue() {
+
+    let languageCode = faker.location.countryCode();
+    let largeLanguage = languageCode.repeat(32800);
+
+    return {
+      generalLanguage: largeLanguage
+    }
+  }
+
   getPrioriValues() {
 
     let value = this.getRandomInput(this.settingsInputJson);
@@ -60,6 +70,17 @@ class SettingsInput {
     }
   }
 
+  getHugeLanguagePrioriValue() {
+
+    let value = this.getRandomInput(this.settingsInputJson);
+    let largLanguage = value.generalLanguage.repeat(32800);
+
+    return {
+      
+      generalLanguage: largLanguage
+    }
+  }
+
   async getDynamicValues() {
 
     let value = await this.getValueFromAPI();
@@ -74,6 +95,17 @@ class SettingsInput {
       facebookDescription: value.facebookDescription,
       metaTitle: value.metaTitle,
       metaDescription: value.metaDescription,
+    }
+  }
+
+  async getHugeLanguageDynamicValue() {
+
+    let value = await this.getValueFromAPI();
+    let largLanguage = value.generalLanguage.repeat(32800);
+
+    return {
+      
+      generalLanguage: largLanguage
     }
   }
   

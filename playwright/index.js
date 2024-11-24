@@ -5,7 +5,7 @@ const { CreatePage_ValidData_JSON, CreatePage_InvalidData_JSON, EditPage_ValidDa
 const { CreatePage_ValidData_API, CreatePage_InvalidData_API, EditPage_ValidData_API, EditPage_InvalidData_API, PreviewPage_ValidData_API, FilterDraftPages_ValidData_API, FilterDraftPages_InvalidData_API, DeletePage_ValidData_API, PreviewPage_ButtonValidData_API, PreviewPage_ButtonInvalidData_API} = require("./input_data/page");
 const { clean_pages } = require("./input_data/page");
 const { createTag, editTag, deleteTag, createTagWithMetadata, createTagWithXCardValues } = require("./test_scenarios/tag");
-const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData } = require("./test_scenarios/settings");
+const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData, settingsEditGeneralLanguageHugeValue } = require("./test_scenarios/settings");
 const { createMember, createMemberWithInvalidEmail, createMemberWithEmptyEmail, createMemberWithTooLongNote, createMemberWithTooLongName, editMember, editMemberWithEmptyEmail, editMemberWithInvalidEmail, editMemberWithTooLongNote, editMemberWithTooLongName } = require("./test_scenarios/members");
 const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
 const { tagInput } = require("./input_data/tag_input_data");
@@ -22,6 +22,15 @@ const { membersInput } = require("./input_data/member_input_data");
   await signUpPage.goto();
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
+
+  // Scenario 28 - Settings - Set General Language With Huge Value - Random Data
+  await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguageRandomValue(), "028 - Settings - Set General Language With Huge Value- Random Data");
+
+  // Scenario 29 - Settings - Set General Language With Huge Value - Pseudo Random Data Pool
+  await settingsEditGeneralLanguageHugeValue(await settingsInput.getHugeLanguageDynamicValue(), "029 - Settings - Set General Language With Huge Value - Pseudo Random Data Pool");
+
+  // Scenario 30 - Settings - Set General Language With Huge Value - A-priori Data Pool
+  await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguagePrioriValue(), "030 - Settings - Set General Language With Huge Value - A-priori Data Pool");
 
   // Scenario 31
   await CreatePage_ValidData_Faker();
