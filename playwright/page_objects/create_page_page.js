@@ -1,3 +1,5 @@
+const { EditPreviewPagePage } = require('./edit_preview_page_page.js');
+
 exports.CreatePagePage = class CreatePagePage {
     constructor(scenario) {
         this.scenario = scenario;
@@ -10,7 +12,13 @@ exports.CreatePagePage = class CreatePagePage {
             closePublishButton: '[data-test-button="close-publish-flow"]',
             modalTitle: '.modal-body h2',
             postExcerpt: '.post-excerpt',
-            backButton: '[data-test-link="pages"]'
+            backButton: '[data-test-link="pages"]',
+            errorAlert: '.gh-alert.gh-alert-red',
+            leaveButton: '.gh-btn.gh-btn-red',
+            markdownButton: 'button[aria-label="Add a card"]',
+            buttonMarkdownPageButton: 'button[data-kg-card-menu-item="Button"]',
+            buttonInputText: '[data-testid="button-input-text"]',
+            buttonInputUrl: '[data-testid="button-input-url"]'
         };
     }
 
@@ -33,19 +41,74 @@ exports.CreatePagePage = class CreatePagePage {
         }
     }
 
-    async createPage(title, description, interrupt = false) {
+    async goBackAndLeave(){
+        await this.scenario.getPage().locator(this.selectors.backButton).click();
+        await this.waitForLoad();
+        await this.scenario.screenshot();
+        await this.scenario.getPage().locator(this.selectors.leaveButton).click();
+        await this.waitForLoad();
+        await this.scenario.screenshot();
+    }
+
+    async createPage(title, description, interrupt = false,invalid = false,empty = false, button = false) {
         try {
+            const editPreviewPage = new EditPreviewPagePage(this.scenario);
             if (interrupt) {
-                // Si interrupt es true, solo llenamos los campos sin publicar
+                
+                if (invalid) {
+                    await this.fillTitle(title);
+                    await this.fillDescription(description);
+                    await this.goBackAndLeave()
+
+                }
+                else {
+
                 await this.fillTitle(title);
                 await this.fillDescription(description);
                 await this.goBack()
+
+                }
             } else {
-                // Si interrupt es false, completamos todo el proceso
-                await this.fillTitle(title);
-                await this.fillDescription(description);
-                await this.publishPage();
-                await this.waitForLoad();
+                if (invalid) {
+                    await this.fillTitle("test");
+                    await this.fillDescription("test");
+                    await editPreviewPage.changeTitle(title);
+                    await editPreviewPage.changeDescription(description);
+                    await this.scenario.getPage().locator(this.selectors.publishButton).first().click();
+                    await this.waitForLoad();
+                }
+                else {
+                    if (empty){
+
+                        await this.fillTitle("test");
+                        await this.fillDescription("test");
+                        await editPreviewPage.changeTitle(title);
+                        await editPreviewPage.changeDescription(description);
+                        await this.publishPage();
+                        await this.waitForLoad();
+
+                    }
+                    else {
+
+                        if (button){
+
+                            await this.fillTitle(title);
+                            await this.fillDescription(description);
+                            await this.scenario.getPage().keyboard.press('Enter');
+                            
+
+                        }
+                        else {
+
+                        await this.fillTitle(title);
+                        await this.fillDescription(description);
+                        await this.publishPage();
+                        await this.waitForLoad();
+                    }
+
+                    }
+                
+                }
             }
         } catch (error) {
             throw new Error(`Failed to create page: ${error.message}`);
@@ -63,6 +126,23 @@ exports.CreatePagePage = class CreatePagePage {
         await this.scenario.screenshot();
     }
 
+    async fillUrlButton(url){
+        await this.scenario.getPage().locator(this.selectors.buttonInputUrl).fill(url)
+        await this.scenario.screenshot();
+    }
+
+    async fillButton(text,url) {
+        await this.scenario.getPage().locator(this.selectors.markdownButton).click()
+        await this.scenario.screenshot();
+        await this.scenario.getPage().locator(this.selectors.buttonMarkdownPageButton).click()
+        await this.scenario.screenshot();
+        await this.scenario.getPage().locator(this.selectors.buttonInputText).fill(text);
+        await this.scenario.screenshot();
+        await this.fillUrlButton(url);
+        await this.scenario.screenshot();
+    }
+
+
     async publishPage() {
         await this.scenario.getPage().locator(this.selectors.publishButton).first().click();
         await this.waitForLoad();
@@ -78,6 +158,9 @@ exports.CreatePagePage = class CreatePagePage {
     }
 
     async verifyTitleInModal(title) {
+        if (title === ""){
+            const title = "(Untitled)"; 
+        }
         const modalTitle = await this.scenario.getPage().locator(this.selectors.modalTitle).innerText();
         await this.scenario.screenshot();
         return modalTitle === title;
@@ -89,5 +172,12 @@ exports.CreatePagePage = class CreatePagePage {
         await this.scenario.screenshot();
         return modalDescription === description;
         
+    }
+    async getErrorMessage() {
+        const errorElement = await this.scenario.getPage().locator(this.selectors.errorAlert);
+        await errorElement.waitFor({ state: 'visible', timeout: 5000 });
+        const errorText = await errorElement.innerText();
+        await this.scenario.screenshot();
+        return errorText === "Validation failed: Title cannot be longer than 255 characters.";
     }
 }
