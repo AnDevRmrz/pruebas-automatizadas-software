@@ -2,25 +2,6 @@ const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
-const {
-  createMember_Valid_A_Priori,
-  createMember_Valid_PseudoRandom,
-  createMember_Valid_Random,
-  createMember_InvalidEmail_A_Priori,
-  createMember_InvalidEmail_PseudoRandom,
-  createMember_InvalidEmail_Random,
-  createMember_TooLongNote_A_Priori,
-  createMember_TooLongNote_PseudoRandom,
-  createMember_TooLongNote_Random,
-  createMember_TooLongName_A_Priori,
-  createMember_TooLongName_PseudoRandom,
-  createMember_TooLongName_Random,
-} = require("../input_data/member_input_data");
-const dataGenerationTecniques = [
-  "A-priori Data Pool",
-  "Pseudo Random Data Pool",
-  "Random Data",
-];
 
 async function _before(scenarioName) {
   const browser = await playwright["chromium"].launch({
@@ -49,12 +30,8 @@ async function _login(scenario) {
   return await signInPage.signIn(email, password);
 }
 
-async function createMember(member, testId, dataGenerationTecnique) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(3, "0")} - Create Member - ${dataGenerationTecnique}`
-  );
+async function createMember(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -81,19 +58,8 @@ async function createMember(member, testId, dataGenerationTecnique) {
   return await _after(browser, scenario);
 }
 
-async function createMemberWithEmptyEmail(
-  member,
-  testId,
-  dataGenerationTecnique
-) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(
-        3,
-        "0"
-      )} - Create Member With Empty Email - ${dataGenerationTecnique}`
-  );
+async function createMemberWithEmptyEmail(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -121,19 +87,8 @@ async function createMemberWithEmptyEmail(
   return await _after(browser, scenario);
 }
 
-async function createMemberWithInvalidEmail(
-  member,
-  testId,
-  dataGenerationTecnique
-) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(
-        3,
-        "0"
-      )} - Create Member With Invalid Email - ${dataGenerationTecnique}`
-  );
+async function createMemberWithInvalidEmail(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -165,19 +120,8 @@ async function createMemberWithInvalidEmail(
   return await _after(browser, scenario);
 }
 
-async function createMemberWithTooLongNote(
-  member,
-  testId,
-  dataGenerationTecnique
-) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(
-        3,
-        "0"
-      )} - Create Member With A Note Longer Than 500 Characters - ${dataGenerationTecnique}`
-  );
+async function createMemberWithTooLongNote(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -209,19 +153,8 @@ async function createMemberWithTooLongNote(
   return await _after(browser, scenario);
 }
 
-async function createMemberWithTooLongName(
-  member,
-  testId,
-  dataGenerationTecnique
-) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(
-        3,
-        "0"
-      )} - Create Member With A Name Longer Than 191 Characters - ${dataGenerationTecnique}`
-  );
+async function createMemberWithTooLongName(member, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -253,17 +186,8 @@ async function createMemberWithTooLongName(
   return await _after(browser, scenario);
 }
 
-async function editMember(
-  memberToCreate,
-  memberToEdit,
-  testId,
-  dataGenerationTecnique
-) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(3, "0")} - Edit Member - ${dataGenerationTecnique}`
-  );
+async function editMember(memberToCreate, memberToEdit, scenarioDesc) {
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -301,17 +225,9 @@ async function editMember(
 async function editMemberWithEmptyEmail(
   memberToCreate,
   memberToEdit,
-  testId,
-  dataGenerationTecnique
+  scenarioDesc
 ) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(
-        3,
-        "0"
-      )} - Edit Member With Empty Email - ${dataGenerationTecnique}`
-  );
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -350,17 +266,9 @@ async function editMemberWithEmptyEmail(
 async function editMemberWithInvalidEmail(
   memberToCreate,
   memberToEdit,
-  testId,
-  dataGenerationTecnique
+  scenarioDesc
 ) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(
-        3,
-        "0"
-      )} - Edit Member With Invalid Email - ${dataGenerationTecnique}`
-  );
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -403,17 +311,9 @@ async function editMemberWithInvalidEmail(
 async function editMemberWithTooLongNote(
   memberToCreate,
   memberToEdit,
-  testId,
-  dataGenerationTecnique
+  scenarioDesc
 ) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(
-        3,
-        "0"
-      )} - Edit Member With A Note Longer Than 500 Characters - ${dataGenerationTecnique}`
-  );
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -456,17 +356,9 @@ async function editMemberWithTooLongNote(
 async function editMemberWithTooLongName(
   memberToCreate,
   memberToEdit,
-  testId,
-  dataGenerationTecnique
+  scenarioDesc
 ) {
-  const { browser, scenario } = await _before(
-    `${testId
-      .toString()
-      .padStart(
-        3,
-        "0"
-      )} - Edit Member With A Name Longer Than 191 Characters - ${dataGenerationTecnique}`
-  );
+  const { browser, scenario } = await _before(scenarioDesc);
 
   // Given
   const dashboard = await _login(scenario);
@@ -506,156 +398,15 @@ async function editMemberWithTooLongName(
   return await _after(browser, scenario);
 }
 
-async function executeMembersTests() {
-  let i = 91;
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let member = {};
-    if (index == 0) {
-      member = createMember_Valid_A_Priori();
-    } else if (index == 1) {
-      member = createMember_Valid_PseudoRandom();
-    } else {
-      member = createMember_Valid_Random();
-    }
-    await createMember(member, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let member = {};
-    if (index == 0) {
-      member = createMember_InvalidEmail_A_Priori();
-    } else if (index == 1) {
-      member = createMember_InvalidEmail_PseudoRandom();
-    } else {
-      member = createMember_InvalidEmail_Random();
-    }
-    await createMemberWithInvalidEmail(member, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let member = {};
-    if (index == 0) {
-      member = createMember_Valid_A_Priori();
-      member.email = "";
-    } else if (index == 1) {
-      member = createMember_Valid_PseudoRandom();
-      member.email = "";
-    } else {
-      member = createMember_Valid_Random();
-      member.email = "";
-    }
-    await createMemberWithEmptyEmail(member, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let member = {};
-    if (index == 0) {
-      member = createMember_TooLongNote_A_Priori();
-    } else if (index == 1) {
-      member = createMember_TooLongNote_PseudoRandom();
-    } else {
-      member = createMember_TooLongNote_Random();
-    }
-    await createMemberWithTooLongNote(member, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let member = {};
-    if (index == 0) {
-      member = createMember_TooLongName_A_Priori();
-    } else if (index == 1) {
-      member = createMember_TooLongName_PseudoRandom();
-    } else {
-      member = createMember_TooLongName_Random();
-    }
-    await createMemberWithTooLongName(member, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let memberToCreate = {};
-    let memberToEdit = {};
-    if (index == 0) {
-      memberToCreate = createMember_Valid_A_Priori();
-      memberToEdit = createMember_Valid_A_Priori();
-    } else if (index == 1) {
-      memberToCreate = createMember_Valid_PseudoRandom();
-      memberToEdit = createMember_Valid_PseudoRandom();
-    } else {
-      memberToCreate = createMember_Valid_Random();
-      memberToEdit = createMember_Valid_Random();
-    }
-    await editMember(memberToCreate, memberToEdit, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let memberToCreate = {};
-    let memberToEdit = {};
-    if (index == 0) {
-      memberToCreate = createMember_Valid_A_Priori();
-      memberToEdit = createMember_Valid_A_Priori();
-      memberToEdit.email = "";
-    } else if (index == 1) {
-      memberToCreate = createMember_Valid_PseudoRandom();
-      memberToEdit = createMember_Valid_PseudoRandom();
-      memberToEdit.email = "";
-    } else {
-      memberToCreate = createMember_Valid_Random();
-      memberToEdit = createMember_Valid_Random();
-      memberToEdit.email = "";
-    }
-    await editMemberWithEmptyEmail(memberToCreate, memberToEdit, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let memberToCreate = {};
-    let memberToEdit = {};
-    if (index == 0) {
-      memberToCreate = createMember_Valid_A_Priori();
-      memberToEdit = createMember_InvalidEmail_A_Priori();
-    } else if (index == 1) {
-      memberToCreate = createMember_Valid_PseudoRandom();
-      memberToEdit = createMember_InvalidEmail_PseudoRandom();
-    } else {
-      memberToCreate = createMember_Valid_Random();
-      memberToEdit = createMember_InvalidEmail_Random();
-    }
-    await editMemberWithInvalidEmail(memberToCreate, memberToEdit, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let memberToCreate = {};
-    let memberToEdit = {};
-    if (index == 0) {
-      memberToCreate = createMember_Valid_A_Priori();
-      memberToEdit = createMember_TooLongNote_A_Priori();
-    } else if (index == 1) {
-      memberToCreate = createMember_Valid_PseudoRandom();
-      memberToEdit = createMember_TooLongNote_PseudoRandom();
-    } else {
-      memberToCreate = createMember_Valid_Random();
-      memberToEdit = createMember_TooLongNote_Random();
-    }
-    await editMemberWithTooLongNote(memberToCreate, memberToEdit, i++, value);
-  }
-
-  for (let [index, value] of dataGenerationTecniques.entries()) {
-    let memberToCreate = {};
-    let memberToEdit = {};
-    if (index == 0) {
-      memberToCreate = createMember_Valid_A_Priori();
-      memberToEdit = createMember_TooLongName_A_Priori();
-    } else if (index == 1) {
-      memberToCreate = createMember_Valid_PseudoRandom();
-      memberToEdit = createMember_TooLongName_PseudoRandom();
-    } else {
-      memberToCreate = createMember_Valid_Random();
-      memberToEdit = createMember_TooLongName_Random();
-    }
-    await editMemberWithTooLongName(memberToCreate, memberToEdit, i++, value);
-  }
-}
-
 module.exports = {
-  executeMembersTests,
+  createMember,
+  createMemberWithInvalidEmail,
+  createMemberWithEmptyEmail,
+  createMemberWithTooLongNote,
+  createMemberWithTooLongName,
+  editMember,
+  editMemberWithEmptyEmail,
+  editMemberWithInvalidEmail,
+  editMemberWithTooLongNote,
+  editMemberWithTooLongName,
 };

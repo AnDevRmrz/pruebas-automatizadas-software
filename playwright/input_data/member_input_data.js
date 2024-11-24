@@ -1,11 +1,16 @@
 const { faker } = require("@faker-js/faker");
+const memberInputJson = require("../data/member/member_data.json");
+const memberInvalidEmailInputJson = require("../data/member/member_invalid_email_data.json");
+const memberLongNameInputJson = require("../data/member/member_long_name_data.json");
+const memberLongNoteInputJson = require("../data/member/member_long_note_data.json");
+const API_KEY = "a74153e0";
 
 class MemberInput {
+
+
   constructor() {}
 
-  /*
-    Util
-    */
+  // Util
 
   generateRandomLongName() {
     let name = "";
@@ -44,13 +49,32 @@ class MemberInput {
     return faker.helpers.arrayElement(invalidPatterns)();
   }
 
-  function() {}
+  async getValueFromAPI(url) {
+    const headers = { "X-API-Key": API_KEY };
+    const result = await fetch(url, {
+      method: "GET",
+      headers: headers,
+    });
 
-  /*
-Valid Data
-*/
-  createMember_Valid_A_Priori() {
-    var member = {
+    if (!result.ok) {
+      throw new Error("Error al consultar los datos");
+    }
+
+    return await result.json();
+  }
+
+  // Valid Data
+
+  getMemberAPriori() {
+    return memberInputJson[Math.floor(Math.random() * memberInputJson.length)];
+  }
+
+  async getMemberPseudoRandom() {
+    return await this.getValueFromAPI("https://my.api.mockaroo.com/Member.json");
+  }
+
+  getMemberRandom() {
+    const member = {
       name: faker.person.fullName(),
       email: faker.internet.email(),
       label: faker.word.noun(),
@@ -60,10 +84,40 @@ Valid Data
     return member;
   }
 
-  createMember_Valid_PseudoRandom() {
-    var member = {
+  // Invalid Email
+
+  getMemberEmptyEmailAPriori() {
+    const member = this.getMemberAPriori();
+    member.email = "";
+    return member;
+  }
+
+  async getMemberEmptyEmailPseudoRandom() {
+    const member = await this.getMemberPseudoRandom();
+    member.email = "";
+    return member;
+  }
+
+  getMemberEmptyEmailRandom() {
+    const member = this.getMemberRandom();
+    member.email = "";
+    return member;
+  }
+
+  // Invalid Email
+
+  getMemberInvalidEmailAPriori() {
+    return memberInvalidEmailInputJson[Math.floor(Math.random() * memberInvalidEmailInputJson.length)];
+  }
+
+  async getMemberInvalidEmailPseudoRandom() {
+    return await this.getValueFromAPI("https://my.api.mockaroo.com/MemberInvalidEmail.json");
+  }
+
+  getMemberInvalidEmailRandom() {
+    const member = {
       name: faker.person.fullName(),
-      email: faker.internet.email(),
+      email: this.generateRandomInvalidEmail(),
       label: faker.word.noun(),
       note: faker.lorem.sentence(),
     };
@@ -71,117 +125,40 @@ Valid Data
     return member;
   }
 
-  createMember_Valid_Random() {
-    var member = {
+  // Too Long Note
+
+  getMemberTooLongNoteAPriori() {
+    return memberLongNoteInputJson[Math.floor(Math.random() * memberLongNoteInputJson.length)];
+  }
+
+  async getMemberTooLongNotePseudoRandom() {
+    return await this.getValueFromAPI("https://my.api.mockaroo.com/MemberLongNote.json");
+  }
+
+  getMemberTooLongNoteRandom() {
+    const member = {
       name: faker.person.fullName(),
       email: faker.internet.email(),
       label: faker.word.noun(),
-      note: faker.lorem.sentence(),
+      note: this.generateRandomLongNote(),
     };
 
     return member;
   }
 
-  /*
-Invalid Email
-*/
-  createMember_InvalidEmail_A_Priori() {
-    var member = {
-      name: faker.person.fullName(),
-      email: generateRandomInvalidEmail(),
-      label: faker.word.noun(),
-      note: faker.lorem.sentence(),
-    };
+  // Too Long Name
 
-    return member;
+  getMemberTooLongNameAPriori() {
+    return memberLongNameInputJson[Math.floor(Math.random() * memberLongNameInputJson.length)];
   }
 
-  createMember_InvalidEmail_PseudoRandom() {
-    var member = {
-      name: faker.person.fullName(),
-      email: generateRandomInvalidEmail(),
-      label: faker.word.noun(),
-      note: faker.lorem.sentence(),
-    };
-
-    return member;
+  async getMemberTooLongNamePseudoRandom() {
+    return await this.getValueFromAPI("https://my.api.mockaroo.com/MemberLongName.json");
   }
 
-  createMember_InvalidEmail_Random() {
-    var member = {
-      name: faker.person.fullName(),
-      email: generateRandomInvalidEmail(),
-      label: faker.word.noun(),
-      note: faker.lorem.sentence(),
-    };
-
-    return member;
-  }
-
-  /*
-Too Long Note
-*/
-  createMember_TooLongNote_A_Priori() {
-    var member = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      label: faker.word.noun(),
-      note: generateRandomLongNote(),
-    };
-
-    return member;
-  }
-
-  createMember_TooLongNote_PseudoRandom() {
-    var member = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      label: faker.word.noun(),
-      note: generateRandomLongNote(),
-    };
-
-    return member;
-  }
-
-  createMember_TooLongNote_Random() {
-    var member = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      label: faker.word.noun(),
-      note: generateRandomLongNote(),
-    };
-
-    return member;
-  }
-
-  /*
-Too Long Name
-*/
-  createMember_TooLongName_A_Priori() {
-    var member = {
-      name: generateRandomLongName(),
-      email: faker.internet.email(),
-      label: faker.word.noun(),
-      note: faker.lorem.sentence(),
-    };
-
-    return member;
-  }
-
-  createMember_TooLongName_PseudoRandom() {
-    var member = {
-      name: generateRandomLongName(),
-      email: faker.internet.email(),
-      label: faker.word.noun(),
-      note: faker.lorem.sentence(),
-    };
-
-    return member;
-  }
-
-  createMember_TooLongName_Random() {
-    var member = {
-      name: generateRandomLongName(),
+  getMemberTooLongNameRandom() {
+    const member = {
+      name: this.generateRandomLongName(),
       email: faker.internet.email(),
       label: faker.word.noun(),
       note: faker.lorem.sentence(),
