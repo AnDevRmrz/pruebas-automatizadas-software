@@ -25,94 +25,94 @@ const { membersInput } = require("./input_data/member_input_data");
   await browser.close();
 
   // Scenario 1
-  await createPostValidDataFaker(postInput.createPostValidDataFaker());
+  await postInput.createPostValidDataFaker();
 
   // Scenario 2
-  await createPostEmptyFieldsFaker(postInput.createPostEmptyFieldsFaker());
+  await postInput.createPostEmptyFieldsFaker();
 
   // Scenario 3
-  await createPostExceedingLimitsFaker(postInput.createPostExceedingLimitsFaker());
+  await postInput.createPostExceedingLimitsFaker();
 
   // Scenario 4
-  await editPostValidDataFaker(postInput.editPostValidDataFaker());
+  await postInput.editPostValidDataFaker();
 
   // Scenario 5
-  await editPostEmptyTitleFaker(postInput.editPostEmptyTitleFaker());
+  await postInput.editPostEmptyTitleFaker();
 
   // Scenario 6
-  await editPostExceedingLimitsFaker(postInput.editPostExceedingLimitsFaker());
+  await postInput.editPostExceedingLimitsFaker();
 
   // Scenario 7
-  await editPostEmptyContentFaker(postInput.editPostEmptyContentFaker());
+  await postInput.editPostEmptyContentFaker();
 
   // Scenario 8
-  await deleteNewlyCreatedPostFaker(postInput.deleteNewlyCreatedPostFaker());
+  await postInput.deleteNewlyCreatedPostFaker();
 
   // Scenario 9
-  await deletePublishedPostFaker(postInput.deletePublishedPostFaker());
+  await postInput.deletePublishedPostFaker();
 
   // Scenario 10
-  await deleteRandomGeneratedPostFaker(postInput.deleteRandomGeneratedPostFaker());
+  await postInput.deleteRandomGeneratedPostFaker();
 
   // Scenario 11
-  await createPostValidDataApi(postInput.createPostValidDataApi());
+  await postInput.createPostValidDataApi();
 
   // Scenario 12
-  await createPostEmptyFieldsApi(postInput.createPostEmptyFieldsApi());
+  await postInput.createPostEmptyFieldsApi();
 
   // Scenario 13
-  await createPostExceedingLimitsApi(postInput.createPostExceedingLimitsApi());
+  await postInput.createPostExceedingLimitsApi();
 
   // Scenario 14
-  await editPostValidDataApi(postInput.editPostValidDataApi());
+  await postInput.editPostValidDataApi();
 
   // Scenario 15
-  await editPostEmptyTitleApi(postInput.editPostEmptyTitleApi())
+  await postInput.editPostEmptyTitleApi();
 
   // Scenario 16
-  await editPostExceedingLimitsApi(postInput.editPostExceedingLimitsApi());
+  await postInput.editPostExceedingLimitsApi();
 
   // Scenario 17
-  await editPostEmptyContentApi(postInput.editPostEmptyContentApi());
+  await postInput.editPostEmptyContentApi();
 
   // Scenario 18
-  await deleteNewlyCreatedPostApi(postInput.deleteNewlyCreatedPostApi());
+  await postInput.deleteNewlyCreatedPostApi();
 
   // Scenario 19
-  await deletePublishedPostApi(postInput.deletePublishedPostApi());
+  await postInput.deletePublishedPostApi();
 
   // Scenario 20
-  await deleteRandomGeneratedPostApi(postInput.deleteRandomGeneratedPostApi());
+  await postInput.deleteRandomGeneratedPostApi();
 
   // Scenario 21
-  await createPostValidDataJson(postInput.createPostValidDataJson());
+  await postInput.createPostValidDataJson();
 
   // Scenario 22
-  await createPostEmptyFieldsJson(postInput.createPostEmptyFieldsJson());
+  await postInput.createPostEmptyFieldsJson();
 
   // Scenario 23
-  await createPostExceedingLimitsJson(postInput.createPostExceedingLimitsJson());
+  await postInput.createPostExceedingLimitsJson();
 
   // Scenario 24
-  await editPostValidDataJson(postInput.editPostValidDataJson());
+  await postInput.editPostValidDataJson();
 
   // Scenario 25
-  await editPostEmptyTitleJson(postInput.editPostEmptyTitleJson());
+  await postInput.editPostEmptyTitleJson();
 
   // Scenario 26
-  await editPostExceedingLimitsJson(postInput.editPostExceedingLimitsJson());
+  await postInput.editPostExceedingLimitsJson();
 
   // Scenario 27
-  await editPostEmptyContentJson(postInput.editPostEmptyContentJson());
+  await postInput.editPostEmptyContentJson();
 
   // Scenario 28
-  await deleteNewlyCreatedPostJson(postInput.deleteNewlyCreatedPostJson());
+  await postInput.deleteNewlyCreatedPostJson();
 
   // Scenario 29
-  await deletePublishedPostJson(postInput.deletePublishedPostJson());
+  await postInput.deletePublishedPostJson();
 
   // Scenario 30
-  await deleteRandomGeneratedPostJson(postInput.deleteRandomGeneratedPostJson());
+  await postInput.deleteRandomGeneratedPostJson();
 
   // Scenario 31
   await CreatePage_ValidData_Faker();

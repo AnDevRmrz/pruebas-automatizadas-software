@@ -151,8 +151,8 @@ async function deleteRandomGeneratedPostApi() {
 const FILE_NAME = "page.json"
 
 async function createPostValidDataJson() {
-    const pageTitle = await getRandomValueFromApi(FILE_NAME, "postTitle");
-    const pageDescription = await getRandomValueFromApi(FILE_NAME, "description");
+    const pageTitle = await getRandomValueFromJson(FILE_NAME, "postTitle");
+    const pageDescription = await getRandomValueFromJson(FILE_NAME, "description");
     const scenario_name = "021 - Create post valid data - JSON";
     await createPostValidData(pageTitle, pageDescription, scenario_name);
 }
@@ -163,15 +163,15 @@ async function createPostEmptyFieldsJson() {
 }
 
 async function createPostExceedingLimitsJson() {
-    const postTitle = await getRandomValueFromApi(FILE_NAME, "postTitle");  
-    const postContent = await getRandomValueFromApi(FILE_NAME, "description"); 
+    const postTitle = await getRandomValueFromJson(FILE_NAME, "postTitle");  
+    const postContent = await getRandomValueFromJson(FILE_NAME, "description"); 
     const scenario = "023 - Create Post - Exceeding Limits - JSON"
     await createPostExceedingLimits(postTitle, postContent, scenario);
 }
 
 async function editPostValidDataJson() {
-    const postTitle = await getRandomValueFromApi(FILE_NAME, "postTitle");  
-    const postContent = await getRandomValueFromApi(FILE_NAME, "description"); 
+    const postTitle = await getRandomValueFromJson(FILE_NAME, "postTitle");  
+    const postContent = await getRandomValueFromJson(FILE_NAME, "description"); 
     const scenario = "024 - Edit Post - Valid Data - JSON"
     await editPostValidData(postTitle, postContent, scenario);
 }
@@ -183,35 +183,35 @@ async function editPostEmptyTitleJson() {
 }
 
 async function editPostExceedingLimitsJson() {
-    const postTitle = await getRandomValueFromApi(FILE_NAME, "postTitle");  
-    const postContent = await getRandomValueFromApi(FILE_NAME, "description"); 
+    const postTitle = await getRandomValueFromJson(FILE_NAME, "postTitle");  
+    const postContent = await getRandomValueFromJson(FILE_NAME, "description"); 
     const scenario = "026 - Edit Post - Exceeding Limits - JSON"
     await editPostExceedingLimits(postTitle, postContent, scenario);
 }
 
 async function editPostEmptyContentJson() {
     const postTitleToEdit = "Auto post";
-    const newPostTitle = await getRandomValueFromApi(FILE_NAME, "postTitle"); 
+    const newPostTitle = await getRandomValueFromJson(FILE_NAME, "postTitle"); 
     const scenario = "027 - Edit Post - Empty Content - JSON"
     await editPostEmptyContent(postTitleToEdit, newPostTitle, scenario);
 }
 
 async function deleteNewlyCreatedPostJson() {
-    const postTitleToDelete = await getRandomValueFromApi(FILE_NAME, "postTitle"); 
-    const postContent = await getRandomValueFromApi(FILE_NAME, "description"); 
+    const postTitleToDelete = await getRandomValueFromJson(FILE_NAME, "postTitle"); 
+    const postContent = await getRandomValueFromJson(FILE_NAME, "description"); 
     const scenario = "028 - Delete Newly Created Post - JSON"
     await deleteNewlyCreatedPost(postTitleToDelete, postContent, scenario);
 }
 
 async function deletePublishedPostJson() {
-    const postTitleToDelete = await getRandomValueFromApi(FILE_NAME, "postTitle"); 
+    const postTitleToDelete = await getRandomValueFromJson(FILE_NAME, "postTitle"); 
     const scenario = "029 - Delete Published Post - JSON"
     await deletePublishedPost(postTitleToDelete, scenario);
 }
 
 async function deleteRandomGeneratedPostJson() {
-    const postTitleToDelete = await getRandomValueFromApi(FILE_NAME, "postTitle"); 
-    const postContent = await getRandomValueFromApi(FILE_NAME, "description");  
+    const postTitleToDelete = await getRandomValueFromJson(FILE_NAME, "postTitle"); 
+    const postContent = await getRandomValueFromJson(FILE_NAME, "description");  
     const scenario = "030 - Delete Randomly Generated Post - JSON"
     await deleteRandomGeneratedPost(postTitleToDelete, postContent, scenario);
 }
