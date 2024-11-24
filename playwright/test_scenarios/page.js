@@ -413,6 +413,36 @@ async function deletePage_ValidData(pageToDelete,pageDescription,scenario_name) 
   scenario.successful();
 }
 
+
+async function deleteAllPages_testing_purpose(){
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  scenario_name = "cleaning to begin next data pool"
+
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 500,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenario_name);
+  scenario.begin();
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  // When
+  const listFilterDeletePagePage = await dashboard.goToPages();
+
+  await listFilterDeletePagePage.deleteAllPages()
+
+  await browser.close();
+  scenario.successful();
+
+}
+
 module.exports = {
   createPage_ValidData,
   createPage_InvalidData,
@@ -423,5 +453,6 @@ module.exports = {
   previewPage_ButtonInvalidData,
   filterDraftPages_ValidData,
   filterDraftPages_InvalidData,
-  deletePage_ValidData
+  deletePage_ValidData,
+  deleteAllPages_testing_purpose
 };

@@ -5,7 +5,7 @@ const { settingsEditTitleAndDescription, settingsEditTimezone } = require("./tes
 const { CreatePage_ValidData_Faker, CreatePage_InvalidData_Faker, EditPage_ValidData_Faker, EditPage_InvalidData_Faker, PreviewPage_ValidData_Faker, FilterDraftPages_ValidData_Faker, FilterDraftPages_InvalidData_Faker, DeletePage_ValidData_Faker, PreviewPage_ButtonValidData_Faker, PreviewPage_ButtonInvalidData_Faker} = require("./input_data/page");
 const { CreatePage_ValidData_JSON, CreatePage_InvalidData_JSON, EditPage_ValidData_JSON, EditPage_InvalidData_JSON, PreviewPage_ValidData_JSON, FilterDraftPages_ValidData_JSON, FilterDraftPages_InvalidData_JSON, DeletePage_ValidData_JSON, PreviewPage_ButtonValidData_JSON, PreviewPage_ButtonInvalidData_JSON} = require("./input_data/page");
 const { CreatePage_ValidData_API, CreatePage_InvalidData_API, EditPage_ValidData_API, EditPage_InvalidData_API, PreviewPage_ValidData_API, FilterDraftPages_ValidData_API, FilterDraftPages_InvalidData_API, DeletePage_ValidData_API, PreviewPage_ButtonValidData_API, PreviewPage_ButtonInvalidData_API} = require("./input_data/page");
-
+const {clean_pages} = require("./input_data/page");
 
 const { createMember, editMember, deleteMember, createMemberMemberWithInvalidEmail, filterMember } = require("./test_scenarios/members");
 const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
@@ -30,6 +30,7 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
   // await editPost();
   // Scenario 5
   // await deletePost();
+  
 
   // Scenario 31
 
@@ -71,6 +72,10 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
   // Scenario 40
   await DeletePage_ValidData_Faker();
 
+  // // // // // CLEANING POOL // // // // // // // 
+  await clean_pages();
+  // // // // // CLEANING POOL // // // // // // // 
+
   // Scenario 41
 
   await CreatePage_ValidData_API();
@@ -110,6 +115,10 @@ const { listPosts, createPost, analyticPost, editPost, deletePost } = require(".
 
   // Scenario 50
   await DeletePage_ValidData_API();
+
+  // // // // // CLEANING POOL // // // // // // // 
+  await clean_pages();
+  // // // // // CLEANING POOL // // // // // // // 
 
   // Scenario 51
 

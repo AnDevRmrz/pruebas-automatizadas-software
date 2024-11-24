@@ -2,7 +2,7 @@ const playwright = require("playwright");
 const { faker } = require('@faker-js/faker');
 const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
-const { createPage_ValidData, createPage_InvalidData, editPage_validData, editPage_InvalidData, previewPage_ValidData, filterDraftPages_ValidData, filterDraftPages_InvalidData, deletePage_ValidData, previewPage_ButtonValidData, previewPage_ButtonInvalidData} = require("../test_scenarios/page");
+const { deleteAllPages_testing_purpose, createPage_ValidData, createPage_InvalidData, editPage_validData, editPage_InvalidData, previewPage_ValidData, filterDraftPages_ValidData, filterDraftPages_InvalidData, deletePage_ValidData, previewPage_ButtonValidData, previewPage_ButtonInvalidData} = require("../test_scenarios/page");
 const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
 
   //Faker
@@ -197,7 +197,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
         const previousPageDescription = getRandomValueFromJson(FILE_NAME, "page_description");
         const newTitle = getRandomValueFromJson(FILE_NAME, "page_title");
         const newDescription = getRandomValueFromJson(FILE_NAME, "page_description");
-        const scenario_name = "045 - Edit Page valid Data - JSON";
+        const scenario_name = "053 - Edit Page valid Data - JSON";
         await editPage_validData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
       }
     
@@ -259,6 +259,13 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
         await deletePage_ValidData(pageToDelete,pageDescription,scenario_name)
       }
 
+    //Clean data
+
+    async function clean_pages(){
+      await deleteAllPages_testing_purpose()
+
+    }
+
 
 
   module.exports = {
@@ -295,6 +302,8 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
     PreviewPage_ButtonInvalidData_JSON,
     FilterDraftPages_ValidData_JSON,
     FilterDraftPages_InvalidData_JSON,
-    DeletePage_ValidData_JSON
+    DeletePage_ValidData_JSON,
+
+    clean_pages
   };
   
