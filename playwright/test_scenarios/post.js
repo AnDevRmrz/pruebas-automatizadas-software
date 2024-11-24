@@ -4,11 +4,11 @@ const playwright = require("playwright");
 const { Scenario } = require("../util/util");
 const { faker } = require('@faker-js/faker');
 
-async function createPostValidData(postTitle, postContent, scenario) {  
+async function createPostValidData(postTitle, postContent, scenario_name) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -39,11 +39,11 @@ async function createPostValidData(postTitle, postContent, scenario) {
     return;
 }
 
-async function createPostEmptyFields(scenario) {  
+async function createPostEmptyFields(scenario_name) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -71,11 +71,11 @@ async function createPostEmptyFields(scenario) {
     return;
 }
 
-async function createPostExceedingLimits(postTitle, postContent, scenario) {  
+async function createPostExceedingLimits(postTitle, postContent, scenario_name) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -103,11 +103,11 @@ async function createPostExceedingLimits(postTitle, postContent, scenario) {
     return;
 }
 
-async function editPostValidData(newPostTitle, newPostContent, scenario) {
+async function editPostValidData(newPostTitle, newPostContent, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -137,11 +137,11 @@ async function editPostValidData(newPostTitle, newPostContent, scenario) {
     return;
 }
 
-async function editPostEmptyTitle(newPostContent, scenario) {
+async function editPostEmptyTitle(newPostContent, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -169,11 +169,11 @@ async function editPostEmptyTitle(newPostContent, scenario) {
     return;
 }
 
-async function editPostExceedingLimits(newPostTitle, newPostContent, scenario) {
+async function editPostExceedingLimits(newPostTitle, newPostContent, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -202,11 +202,11 @@ async function editPostExceedingLimits(newPostTitle, newPostContent, scenario) {
     return;
 }
 
-async function editPostEmptyContent(postTitleToEdit, newPostTitle, scenario) {
+async function editPostEmptyContent(postTitleToEdit, newPostTitle, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -234,11 +234,11 @@ async function editPostEmptyContent(postTitleToEdit, newPostTitle, scenario) {
     return;
 }
 
-async function deleteNewlyCreatedPost(postTitleToDelete, postContent, scenario) {
+async function deleteNewlyCreatedPost(postTitleToDelete, postContent, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -271,11 +271,11 @@ async function deleteNewlyCreatedPost(postTitleToDelete, postContent, scenario) 
     return;
 }
 
-async function deletePublishedPost(postTitleToDelete, scenario) {
+async function deletePublishedPost(postTitleToDelete, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
@@ -307,11 +307,11 @@ async function deletePublishedPost(postTitleToDelete, scenario) {
     return;
 }
 
-async function deleteRandomGeneratedPost(postTitleToDelete, postContent, scenario) {
+async function deleteRandomGeneratedPost(postTitleToDelete, postContent, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
-    const scenario = new Scenario(page, scenario);
+    const scenario = new Scenario(page, scenario_name);
     scenario.begin();
 
     const email = "alguien@hotmail.com";
