@@ -9,9 +9,11 @@ class EditPreviewPagePage {
             backButton: '[data-test-link="pages"]',
             pageTitle: '.gh-content-entry-title',
             pagePreviewTitle: '.gh-article-title',
-            pagePreviewDescription: '.gh-content',
+            pagePreviewDescription: '.gh-content p',
             settingsButton: 'button.settings-menu-toggle[title="Settings"]',
-            viewPageButton: '.post-view-link'
+            viewPageButton: '.post-view-link',
+            errorAlert: '.gh-alert.gh-alert-red',
+            buttonText: '.kg-card.kg-button-card a.kg-btn.kg-btn-accent'
         };
     }
     
@@ -98,6 +100,24 @@ class EditPreviewPagePage {
         }
     }
 
+    async verifyTextButton(expectedText) {
+        try {
+            await this.waitForLoad(2000);
+            
+            const textElement = this.scenario.getPage().locator(this.selectors.buttonText);
+            await textElement.waitFor({ state: 'visible', timeout: 5000 });
+            
+            const actualText = await textElement.textContent();
+            
+            return actualText.trim() === expectedText.trim();
+        } catch (error) {
+            console.error('Error verifying button text:', error);
+            console.error('Selector usado:', this.selectors.buttonText);
+            console.error('Expected text was:', expectedText);
+            throw error;
+        }
+    }
+
     async verifyPreviewDescription(expectedDescription) {
         try {
             const descElement = await this.scenario.getPage().locator(this.selectors.pagePreviewDescription);
@@ -141,6 +161,14 @@ class EditPreviewPagePage {
             console.error("Error al intentar ver la página:", error);
             throw new Error(`No se pudo ver la página: ${error.message}`);
         }
+    }
+
+    async getUpdateErrorMessage() {
+        const errorElement = await this.scenario.getPage().locator(this.selectors.errorAlert);
+        await errorElement.waitFor({ state: 'visible', timeout: 5000 });
+        const errorText = await errorElement.innerText();
+        await this.scenario.screenshot();
+        return errorText === "Update failed: Title cannot be longer than 255 characters.";
     }
 
     

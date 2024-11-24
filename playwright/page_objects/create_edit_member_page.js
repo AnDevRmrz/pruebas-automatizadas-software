@@ -6,7 +6,7 @@ exports.CreateEditMemberPage = class CreateEditMemberPage {
     this.memberNameInput = scenario.getPage().locator("#member-name");
     this.memberEmailInput = scenario.getPage().locator("#member-email");
     this.memberLabelInput = scenario.getPage().locator("input[type=search]");
-    this.memberLabelSearchBox = scenario.getPage().locator("ul[role=listbox] li");
+    this.memberLabelSearchBox = scenario.getPage().locator("ul[role=listbox] li").first();
     this.memberNoteTextArea = scenario.getPage().locator("#member-note");
     this.saveMemberButton = scenario
       .getPage()

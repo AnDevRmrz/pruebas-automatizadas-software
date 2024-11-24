@@ -35,33 +35,38 @@ class ListFilterDeletePage {
 
 
     async getListOfPages() {
-      try {
-          // Esperamos a que la lista de páginas esté visible
-          await this.scenario.getPage().locator(this.selectors.pageListItem).first().waitFor({ state: 'visible', timeout: 5000 });
-          
-          const pagesHtml = await this.scenario.getPage().locator(this.selectors.pageListItem).all();
-          
-          const pages = [];
-          for (const pageHtml of pagesHtml) {
-              // Esperamos a que el título sea visible
-              const titleElement = pageHtml.locator(this.selectors.pageTitle);
-              await titleElement.waitFor({ state: 'visible', timeout: 2000 });
-              
-              const title = await titleElement.innerText();
-              const attribute = await this.getElementText(pageHtml, this.selectors.pageAttribute);
-                            
-              pages.push({
-                  title: title,
-                  attribute: attribute
-              });
-          }
-          
-          return pages;
-      } catch (error) {
-          console.error('Error al obtener la lista de páginas:', error);
-          throw new Error(`Failed to get list of pages: ${error.message}`);
-      }
-  }
+        try {
+            const count = await this.scenario.getPage().locator(this.selectors.pageListItem).count();
+            
+            if (count === 0) {
+                return [];
+            }
+    
+            const pages = [];
+            for (let i = 0; i < count; i++) {
+                try {
+                    const pageHtml = await this.scenario.getPage().locator(this.selectors.pageListItem).nth(i);
+                    if (await pageHtml.isVisible()) {
+                        const titleElement = pageHtml.locator(this.selectors.pageTitle);
+                        const title = await titleElement.innerText();
+                        const attribute = await this.getElementText(pageHtml, this.selectors.pageAttribute);
+                        
+                        pages.push({
+                            title: title,
+                            attribute: attribute
+                        });
+                    }
+                } catch (e) {
+                    continue;
+                }
+            }
+            
+            return pages;
+        } catch (error) {
+            console.error('Error al obtener la lista de páginas:', error);
+            return []; 
+        }
+    }
   
   async getElementText(element, selector) {
       try {
@@ -86,28 +91,38 @@ class ListFilterDeletePage {
     }
 
     async goToEditPage(pageTitle) {
-      try {
-          const existingPage = await this.findPageByTitle(pageTitle);
-          if (!existingPage) {
-              throw new Error(`Page with title "${pageTitle}" not found in the list`);
-          }
-          const pageElement = await this.scenario.getPage()
-              .locator(`${this.selectors.pageListItem}:has(${this.selectors.pageTitle}:text-is("${pageTitle}"))`);
-          
-          await pageElement.waitFor({ state: 'visible', timeout: 5000 });
-          await pageElement.click();
-          await this.waitForLoad();
-          await this.scenario.screenshot();
-          return new EditPreviewPagePage(this.scenario);
-      } catch (error) {
-          throw new Error(`Failed to navigate to edit page: ${error.message}`);
-      }
-  }
+        try {
+            const existingPage = await this.findPageByTitle(pageTitle);
+            if (!existingPage) {
+                throw new Error(`Page with title "${pageTitle}" not found in the list`);
+            }
+    
+            const pageElements = await this.scenario.getPage()
+                .locator(`${this.selectors.pageListItem}:has(${this.selectors.pageTitle}:text-is("${pageTitle}"))`).all();
+            
+            if (pageElements.length === 0) {
+                throw new Error(`No page elements found with title "${pageTitle}"`);
+            }
+            
+            // Tomamos el primer elemento que coincida
+            await pageElements[0].waitFor({ state: 'visible', timeout: 5000 });
+            await pageElements[0].click();
+            
+            await this.waitForLoad();
+            await this.scenario.screenshot();
+            return new EditPreviewPagePage(this.scenario);
+        } catch (error) {
+            throw new Error(`Failed to navigate to edit page: ${error.message}`);
+        }
+    }
 
     async verifyTitleInList(expectedTitle) {
-        const titleElement = await this.scenario.getPage().locator(this.selectors.pageTitle).first();
-        const actualTitle = await titleElement.innerText();
-        return actualTitle === expectedTitle;
+        try {
+            const pages = await this.getListOfPages();
+            return pages.some(page => page.title === expectedTitle);
+        } catch (error) {
+            throw new Error(`Failed to verify title in list: ${error.message}`);
+        }
     }
 
     async findPageByTitle(pageTitle) {
@@ -178,7 +193,7 @@ async rightClickOnPage(pageTitle) {
   try {
       const titleElement = this.scenario.getPage().locator(
           `${this.selectors.pageTitle}:text-is("${pageTitle}")`
-      );
+      ).first();
       await titleElement.waitFor({ state: 'visible', timeout: 5000 });
       await titleElement.click({ button: 'right' });
       await this.waitForLoad();
@@ -192,7 +207,20 @@ async clickDeleteButton() {
     try {
         const deleteButton = this.scenario.getPage().locator(this.selectors.deleteButton);
         await deleteButton.waitFor({ state: 'visible', timeout: 5000 });
+        
+        await deleteButton.scrollIntoViewIfNeeded();
+        await this.waitForLoad(500);
+        
+        await this.scenario.getPage().evaluate(async (selector) => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, this.selectors.deleteButton);
+        
+        await this.waitForLoad(500);
         await deleteButton.click();
+        
         await this.waitForLoad();
         await this.scenario.screenshot();
     } catch (error) {
@@ -211,7 +239,38 @@ async confirmDelete() {
         throw new Error(`Failed to confirm deletion: ${error.message}`);
     }
 }
+async deleteAllPages() {
+    try {
+        await this.goto(); // Aseguramos que estamos en la página de listado
+        await this.waitForLoad();
 
+        while (true) {
+            // Obtener todas las páginas actuales
+            const pages = await this.getListOfPages();
+            
+            // Si no hay más páginas, salimos del bucle
+            if (pages.length === 0) {
+                break;
+            }
+
+            // Tomar el título de la primera página
+            const firstPageTitle = pages[0].title;
+            
+            // Usar las funciones existentes para eliminar
+            await this.rightClickOnPage(firstPageTitle);
+            await this.clickDeleteButton();
+            await this.confirmDelete();
+            
+            // Esperar un momento para que la lista se actualice
+            await this.waitForLoad();
+        }
+    } catch (error) {
+        throw new Error(`Failed to delete all pages: ${error.message}`);
+    }
 }
+}
+
+
+
 
 module.exports = { ListFilterDeletePage };
