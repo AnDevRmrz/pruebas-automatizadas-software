@@ -3,19 +3,20 @@ const { expect } = require('@playwright/test');
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
 
-async function createTag() {  
+async function createTag(input, scenarioDesc) {  
   
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, "016 - Create Tag");
+  const scenario = new Scenario(page, scenarioDesc);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf"
-  const tagName = "Tag Name Test";
-  const tagSlug = "slug-test";
-  const tagDescription = "Description Test";
+  const tagName = input.tagName;
+  const tagSlug = input.tagSlug;
+  const tagDescription = input.tagDescription;
+  const tagHexColor = input.tagHexColor;
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -25,7 +26,7 @@ async function createTag() {
   const createEditTagPage = await listTagsPage.goToNewTag();
 
   // When
-  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription);
+  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription, tagHexColor);
 
   // Then
   await listTagsPage.goto();
@@ -36,25 +37,26 @@ async function createTag() {
   return ;
 }
 
-async function editTag() {
+async function editTag(input, scenarioDesc) {
   
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, "017 - Edit Tag");
+  const scenario = new Scenario(page, scenarioDesc);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
-  const password = "123456#213asdf"
-  const tagToEdit = "slug-test";
+  const password = "123456#213asdf"  
 
-  const oldTagName = "Tag Name Test";
-  const oldTagSlug = "slug-test";
-  const oldTagDescription = "Description Test";
+  const oldTagName = input.oldTagName;
+  const oldTagSlug = input.oldTagSlug;
+  const oldTagDescription = input.oldTagDescription;
+  const oldTagHexColor = input.oldTagHexColor;
 
-  const tagName = "New Tag Name Test";
-  const tagSlug = "new-slug-test";
-  const tagDescription = "New Description Test";
+  const tagName = input.tagName;
+  const tagSlug = input.tagSlug;
+  const tagDescription = input.tagDescription;
+  const tagHexColor = input.tagHexColor;
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -62,12 +64,12 @@ async function editTag() {
   const dashboard = await signInPage.signIn(email, password);
   const listTagsPage = await dashboard.goToTags();
   const createEditTagPage = await listTagsPage.goToNewTag();
-  await createEditTagPage.saveTag(oldTagName, oldTagSlug, oldTagDescription);
+  await createEditTagPage.saveTag(oldTagName, oldTagSlug, oldTagDescription, oldTagHexColor);
   await dashboard.goToTags();
-  await listTagsPage.goToEditTag(tagToEdit);
+  await listTagsPage.goToEditTag(oldTagSlug);
 
   // When
-  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription);
+  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription, tagHexColor);
 
   // Then
   await listTagsPage.goto();
@@ -78,20 +80,21 @@ async function editTag() {
   return ;
 }
 
-async function deleteTag() {
+async function deleteTag(input, scenarioDesc) {
   
   const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "018 - Delete Tag");
+  const scenario = new Scenario(page, scenarioDesc);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf"
-  const tagToDelete = "new-slug-test";
-  const tagName = "New Tag Name Test";
-  const tagSlug = "new-slug-test";
-  const tagDescription = "New Description Test";
+  
+  const tagName = input.tagName;
+  const tagSlug = input.tagSlug;
+  const tagDescription = input.tagDescription;
+  const tagHexColor = input.tagHexColor;
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -99,9 +102,9 @@ async function deleteTag() {
   const dashboard = await signInPage.signIn(email, password);
   let listTagsPage = await dashboard.goToTags();
   const createEditTagPage = await listTagsPage.goToNewTag();
-  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription);
+  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription, tagHexColor);
   await dashboard.goToTags();
-  await listTagsPage.goToEditTag(tagToDelete);  
+  await listTagsPage.goToEditTag(tagSlug);
 
   // When
   listTagsPage = await createEditTagPage.deleteTag();
@@ -115,9 +118,85 @@ async function deleteTag() {
   return ;
 }
 
+async function createTagWithMetadata(input, scenarioDesc) {  
+  
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const context = await browser.newContext();
+  const page = await context.newPage();  
+  const scenario = new Scenario(page, scenarioDesc);
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf"
+  const tagName = input.tagName;
+  const tagSlug = input.tagSlug;
+  const tagDescription = input.tagDescription;
+  const tagHexColor = input.tagHexColor;
+  const metaTitle = input.metaTitle;
+  const metaDescription = input.metaDescription;
+  const metaUrl = input.metaUrl;
+  
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listTagsPage = await dashboard.goToTags();
+  const createEditTagPage = await listTagsPage.goToNewTag();
+
+  // When
+  await createEditTagPage.saveTagWithMetadata(tagName, tagSlug, tagDescription, tagHexColor, metaTitle, metaDescription, metaUrl);
+
+  // Then
+  await listTagsPage.goto();
+  const currentTags = await listTagsPage.getListOfTags();
+  expect(currentTags.some(tag => tag.name === tagName && tag.slug === tagSlug && tag.description === tagDescription)).toBeTruthy();  
+  await browser.close();
+  scenario.successful();
+  return ;
+}
+
+async function createTagWithXCardValues(input, scenarioDesc) {  
+  
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const context = await browser.newContext();
+  const page = await context.newPage();  
+  const scenario = new Scenario(page, scenarioDesc);
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf"
+  const tagName = input.tagName;
+  const tagSlug = input.tagSlug;
+  const tagDescription = input.tagDescription;
+  const tagHexColor = input.tagHexColor;
+  const xCardTitle = input.xCardTitle;
+  const xCardDescription = input.xCardDescription;
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listTagsPage = await dashboard.goToTags();
+  const createEditTagPage = await listTagsPage.goToNewTag();
+
+  // When
+  await createEditTagPage.saveTagWithCodeXCardValues(tagName, tagSlug, tagDescription, tagHexColor, xCardTitle, xCardDescription);
+
+  // Then
+  await listTagsPage.goto();
+  const currentTags = await listTagsPage.getListOfTags();
+  expect(currentTags.some(tag => tag.name === tagName && tag.slug === tagSlug && tag.description === tagDescription)).toBeTruthy();  
+  await browser.close();
+  scenario.successful();
+  return ;
+}
+
 module.exports = {
 
   createTag,
   editTag,
-  deleteTag
+  deleteTag,
+  createTagWithMetadata,
+  createTagWithXCardValues
 }
