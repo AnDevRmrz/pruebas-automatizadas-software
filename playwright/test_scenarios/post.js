@@ -4,7 +4,7 @@ const playwright = require("playwright");
 const { Scenario } = require("../util/util");
 const { faker } = require('@faker-js/faker');
 
-async function createPostValidData(postTitle, postContent, scenario_name) {  
+async function createPostValidData(postTitle_name, postContent_name, scenario_name) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
@@ -13,8 +13,8 @@ async function createPostValidData(postTitle, postContent, scenario_name) {
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitle = postTitle; 
-    const postContent = postContent; 
+    const postTitle = postTitle_name; 
+    const postContent = postContent_name; 
     const expectedPostStatus = "Published";
 
     // Given
@@ -71,7 +71,7 @@ async function createPostEmptyFields(scenario_name) {
     return;
 }
 
-async function createPostExceedingLimits(postTitle, postContent, scenario_name) {  
+async function createPostExceedingLimits(postTitle_name, postContent_name, scenario_name) {  
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();  
@@ -80,8 +80,8 @@ async function createPostExceedingLimits(postTitle, postContent, scenario_name) 
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitle = postTitle; 
-    const postContent = postContent; 
+    const postTitle = postTitle_name; 
+    const postContent = postContent_name; 
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -103,7 +103,7 @@ async function createPostExceedingLimits(postTitle, postContent, scenario_name) 
     return;
 }
 
-async function editPostValidData(newPostTitle, newPostContent, scenario_name) {
+async function editPostValidData(postTitle_name, postContent_name, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -113,8 +113,8 @@ async function editPostValidData(newPostTitle, newPostContent, scenario_name) {
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
     const postTitleToEdit = "Auto post";
-    const newPostTitle = newPostTitle; 
-    const newPostContent = newPostContent; 
+    const newPostTitle = postTitle_name; 
+    const newPostContent = postContent_name; 
     const expectedPostStatus = "Published";
 
     // Given
@@ -137,7 +137,7 @@ async function editPostValidData(newPostTitle, newPostContent, scenario_name) {
     return;
 }
 
-async function editPostEmptyTitle(newPostContent, scenario_name) {
+async function editPostEmptyTitle(postContent_name, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -148,7 +148,7 @@ async function editPostEmptyTitle(newPostContent, scenario_name) {
     const password = "123456#213asdf";
     const postTitleToEdit = "Auto post";
     const newPostTitle = ""; 
-    const newPostContent = newPostContent;
+    const newPostContent = postContent_name;
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -169,7 +169,7 @@ async function editPostEmptyTitle(newPostContent, scenario_name) {
     return;
 }
 
-async function editPostExceedingLimits(newPostTitle, newPostContent, scenario_name) {
+async function editPostExceedingLimits(postTitle_name, postContent_name, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -179,8 +179,8 @@ async function editPostExceedingLimits(newPostTitle, newPostContent, scenario_na
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
     const postTitleToEdit = "Auto post";
-    const newPostTitle = newPostTitle; 
-    const newPostContent = newPostContent; 
+    const newPostTitle = postTitle_name; 
+    const newPostContent = postContent_name; 
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -202,7 +202,7 @@ async function editPostExceedingLimits(newPostTitle, newPostContent, scenario_na
     return;
 }
 
-async function editPostEmptyContent(postTitleToEdit, newPostTitle, scenario_name) {
+async function editPostEmptyContent(postTitleToEdit_name, postTitle_name, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -211,8 +211,8 @@ async function editPostEmptyContent(postTitleToEdit, newPostTitle, scenario_name
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToEdit = postTitleToEdit;
-    const newPostTitle = newPostTitle;
+    const postTitleToEdit = postTitleToEdit_name;
+    const newPostTitle = postTitle_name;
     const newPostContent = ""; 
 
     // Given
@@ -234,7 +234,7 @@ async function editPostEmptyContent(postTitleToEdit, newPostTitle, scenario_name
     return;
 }
 
-async function deleteNewlyCreatedPost(postTitleToDelete, postContent, scenario_name) {
+async function deleteNewlyCreatedPost(postTitle_name, postContent_name, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -243,8 +243,8 @@ async function deleteNewlyCreatedPost(postTitleToDelete, postContent, scenario_n
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToDelete = postTitleToDelete; 
-    const postContent = postContent; 
+    const postTitleToDelete = postTitle_name; 
+    const postContent = postContent_name; 
 
     // Given
     const signInPage = new SignInPage(scenario);
@@ -271,7 +271,7 @@ async function deleteNewlyCreatedPost(postTitleToDelete, postContent, scenario_n
     return;
 }
 
-async function deletePublishedPost(postTitleToDelete, scenario_name) {
+async function deletePublishedPost(postTitle_name, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -280,7 +280,7 @@ async function deletePublishedPost(postTitleToDelete, scenario_name) {
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToDelete = postTitleToDelete; 
+    const postTitleToDelete = postTitle_name; 
     const expectedPostStatus = "Published";
 
     // Given
@@ -307,7 +307,7 @@ async function deletePublishedPost(postTitleToDelete, scenario_name) {
     return;
 }
 
-async function deleteRandomGeneratedPost(postTitleToDelete, postContent, scenario_name) {
+async function deleteRandomGeneratedPost(postTitle_name, postContent_name, scenario_name) {
     const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50 });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -316,8 +316,8 @@ async function deleteRandomGeneratedPost(postTitleToDelete, postContent, scenari
 
     const email = "alguien@hotmail.com";
     const password = "123456#213asdf";
-    const postTitleToDelete = postTitleToDelete; 
-    const postContent = postContent; 
+    const postTitleToDelete = postTitle_name; 
+    const postContent = postContent_name; 
 
     // Given
     const signInPage = new SignInPage(scenario);
