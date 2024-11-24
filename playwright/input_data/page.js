@@ -10,14 +10,14 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
   async function CreatePage_ValidData_Faker(){
     const pageTitle = faker.lorem.words(3); 
     const pageDescription = faker.lorem.paragraph(); 
-    const scenario_name = "031 - Create Page Valid Data";
+    const scenario_name = "031 - Create Page Valid Data - Faker";
     await createPage_ValidData(pageTitle,pageDescription,scenario_name);
   }
 
   async function CreatePage_InvalidData_Faker(){
     const pageTitle = faker.lorem.words(50).slice(0, 245) + faker.lorem.words(5);
     const pageDescription = faker.lorem.paragraph(); 
-    const scenario_name = "032 - Create Page Invalid Data";
+    const scenario_name = "032 - Create Page Invalid Data - Faker";
     await createPage_InvalidData(pageTitle,pageDescription,scenario_name);
   }
 
@@ -26,7 +26,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
     const previousPageDescription = faker.lorem.paragraph(); 
     const newTitle = faker.lorem.words(6); 
     const newDescription = faker.lorem.paragraph(3); 
-    const scenario_name = "033 - Edit Page valid Data";
+    const scenario_name = "033 - Edit Page valid Data - Faker";
     await editPage_validData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
   }
 
@@ -35,14 +35,14 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
     const previousPageDescription = faker.lorem.paragraph(); 
     const newTitle = faker.lorem.words(50).slice(0, 245) + faker.lorem.words(5);
     const newDescription = faker.lorem.paragraph(3); 
-    const scenario_name = "034 - Edit Page Invalid Data";
+    const scenario_name = "034 - Edit Page Invalid Data - Faker";
     await editPage_InvalidData(previousPageTitle, previousPageDescription, newTitle, newDescription, scenario_name)
   }
 
   async function PreviewPage_ValidData_Faker(){
     const pageTitle = faker.lorem.words(4); 
     const pageDescription = faker.lorem.paragraph(); 
-    const scenario_name = "035- Preview Page valid Data";
+    const scenario_name = "035- Preview Page valid Data - Faker";
     await previewPage_ValidData(pageTitle, pageDescription, scenario_name)
   }
 
@@ -51,7 +51,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
     const pageDescription = faker.lorem.paragraph(); 
     const buttonName = faker.lorem.words(1); 
     const buttonUrl = faker.internet.url()
-    const scenario_name = "036 - Preview Page Button valid Data";
+    const scenario_name = "036 - Preview Page Button valid Data - Faker";
     await previewPage_ButtonValidData(pageTitle, pageDescription, buttonName, buttonUrl, scenario_name)
   }
 
@@ -60,7 +60,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
     const pageDescription = faker.lorem.paragraph(); 
     const buttonName = faker.lorem.words(1); 
     const buttonUrl = faker.lorem.paragraph()
-    const scenario_name = "037- Preview Page Button invalid Data";
+    const scenario_name = "037- Preview Page Button invalid Data - Faker";
     await previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name)
   }
 
@@ -68,7 +68,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
   async function FilterDraftPages_ValidData_Faker(){
     const draftPageTitle = faker.lorem.words(3); 
     const pageDescription = faker.lorem.paragraph(); 
-    const scenario_name = "038- Filter Draft Page valid Data";
+    const scenario_name = "038- Filter Draft Page valid Data - Faker";
     await filterDraftPages_ValidData(draftPageTitle,pageDescription,scenario_name) 
   }
 
@@ -76,7 +76,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
   async function FilterDraftPages_InvalidData_Faker(){
     const draftPageTitle = faker.lorem.words(50).slice(0, 245) + faker.lorem.words(5);
     const pageDescription = faker.lorem.paragraph(3); 
-    const scenario_name = "039 - Filter Draft Page Invalid Data";
+    const scenario_name = "039 - Filter Draft Page Invalid Data - Faker";
     await filterDraftPages_InvalidData(draftPageTitle,pageDescription,scenario_name) 
   }
 
@@ -84,7 +84,7 @@ const {getRandomValueFromJson,getRandomValueFromApi} = require("./data_reading")
   async function DeletePage_ValidData_Faker(){
     const pageToDelete = faker.lorem.words(3); 
     const pageDescription = faker.lorem.paragraph(10); 
-    const scenario_name = "040 - Delete Page Valid Data";
+    const scenario_name = "040 - Delete Page Valid Data - Faker";
     await deletePage_ValidData(pageToDelete,pageDescription,scenario_name)
   }
 
