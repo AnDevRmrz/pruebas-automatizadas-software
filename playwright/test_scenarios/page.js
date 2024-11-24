@@ -2,21 +2,23 @@ const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
+const { faker } = require('@faker-js/faker');
 
-async function createPage() {
+async function createPage_ValidData(pageTitle,pageDescription,scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "006 - Create Page");
+  const scenario = new Scenario(page, scenario_name);
   scenario.begin();
 
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const pageTitle = "Title";
-  const pageDescription = "Description";
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -26,7 +28,7 @@ async function createPage() {
   // When
   const listFilterDeletePagePage = await dashboard.goToPages();
   const createPagePage = await listFilterDeletePagePage.goToNewPage();
-  await createPagePage.createPage(pageTitle, pageDescription, false);
+  await createPagePage.createPage(pageTitle, pageDescription, false, false,false);
 
   // Then
   expect(await createPagePage.verifyTitleInModal(pageTitle)).toBeTruthy();
@@ -44,20 +46,23 @@ async function createPage() {
   return;
 }
 
-async function editPage() {
+
+async function createPage_InvalidData(pageTitle,pageDescription,scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+
+  
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "007 - Edit Page");
+  const scenario = new Scenario(page, scenario_name);
   scenario.begin();
 
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const newTitle = "Title changed";
-  const newDescription = "Description changed";
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -66,7 +71,43 @@ async function editPage() {
 
   // When
   const listFilterDeletePagePage = await dashboard.goToPages();
-  const editPagePage = await listFilterDeletePagePage.goToEditPage("Title");
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
+  await createPagePage.createPage(pageTitle, pageDescription, false,true,false);
+  expect(await createPagePage.getErrorMessage()).toBeTruthy()
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+async function editPage_validData(previousPageTitle,previousPageDescription,newTitle,newDescription,scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+
+
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 500,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenario_name);
+  scenario.begin();
+
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+
+  // When
+  const listFilterDeletePagePage = await dashboard.goToPages();
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
+  await createPagePage.createPage(previousPageTitle, previousPageDescription, false, false,false);
+  await createPagePage.closePublishFlow();
+  await listFilterDeletePagePage.goto();
+  const editPagePage = await listFilterDeletePagePage.goToEditPage(previousPageTitle);
   await editPagePage.changeTitle(newTitle);
   await editPagePage.changeDescription(newDescription);
   await editPagePage.clickUpdate();
@@ -82,20 +123,23 @@ async function editPage() {
   return;
 }
 
-async function previewPage() {
+
+async function editPage_InvalidData(previousPageTitle, previousPageDescription, newTitle, newDescription,scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+
+
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "008 - Preview Page");
+  const scenario = new Scenario(page, scenario_name);
   scenario.begin();
 
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const expectedTitle = "Title changed";
-  const expectedDescription = "Description changed";
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -104,16 +148,59 @@ async function previewPage() {
 
   // When
   const listFilterDeletePagePage = await dashboard.goToPages();
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
+  await createPagePage.createPage(previousPageTitle, previousPageDescription, false, false,false);
+  await createPagePage.closePublishFlow();
+  await listFilterDeletePagePage.goto();
+  const editPagePage = await listFilterDeletePagePage.goToEditPage(previousPageTitle);
+  await editPagePage.changeTitle(newTitle);
+  await editPagePage.changeDescription(newDescription);
+  await editPagePage.clickUpdate();
+  
+  // Then
+  expect(await editPagePage.getUpdateErrorMessage()).toBeTruthy();
+
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+
+async function previewPage_ValidData(pageTitle, pageDescription, scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 500,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenario_name);
+  scenario.begin();
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+
+  // When
+  const listFilterDeletePagePage = await dashboard.goToPages();
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
+  await createPagePage.createPage(pageTitle, pageDescription, false, false,false);
+  await createPagePage.closePublishFlow();
+  await listFilterDeletePagePage.goto();
   const editPreviewPagePage = await listFilterDeletePagePage.goToEditPage(
-    "Title changed"
+    pageTitle
   );
   await editPreviewPagePage.openSettings();
   const previewPage = await editPreviewPagePage.viewPage();
 
   // Then
-  expect(await previewPage.verifyPreviewTitle(expectedTitle)).toBeTruthy();
+  expect(await previewPage.verifyPreviewTitle(pageTitle)).toBeTruthy();
   expect(
-    await previewPage.verifyPreviewDescription(expectedDescription)
+    await previewPage.verifyPreviewDescription(pageDescription)
   ).toBeTruthy();
 
   await browser.close();
@@ -121,22 +208,114 @@ async function previewPage() {
   return;
 }
 
-async function filterDraftPages() {
+
+async function previewPage_ButtonValidData(pageTitle, pageDescription, buttonName, buttonUrl, scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 500,
+  });
+
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenario_name);
+  scenario.begin();
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+
+  // When
+  const listFilterDeletePagePage = await dashboard.goToPages();
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
+  await createPagePage.createPage(pageTitle, pageDescription, false, false,false, true);
+  await createPagePage.fillButton(buttonName,buttonUrl)
+  await createPagePage.publishPage()
+  await createPagePage.closePublishFlow();
+  await createPagePage.waitForLoad();
+  await listFilterDeletePagePage.goto();
+  const editPreviewPagePage = await listFilterDeletePagePage.goToEditPage(pageTitle);
+  await editPreviewPagePage.openSettings();
+  const previewPage = await editPreviewPagePage.viewPage();
+
+  // Then
+  const titleVerified = await previewPage.verifyPreviewTitle(pageTitle);
+  expect(titleVerified).toBeTruthy();
+  const descriptionVerified = await previewPage.verifyPreviewDescription(pageDescription);
+  expect(descriptionVerified).toBeTruthy();
+  const buttonTextVerified = await previewPage.verifyTextButton(buttonName);
+  expect(buttonTextVerified).toBeTruthy();
+
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+async function previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonName,buttonUrl,scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
+
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 500,
+  });
+
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenario_name);
+  scenario.begin();
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+
+  // When
+  const listFilterDeletePagePage = await dashboard.goToPages();
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
+  await createPagePage.createPage(pageTitle, pageDescription, false, false,false, true);
+  await createPagePage.fillButton(buttonName,buttonUrl)
+  await createPagePage.publishPage()
+  await createPagePage.closePublishFlow();
+  await createPagePage.waitForLoad();
+  await listFilterDeletePagePage.goto();
+  const editPreviewPagePage = await listFilterDeletePagePage.goToEditPage(pageTitle);
+  await editPreviewPagePage.openSettings();
+  const previewPage = await editPreviewPagePage.viewPage();
+
+  // Then
+  const titleVerified = await previewPage.verifyPreviewTitle(pageTitle);
+  expect(titleVerified).toBeTruthy();
+  const descriptionVerified = await previewPage.verifyPreviewDescription(pageDescription);
+  expect(descriptionVerified).toBeTruthy();
+  const buttonTextVerified = await previewPage.verifyTextButton(buttonName);
+  expect(buttonTextVerified).toBeTruthy();
+
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+async function filterDraftPages_ValidData(draftPageTitle,pageDescription,scenario_name) {
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const expectedAttribute = "Draft";
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "009 - Filter Draft Pages");
+  const scenario = new Scenario(page, scenario_name);
   scenario.begin();
-
-  const email = "alguien@hotmail.com";
-  const password = "123456#213asdf";
-  const draftPageTitle = "Title draft";
-  const expectedAttribute = "Draft";
-  const pageTitle = draftPageTitle;
-  const pageDescription = "Description draft";
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -144,7 +323,7 @@ async function filterDraftPages() {
   const dashboard = await signInPage.signIn(email, password);
   const listFilterDeletePagePage = await dashboard.goToPages();
   const createPagePage = await listFilterDeletePagePage.goToNewPage();
-  await createPagePage.createPage(pageTitle, pageDescription, true);
+  await createPagePage.createPage(draftPageTitle, pageDescription, true, false,false);
   await dashboard.goToPages();
 
   // When
@@ -159,20 +338,55 @@ async function filterDraftPages() {
   scenario.successful();
 }
 
-async function deletePage() {
+async function filterDraftPages_InvalidData(draftPageTitle,pageDescription,scenario_name)  {
+
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+
   const browser = await playwright["chromium"].launch({
     headless: false,
     slowMo: 500,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "010 - Delete Page");
+  const scenario = new Scenario(page, scenario_name);
   scenario.begin();
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listFilterDeletePagePage = await dashboard.goToPages();
+  const createPagePage = await listFilterDeletePagePage.goToNewPage();
+  await createPagePage.createPage(draftPageTitle, pageDescription, true, true,false);
+  await dashboard.goToPages();
+
+  // When
+  
+  await listFilterDeletePagePage.filterByDraft();
+  
+  const pageAttribute = await listFilterDeletePagePage.getPageAttributeByTitle(draftPageTitle);
+  expect(pageAttribute).toBeNull();
+
+  await browser.close();
+  scenario.successful();
+}
+
+
+async function deletePage_ValidData(pageToDelete,pageDescription,scenario_name) {
 
   const email = "alguien@hotmail.com";
   const password = "123456#213asdf";
-  const pageToDelete = "Title changed 1"; // El título de la página que queremos eliminar
-  const pageDescription = "My description";
+
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 500,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenario_name);
+  scenario.begin();
 
   // Given
   const signInPage = new SignInPage(scenario);
@@ -181,12 +395,10 @@ async function deletePage() {
 
   // When
   const listFilterDeletePagePage = await dashboard.goToPages();
-
   const createPagePage = await listFilterDeletePagePage.goToNewPage();
-  await createPagePage.createPage(pageToDelete, pageDescription, false);
+  await createPagePage.createPage(pageToDelete, pageDescription, false, false,false);
   await createPagePage.closePublishFlow();
   await listFilterDeletePagePage.goto();
-
   await listFilterDeletePagePage.rightClickOnPage(pageToDelete);
   await listFilterDeletePagePage.clickDeleteButton();
   await listFilterDeletePagePage.confirmDelete();
@@ -194,17 +406,53 @@ async function deletePage() {
   // Then
   await listFilterDeletePagePage.goto();
   const isDeleted =
-    (await listFilterDeletePagePage.verifyTitleChanged(pageToDelete)) === false; // Si no encuentra el título, está eliminado
+    (await listFilterDeletePagePage.verifyTitleChanged(pageToDelete)) === false;
   expect(isDeleted).toBeTruthy();
 
   await browser.close();
   scenario.successful();
 }
 
+
+async function deleteAllPages_testing_purpose(){
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  scenario_name = "cleaning to begin next data pool"
+
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 500,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenario_name);
+  scenario.begin();
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  // When
+  const listFilterDeletePagePage = await dashboard.goToPages();
+
+  await listFilterDeletePagePage.deleteAllPages()
+
+  await browser.close();
+  scenario.successful();
+
+}
+
 module.exports = {
-  createPage,
-  editPage,
-  previewPage,
-  filterDraftPages,
-  deletePage,
+  createPage_ValidData,
+  createPage_InvalidData,
+  editPage_validData,
+  editPage_InvalidData,
+  previewPage_ValidData,
+  previewPage_ButtonValidData,
+  previewPage_ButtonInvalidData,
+  filterDraftPages_ValidData,
+  filterDraftPages_InvalidData,
+  deletePage_ValidData,
+  deleteAllPages_testing_purpose
 };
