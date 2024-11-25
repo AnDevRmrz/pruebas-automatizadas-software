@@ -35,9 +35,29 @@ En este componente tenemos que preparar las dependencias de 1 módulo Node js. B
 
 ### Ejecución 120 pruebas E2E
 
-Se debe ejecutar el comando node index.js en la siguiente ruta
+Las 120 pruebas no se pueden ejecutar de seguido ya que cada escenario estará iniciando sesión al principio. Cuando se inicia sesión más de 90 veces, Ghost tiene un mecanismo de bloqueo, por lo que no permitirá que se inicie sesión de nuevo.
+
+Debido a lo anterior, se divide la ejecución de las 120 pruebas en dos bloques de la siguiente forma:
+
+Los siguientes comandos deben ejecutados en la ruta
 
 - %ruta_instalacion%/playwright
 
-### Evidencia 120 Pruebas Exitosas
+Para ejecutar las primeras 60 E2E (1 - 60) utiliza el siguiente comando:
+
+- node index.js 1
+
+Para ejecutar las últimas 60 E2E (61 - 120) utiliza el siguiente comando:
+
+- node index.js 2
+
+Cada ejecución de pruebas debe tener una instancia de Docker reiniciada (Cold Start).
+
+### Consideraciones
+
+- Dada la aleatoriedad de los escenarios, es posible obtener fallos cuando se quiere editar un elemento utilizando datos repetidos, los cuales no van a generar un escenario de edición. Es decir, si en un escenario de cambiar el lenguaje general de Ghost, casualmente en el escenario Random y el escenario A priori Utilizaron exactamente el mismo valor, esta prueba va a fallar porque no habrá cambiar a realizar.
+
+- Si previamente se crea un elemento y, debido a la aleatoriedad de los datos, en otro escenario se utilizan los mismos datos en una prueba de eliminación, el test podría fallar. Esto ocurriría porque se realizaría una validación que contempla que el elemento ya no debería estar presente en el listado de objetos.
+
+- Las API utilizadas de Mockaroo tienen una quota fija de 200 peticiones. Hay 3 cuentas en uso. Esto es muy importante porque ya hemos experimentado el límite de uso y siempre retornará un código HTTP 500, rompiendo las pruebas.
 
