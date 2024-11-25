@@ -30,7 +30,7 @@ class MemberInput {
 
     do {
       note += faker.lorem.sentence() + " ";
-    } while (note.length <= 500);
+    } while (note.length <= 501);
 
     return note;
   }
