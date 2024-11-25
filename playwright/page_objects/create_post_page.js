@@ -87,6 +87,24 @@ exports.CreateEditPostPage = class CreateEditPostPage {
     await this.scenario.screenshot();
   }
 
+  async deletePost() {
+    await this.settingsButton.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+
+    let deleteButton = this.scenario
+      .getPage()
+      .locator("button[data-test-button=delete-post]");
+    await deleteButton.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+
+    let confirmButton = await this.scenario
+      .getPage()
+      .locator("button[data-test-button=delete-post-confirm]");
+    await confirmButton.click();
+  }
+
   async checkErrorAlert(errorText) {
     await this.alertError.waitFor({ timeout: 500 });
     const textAlertError = await this.alertError.innerText();
