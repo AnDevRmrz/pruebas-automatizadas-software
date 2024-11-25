@@ -49,7 +49,7 @@ class TagInput {
     tagName = tagName.repeat(50);
 
     let tagDescription = faker.lorem.paragraph();
-    tagDescription = tagDescription.repeat(50);
+    tagDescription = tagDescription.repeat(500);
 
     return {
       tagName: tagName,
@@ -89,7 +89,7 @@ class TagInput {
     tagName = tagName.repeat(50);
 
     let tagDescription = value.tagDescription;
-    tagDescription = tagDescription.repeat(50);
+    tagDescription = tagDescription.repeat(500);
   
     return {
       tagName: tagName,
@@ -129,7 +129,7 @@ class TagInput {
     tagName = tagName.repeat(50);
 
     let tagDescription = value.tagDescription;
-    tagDescription = tagDescription.repeat(50);
+    tagDescription = tagDescription.repeat(500);
   
     return {
       tagName: tagName,

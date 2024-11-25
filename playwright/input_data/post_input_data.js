@@ -82,15 +82,31 @@ class PostInput {
   }
 
   async generatePostWithLongExcerptPseudoRandom() {
-    return await this.getValueFromAPI(
-      "https://my.api.mockaroo.com/PostLongExcerpt.json"
-    );
+
+    let value = await this.getValueFromAPI("https://my.api.mockaroo.com/PostLongExcerpt.json");
+
+    let excerpt = value.excerpt.repeat(2);
+
+    return {
+      title: value.title,
+      content: value.content,
+      excerpt: excerpt
+    };
   }
 
   generatePostWithLongExcerptAPriori() {
-    return postLongExcerptInputJson[
+
+    let value = postLongExcerptInputJson[
       Math.floor(Math.random() * postLongExcerptInputJson.length)
     ];
+
+    let excerpt = value.excerpt.repeat(2);
+
+    return {
+      title: value.title,
+      content: value.content,
+      excerpt: excerpt
+    };
   }
 }
 
