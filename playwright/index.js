@@ -7,7 +7,7 @@ const { clean_pages } = require("./input_data/page");
 const { createTag, editTag, deleteTag, createTagWithMetadata, createTagWithXCardValues } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData, settingsEditGeneralLanguageHugeValue } = require("./test_scenarios/settings");
 const { createMember, createMemberWithInvalidEmail, createMemberWithEmptyEmail, createMemberWithTooLongNote, createMemberWithTooLongName, editMember, editMemberWithEmptyEmail, editMemberWithInvalidEmail, editMemberWithTooLongNote, editMemberWithTooLongName } = require("./test_scenarios/members");
-const { createPost, editPost, deletePost, createPostWithLongTitle, editPostWithLongTitle } = require("./test_scenarios/post");
+const { createPost, editPost, deletePost, createPostWithLongTitle, editPostWithLongTitle, createPostWithLongExcerpt, editPostWithLongExcerpt } = require("./test_scenarios/post");
 const { postInput } = require("./input_data/post_input_data");
 const { tagInput } = require("./input_data/tag_input_data");
 const { settingsInput } = require("./input_data/settings_input_data");
@@ -40,6 +40,12 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 05
   await editPostWithLongTitle(postInput.generatePostRandom(), postInput.generatePostWithLongTitleRandom(),"005 Edit Post With a Title Longer Than 255 Characters - Random Data");
 
+  // Scenario 06
+  await createPostWithLongExcerpt(postInput.generatePostWithLongExcerptRandom(),"006 Create Post With a Excerpt Longer Than 300 Characters - Random Data");
+
+  // Scenario 07
+  await editPostWithLongExcerpt(postInput.generatePostRandom(), postInput.generatePostWithLongExcerptRandom(), "007 Edit Post With a Excerpt Longer Than 300 Characters - Random Data");
+  
   // Scenario 10 - Settings - Set General Language With Huge Value - Random Data
   await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguageRandomValue(), "010 - Settings - Set General Language With Huge Value- Random Data");
   
@@ -57,6 +63,12 @@ const { membersInput } = require("./input_data/member_input_data");
 
   // Scenario 15
   await editPostWithLongTitle(await postInput.generatePostPseudoRandom(), await postInput.generatePostWithLongTitlePseudoRandom(),"015 Edit Post With a Title Longer Than 255 Characters - Pseudo Random Data Pool");
+
+  // Scenario 16
+  await createPostWithLongExcerpt(await postInput.generatePostWithLongExcerptPseudoRandom(),"016 Create Post With a Excerpt Longer Than 300 Characters - Pseudo Random Data Pool");
+  
+  // Scenario 17
+  await editPostWithLongExcerpt(await postInput.generatePostPseudoRandom(), await postInput.generatePostWithLongExcerptPseudoRandom(), "017 Edit Post With a Excerpt Longer Than 300 Characters - Pseudo Random Data Pool");
 
   // Scenario 20 - Settings - Set General Language With Huge Value - Pseudo Random Data Pool
   await settingsEditGeneralLanguageHugeValue(await settingsInput.getHugeLanguageDynamicValue(), "020 - Settings - Set General Language With Huge Value - Pseudo Random Data Pool");
@@ -76,6 +88,12 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 25
   await editPostWithLongTitle(postInput.generatePostAPriori(), postInput.generatePostWithLongTitleAPriori(),"025 Edit Post With a Title Longer Than 255 Characters -A-priori Data Pool");
 
+  // Scenario 26
+  await createPostWithLongExcerpt(postInput.generatePostWithLongExcerptAPriori(),"026 Create Post With a Excerpt Longer Than 300 Characters - A-priori Data Pool");  
+  
+  // Scenario 27
+  await editPostWithLongExcerpt(postInput.generatePostAPriori(), postInput.generatePostWithLongExcerptAPriori(), "027 Edit Post With a Excerpt Longer Than 300 Characters - A-priori Data Pool");
+  
   // Scenario 30 - Settings - Set General Language With Huge Value - A-priori Data Pool
   await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguagePrioriValue(), "030 - Settings - Set General Language With Huge Value - A-priori Data Pool");
   
