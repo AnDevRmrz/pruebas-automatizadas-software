@@ -46,7 +46,7 @@ exports.SettingsPage = class SettingsPage {
 
     let saveButton = this.scenario.getPage().locator("div[data-testid='publication-language'] button[class*='bg-green']");
     await saveButton.click();
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 500));
     await this.scenario.screenshot();
   }
 
@@ -192,5 +192,11 @@ exports.SettingsPage = class SettingsPage {
 
     let timezoneData = await this.scenario.getPage().locator("div[data-testid='timezone'] div[class='flex flex-col']").all();
     return await timezoneData[1].innerText();
+  }
+
+  async getToastErrorMessage() {
+
+    let errorMessage = await this.scenario.getPage().locator("div[data-testid='toast-error']");
+    return await errorMessage.innerText();
   }
 };

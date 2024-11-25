@@ -5,7 +5,7 @@ const { CreatePage_ValidData_JSON, CreatePage_InvalidData_JSON, EditPage_ValidDa
 const { CreatePage_ValidData_API, CreatePage_InvalidData_API, EditPage_ValidData_API, EditPage_InvalidData_API, PreviewPage_ValidData_API, FilterDraftPages_ValidData_API, FilterDraftPages_InvalidData_API, DeletePage_ValidData_API, PreviewPage_ButtonValidData_API, PreviewPage_ButtonInvalidData_API} = require("./input_data/page");
 const { clean_pages } = require("./input_data/page");
 const { createTag, editTag, deleteTag, createTagWithMetadata, createTagWithXCardValues } = require("./test_scenarios/tag");
-const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData } = require("./test_scenarios/settings");
+const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData, settingsEditGeneralLanguageHugeValue } = require("./test_scenarios/settings");
 const { createMember, createMemberWithInvalidEmail, createMemberWithEmptyEmail, createMemberWithTooLongNote, createMemberWithTooLongName, editMember, editMemberWithEmptyEmail, editMemberWithInvalidEmail, editMemberWithTooLongNote, editMemberWithTooLongName } = require("./test_scenarios/members");
 const { createPost, editPost, deletePost, createPostWithLongTitle, editPostWithLongTitle } = require("./test_scenarios/post");
 const { postInput } = require("./input_data/post_input_data");
@@ -40,6 +40,9 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 05
   await editPostWithLongTitle(postInput.generatePostRandom(), postInput.generatePostWithLongTitleRandom(),"005 Edit Post With a Title Longer Than 255 Characters - Random Data");
 
+  // Scenario 10 - Settings - Set General Language With Huge Value - Random Data
+  await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguageRandomValue(), "010 - Settings - Set General Language With Huge Value- Random Data");
+  
   // Scenario 11
   await createPost(await postInput.generatePostPseudoRandom(),"011 Create Post - Pseudo Random Data Pool");
 
@@ -55,6 +58,9 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 15
   await editPostWithLongTitle(await postInput.generatePostPseudoRandom(), await postInput.generatePostWithLongTitlePseudoRandom(),"015 Edit Post With a Title Longer Than 255 Characters - Pseudo Random Data Pool");
 
+  // Scenario 20 - Settings - Set General Language With Huge Value - Pseudo Random Data Pool
+  await settingsEditGeneralLanguageHugeValue(await settingsInput.getHugeLanguageDynamicValue(), "020 - Settings - Set General Language With Huge Value - Pseudo Random Data Pool");
+  
   // Scenario 21
   await createPost(postInput.generatePostAPriori(),"021 Create Post - A-priori Data Pool");
 
@@ -70,6 +76,9 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 25
   await editPostWithLongTitle(postInput.generatePostAPriori(), postInput.generatePostWithLongTitleAPriori(),"025 Edit Post With a Title Longer Than 255 Characters -A-priori Data Pool");
 
+  // Scenario 30 - Settings - Set General Language With Huge Value - A-priori Data Pool
+  await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguagePrioriValue(), "030 - Settings - Set General Language With Huge Value - A-priori Data Pool");
+  
   // Scenario 31
   await CreatePage_ValidData_Faker();
 

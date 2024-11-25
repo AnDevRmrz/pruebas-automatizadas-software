@@ -105,6 +105,38 @@ async function settingsEditGeneralLanguage(input, scenarioDesc) {
   return;
 }
 
+async function settingsEditGeneralLanguageHugeValue(input, scenarioDesc) {
+
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 50,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenarioDesc);
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const generalLanguage = input.generalLanguage;
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const settingsPage = await dashboard.goToSettings();
+
+  // When
+  await settingsPage.editGeneralLanguage(generalLanguage);
+
+  // Then
+  const getErrorMessage = await settingsPage.getToastErrorMessage()
+  expect(getErrorMessage === "Value in [settings.value] exceeds maximum length of 65535 characters. settings.value").toBeTruthy();
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
 async function settingsEditMetaData(input, scenarioDesc) {
 
   const browser = await playwright["chromium"].launch({
@@ -214,5 +246,6 @@ module.exports = {
   settingsEditGeneralLanguage,
   settingsEditMetaData,
   settingsEditXCardData,
-  settingsEditFacebookData
+  settingsEditFacebookData,
+  settingsEditGeneralLanguageHugeValue
 };
