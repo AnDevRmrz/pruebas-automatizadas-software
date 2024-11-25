@@ -4,7 +4,7 @@ const { CreatePage_ValidData_Faker, CreatePage_InvalidData_Faker, EditPage_Valid
 const { CreatePage_ValidData_JSON, CreatePage_InvalidData_JSON, EditPage_ValidData_JSON, EditPage_InvalidData_JSON, PreviewPage_ValidData_JSON, FilterDraftPages_ValidData_JSON, FilterDraftPages_InvalidData_JSON, DeletePage_ValidData_JSON, PreviewPage_ButtonValidData_JSON, PreviewPage_ButtonInvalidData_JSON} = require("./input_data/page_input_data");
 const { CreatePage_ValidData_API, CreatePage_InvalidData_API, EditPage_ValidData_API, EditPage_InvalidData_API, PreviewPage_ValidData_API, FilterDraftPages_ValidData_API, FilterDraftPages_InvalidData_API, DeletePage_ValidData_API, PreviewPage_ButtonValidData_API, PreviewPage_ButtonInvalidData_API} = require("./input_data/page_input_data");
 const { clean_pages } = require("./input_data/page_input_data");
-const { createTag, editTag, deleteTag, createTagWithMetadata, createTagWithXCardValues } = require("./test_scenarios/tag");
+const { createTag, editTag, deleteTag, createTagWithMetadata, createTagWithXCardValues, createTagWithHugeTitle, createTagWithHugeDescription } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData, settingsEditGeneralLanguageHugeValue } = require("./test_scenarios/settings");
 const { createMember, createMemberWithInvalidEmail, createMemberWithEmptyEmail, createMemberWithTooLongNote, createMemberWithTooLongName, editMember, editMemberWithEmptyEmail, editMemberWithInvalidEmail, editMemberWithTooLongNote, editMemberWithTooLongName } = require("./test_scenarios/members");
 const { createPost, editPost, deletePost, createPostWithLongTitle, editPostWithLongTitle, createPostWithLongExcerpt, editPostWithLongExcerpt } = require("./test_scenarios/post");
@@ -23,7 +23,6 @@ const { membersInput } = require("./input_data/member_input_data");
   await signUpPage.goto();
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
-
 
   // Scenario 01
   await createPost(postInput.generatePostRandom(),"001 Create Post - Random Data");
@@ -45,6 +44,12 @@ const { membersInput } = require("./input_data/member_input_data");
 
   // Scenario 07
   await editPostWithLongExcerpt(postInput.generatePostRandom(), postInput.generatePostWithLongExcerptRandom(), "007 Edit Post With a Excerpt Longer Than 300 Characters - Random Data");
+
+  // Scenario 08 - Create Tag With Huge Title - Random Data
+  await createTagWithHugeTitle(tagInput.createTagHugeRandomValues(), "008 - Create Tag With Huge Title - Random Data");
+
+  // Scenario 09 - Create Tag With Huge Description - Random Data
+  await createTagWithHugeDescription(tagInput.createTagHugeRandomValues(), "009 - Create Tag With Huge Description - Random Data");
   
   // Scenario 10 - Settings - Set General Language With Huge Value - Random Data
   await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguageRandomValue(), "010 - Settings - Set General Language With Huge Value- Random Data");
@@ -70,6 +75,12 @@ const { membersInput } = require("./input_data/member_input_data");
   // Scenario 17
   await editPostWithLongExcerpt(await postInput.generatePostPseudoRandom(), await postInput.generatePostWithLongExcerptPseudoRandom(), "017 Edit Post With a Excerpt Longer Than 300 Characters - Pseudo Random Data Pool");
 
+  // Scenario 18 - Create Tag With Huge Title - Pseudo Random Data Pool
+  await createTagWithHugeTitle(await tagInput.createTagHugeDynamicValues(), "018 - Create Tag With Huge Title - Pseudo Random Data Pool");
+
+  // Scenario 19 - Create Tag With Huge Description - Pseudo Random Data Pool
+  await createTagWithHugeDescription(await tagInput.createTagHugeDynamicValues(), "018 - Create Tag With Huge Description - Pseudo Random Data Pool");
+
   // Scenario 20 - Settings - Set General Language With Huge Value - Pseudo Random Data Pool
   await settingsEditGeneralLanguageHugeValue(await settingsInput.getHugeLanguageDynamicValue(), "020 - Settings - Set General Language With Huge Value - Pseudo Random Data Pool");
   
@@ -93,6 +104,12 @@ const { membersInput } = require("./input_data/member_input_data");
   
   // Scenario 27
   await editPostWithLongExcerpt(postInput.generatePostAPriori(), postInput.generatePostWithLongExcerptAPriori(), "027 Edit Post With a Excerpt Longer Than 300 Characters - A-priori Data Pool");
+
+  // Scenario 28 - Create Tag With Huge Title - A-priori Data Pool
+  await createTagWithHugeTitle(tagInput.createTagHugePrioriValues(), "028 - Create Tag With Huge Title - A-priori Data Pool");
+
+  // Scenario 29 - Create Tag With Huge Description - A-priori Data Pool
+  await createTagWithHugeDescription(tagInput.createTagHugePrioriValues(), "029 - Create Tag With Huge Description - A-priori Data Pool");
   
   // Scenario 30 - Settings - Set General Language With Huge Value - A-priori Data Pool
   await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguagePrioriValue(), "030 - Settings - Set General Language With Huge Value - A-priori Data Pool");
