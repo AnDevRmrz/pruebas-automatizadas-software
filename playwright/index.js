@@ -7,7 +7,8 @@ const { clean_pages } = require("./input_data/page");
 const { createTag, editTag, deleteTag, createTagWithMetadata, createTagWithXCardValues } = require("./test_scenarios/tag");
 const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData } = require("./test_scenarios/settings");
 const { createMember, createMemberWithInvalidEmail, createMemberWithEmptyEmail, createMemberWithTooLongNote, createMemberWithTooLongName, editMember, editMemberWithEmptyEmail, editMemberWithInvalidEmail, editMemberWithTooLongNote, editMemberWithTooLongName } = require("./test_scenarios/members");
-const { listPosts, createPost, analyticPost, editPost, deletePost } = require("./test_scenarios/post");
+const { createPost, editPost, deletePost, createPostWithLongTitle, editPostWithLongTitle } = require("./test_scenarios/post");
+const { postInput } = require("./input_data/post_input_data");
 const { tagInput } = require("./input_data/tag_input_data");
 const { settingsInput } = require("./input_data/settings_input_data");
 const { membersInput } = require("./input_data/member_input_data");
@@ -22,6 +23,52 @@ const { membersInput } = require("./input_data/member_input_data");
   await signUpPage.goto();
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
+
+
+  // Scenario 01
+  await createPost(postInput.generatePostRandom(),"001 Create Post - Random Data");
+
+  // Scenario 02
+  await editPost(postInput.generatePostRandom(), postInput.generatePostRandom(),"002 Edit Post - Random Data");
+
+  // Scenario 03
+  await deletePost(postInput.generatePostRandom(),"003 Delete Post - Random Data");
+
+  // Scenario 04
+  await createPostWithLongTitle(postInput.generatePostWithLongTitleRandom(),"004 Create Post With a Title Longer Than 255 Characters - Random Data");
+
+  // Scenario 05
+  await editPostWithLongTitle(postInput.generatePostRandom(), postInput.generatePostWithLongTitleRandom(),"005 Edit Post With a Title Longer Than 255 Characters - Random Data");
+
+  // Scenario 11
+  await createPost(await postInput.generatePostPseudoRandom(),"011 Create Post - Pseudo Random Data Pool");
+
+  // Scenario 12
+  await editPost(await postInput.generatePostPseudoRandom(), await postInput.generatePostPseudoRandom(),"012 Edit Post - Pseudo Random Data Pool");
+  
+  // Scenario 13
+  await deletePost(await postInput.generatePostPseudoRandom(),"013 Delete Post - Pseudo Random Data Pool");
+
+  // Scenario 14
+  await createPostWithLongTitle(await postInput.generatePostWithLongTitlePseudoRandom(),"014 Create Post With a Title Longer Than 255 Characters - Pseudo Random Data Pool");
+
+  // Scenario 15
+  await editPostWithLongTitle(await postInput.generatePostPseudoRandom(), await postInput.generatePostWithLongTitlePseudoRandom(),"015 Edit Post With a Title Longer Than 255 Characters - Pseudo Random Data Pool");
+
+  // Scenario 21
+  await createPost(postInput.generatePostAPriori(),"021 Create Post - A-priori Data Pool");
+
+  // Scenario 22
+  await editPost(postInput.generatePostAPriori(), postInput.generatePostAPriori(),"022 Edit Post - A-priori Data Pool");
+    
+  // Scenario 23
+  await deletePost(postInput.generatePostAPriori(),"023 Delete Post - A-priori Data Pool");
+
+  // Scenario 24
+  await createPostWithLongTitle(postInput.generatePostWithLongTitleAPriori(),"024 Create Post With a Title Longer Than 255 Characters - A-priori Data Pool");
+
+  // Scenario 25
+  await editPostWithLongTitle(postInput.generatePostAPriori(), postInput.generatePostWithLongTitleAPriori(),"025 Edit Post With a Title Longer Than 255 Characters -A-priori Data Pool");
 
   // Scenario 31
   await CreatePage_ValidData_Faker();
