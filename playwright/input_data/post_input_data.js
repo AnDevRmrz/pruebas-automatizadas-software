@@ -1,6 +1,7 @@
 const { faker } = require("@faker-js/faker");
 const postInputJson = require("../data/post/post_data.json");
 const postLongTitleInputJson = require("../data/post/post_long_title_data.json");
+const postLongExcerptInputJson = require("../data/post/post_long_excerpt.json");
 const API_KEY = "a74153e0";
 
 class PostInput {
@@ -8,12 +9,12 @@ class PostInput {
 
   // Util
 
-  generateRandomLongTitle() {
+  generateRandomLongString(limit) {
     let title = "";
 
     do {
       title += faker.lorem.sentence() + " ";
-    } while (title.length <= 256);
+    } while (title.length <= limit);
 
     return title.trim();
   }
@@ -42,7 +43,7 @@ class PostInput {
   }
 
   async generatePostPseudoRandom() {
-    return await this.getValueFromAPI("https://my.api.mockaroo.com/post.json");
+    return await this.getValueFromAPI("https://my.api.mockaroo.com/Post.json");
   }
 
   generatePostAPriori() {
@@ -52,20 +53,45 @@ class PostInput {
   // Post with Long Title
   generatePostWithLongTitleRandom() {
     const post = {
-      title: this.generateRandomLongTitle(),
+      title: this.generateRandomLongString(256),
       content: faker.lorem.sentences(),
     };
     return post;
   }
 
   async generatePostWithLongTitlePseudoRandom() {
-    return await this.getValueFromAPI("https://my.api.mockaroo.com/postlongtitle.json");
+    return await this.getValueFromAPI(
+      "https://my.api.mockaroo.com/PostLongTitle.json"
+    );
   }
 
   generatePostWithLongTitleAPriori() {
-    return postLongTitleInputJson[Math.floor(Math.random() * postLongTitleInputJson.length)];
+    return postLongTitleInputJson[
+      Math.floor(Math.random() * postLongTitleInputJson.length)
+    ];
   }
 
+  // Post with Long Excerpt
+  generatePostWithLongExcerptRandom() {
+    const post = {
+      title: faker.lorem.sentence(),
+      content: faker.lorem.sentences(),
+      excerpt: this.generateRandomLongString(301),
+    };
+    return post;
+  }
+
+  async generatePostWithLongExcerptPseudoRandom() {
+    return await this.getValueFromAPI(
+      "https://my.api.mockaroo.com/PostLongExcerpt.json"
+    );
+  }
+
+  generatePostWithLongExcerptAPriori() {
+    return postLongExcerptInputJson[
+      Math.floor(Math.random() * postLongExcerptInputJson.length)
+    ];
+  }
 }
 
 module.exports = {

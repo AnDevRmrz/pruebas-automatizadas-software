@@ -9,6 +9,7 @@ exports.CreateEditPostPage = class CreateEditPostPage {
         "div[class='gh-editor-title-container'] textarea[class='gh-editor-title  ember-text-area gh-input ember-view']"
       );
     this.postContentInput = scenario.getPage().locator(".kg-prose").first();
+    this.excerptInput = scenario.getPage().locator("#custom-excerpt").first();
     this.publishButton = scenario
       .getPage()
       .locator('[data-test-button="publish-flow"]')
@@ -34,11 +35,17 @@ exports.CreateEditPostPage = class CreateEditPostPage {
     await this.scenario.screenshot();
   }
 
-  async savePost(title, content, expectedError = false) {
+  async savePost(post, expectedError = false) {
     await this.postTitleInput.fill(" ");
     await this.postContentInput.fill(" ");
-    await this.postTitleInput.fill(title);
-    await this.postContentInput.fill(content);
+    await this.postTitleInput.fill(post.title);
+    await this.postContentInput.fill(post.content);
+
+    if (post.excerpt) {
+      this.settingsButton.click();
+      await this.excerptInput.fill(post.excerpt);
+    }
+
     await this.publishButton.click();
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
@@ -60,11 +67,17 @@ exports.CreateEditPostPage = class CreateEditPostPage {
     }
   }
 
-  async updatePost(title, content) {
+  async updatePost(post) {
     await this.postTitleInput.fill(" ");
     await this.postContentInput.fill(" ");
-    await this.postTitleInput.fill(title);
-    await this.postContentInput.fill(content);
+    await this.postTitleInput.fill(post.title);
+    await this.postContentInput.fill(post.content);
+
+    if (post.excerpt) {
+      this.settingsButton.click();
+      await this.excerptInput.fill(post.excerpt);
+    }
+
     let updateButton = this.scenario
       .getPage()
       .locator("button[data-test-button='publish-save']")
@@ -72,24 +85,6 @@ exports.CreateEditPostPage = class CreateEditPostPage {
     await updateButton.click();
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
-  }
-
-  async deletePost() {
-    await this.settingsButton.click();
-    await new Promise((r) => setTimeout(r, 1000));
-    await this.scenario.screenshot();
-
-    let deleteButton = this.scenario
-      .getPage()
-      .locator("button[data-test-button=delete-post]");
-    await deleteButton.click();
-    await new Promise((r) => setTimeout(r, 1000));
-    await this.scenario.screenshot();
-
-    let confirmButton = await this.scenario
-      .getPage()
-      .locator("button[data-test-button=delete-post-confirm]");
-    await confirmButton.click();
   }
 
   async checkErrorAlert(errorText) {
@@ -102,5 +97,7 @@ exports.CreateEditPostPage = class CreateEditPostPage {
   async confirmLeave() {
     await this.leaveButton.waitFor({ timeout: 500 });
     await this.leaveButton.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
   }
 };

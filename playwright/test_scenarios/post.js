@@ -25,7 +25,7 @@ async function createPost(post, scenarioDescription) {
   const createPostPage = await listPostsPage.goToNewPost();
 
   // When
-  await createPostPage.savePost(post.title, post.content);
+  await createPostPage.savePost(post);
 
   // Then
   expect(
@@ -66,10 +66,51 @@ async function createPostWithLongTitle(post, scenarioDescription) {
   const createPostPage = await listPostsPage.goToNewPost();
 
   // When
-  await createPostPage.savePost(post.title, post.content, true);
+  await createPostPage.savePost(post, true);
 
   // Then
   await createPostPage.checkErrorAlert('Validation failed: Title cannot be longer than 255 characters.');
+  await listPostsPage.goto();
+  await createPostPage.confirmLeave();
+  const currentPosts = await listPostsPage.getListOfPosts();
+  expect(
+    currentPosts.some(
+      (p) => p.title === post.title && p.status === expectedPostStatus
+    )
+  ).toBeFalsy();
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+async function createPostWithLongExcerpt(post, scenarioDescription) {
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 50,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenarioDescription);
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const expectedPostStatus = "Published";
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listPostsPage = await dashboard.goToPosts();
+  const createPostPage = await listPostsPage.goToNewPost();
+
+  // When
+  await createPostPage.savePost(post, true);
+
+  // Then
+  await createPostPage.checkErrorAlert('Validation failed: Excerpt cannot be longer than 300 characters.');
+  await listPostsPage.goto();
+  await createPostPage.confirmLeave();
   const currentPosts = await listPostsPage.getListOfPosts();
   expect(
     currentPosts.some(
@@ -101,14 +142,14 @@ async function editPost(postToCreate, postToEdit, scenarioDescription) {
   const dashboard = await signInPage.signIn(email, password);
   const listPostsPage = await dashboard.goToPosts();
   const createPostPage = await listPostsPage.goToNewPost();
-  await createPostPage.savePost(postToCreate.title, postToCreate.content);
+  await createPostPage.savePost(postToCreate);
   await listPostsPage.closeSuccessfulModal();
 
   // When
   const createEditPostPage = await listPostsPage.goToEditPost(
     postToCreate.title
   );
-  await createEditPostPage.updatePost(postToEdit.title, postToEdit.content);
+  await createEditPostPage.updatePost(postToEdit);
 
   // Then
   await listPostsPage.goto();
@@ -143,17 +184,61 @@ async function editPostWithLongTitle(postToCreate, postToEdit, scenarioDescripti
   const dashboard = await signInPage.signIn(email, password);
   const listPostsPage = await dashboard.goToPosts();
   const createPostPage = await listPostsPage.goToNewPost();
-  await createPostPage.savePost(postToCreate.title, postToCreate.content);
+  await createPostPage.savePost(postToCreate);
   await listPostsPage.closeSuccessfulModal();
 
   // When
   const createEditPostPage = await listPostsPage.goToEditPost(
     postToCreate.title
   );
-  await createEditPostPage.updatePost(postToEdit.title, postToEdit.content);
+  await createEditPostPage.updatePost(postToEdit);
 
   // Then
   await createPostPage.checkErrorAlert('Update failed: Title cannot be longer than 255 characters.');
+  await listPostsPage.goto();
+  await createEditPostPage.confirmLeave();
+  const currentPosts = await listPostsPage.getListOfPosts();
+  expect(
+    currentPosts.some(
+      (p) => p.title === postToEdit.title && p.status === expectedPostStatus
+    )
+  ).toBeFalsy();
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+async function editPostWithLongExcerpt(postToCreate, postToEdit, scenarioDescription) {
+  const browser = await playwright["chromium"].launch({
+    headless: false,
+    slowMo: 50,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenarioDescription);
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const expectedPostStatus = "Published";
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listPostsPage = await dashboard.goToPosts();
+  const createPostPage = await listPostsPage.goToNewPost();
+  await createPostPage.savePost(postToCreate);
+  await listPostsPage.closeSuccessfulModal();
+
+  // When
+  const createEditPostPage = await listPostsPage.goToEditPost(
+    postToCreate.title
+  );
+  await createEditPostPage.updatePost(postToEdit);
+
+  // Then
+  await createPostPage.checkErrorAlert('Update failed: Excerpt cannot be longer than 300 characters.');
   await listPostsPage.goto();
   await createEditPostPage.confirmLeave();
   const currentPosts = await listPostsPage.getListOfPosts();
@@ -187,7 +272,7 @@ async function deletePost(post, scenarioDescription) {
   const listPostsPage = await dashboard.goToPosts();
 
   const createPostPage = await listPostsPage.goToNewPost();
-  await createPostPage.savePost(post.title, post.content);
+  await createPostPage.savePost(post);
   await listPostsPage.closeSuccessfulModal();
   const createEditPostPage = await listPostsPage.goToEditPost(post.title);
 
@@ -206,7 +291,9 @@ async function deletePost(post, scenarioDescription) {
 module.exports = {
   createPost,
   createPostWithLongTitle,
+  createPostWithLongExcerpt,
   editPost,
   editPostWithLongTitle,
+  editPostWithLongExcerpt,
   deletePost,
 };
