@@ -12,7 +12,7 @@ async function createPage_ValidData(pageTitle,pageDescription,scenario_name) {
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -56,7 +56,7 @@ async function createPage_InvalidData(pageTitle,pageDescription,scenario_name) {
   
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -88,7 +88,7 @@ async function editPage_validData(previousPageTitle,previousPageDescription,newT
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -133,7 +133,7 @@ async function editPage_InvalidData(previousPageTitle, previousPageDescription, 
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -173,7 +173,7 @@ async function previewPage_ValidData(pageTitle, pageDescription, scenario_name) 
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -217,7 +217,7 @@ async function previewPage_ButtonValidData(pageTitle, pageDescription, buttonNam
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
 
   const context = await browser.newContext();
@@ -264,7 +264,7 @@ async function previewPage_ButtonInvalidData(pageTitle,pageDescription,buttonNam
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
 
   const context = await browser.newContext();
@@ -310,7 +310,7 @@ async function filterDraftPages_ValidData(draftPageTitle,pageDescription,scenari
   const expectedAttribute = "Draft";
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -346,7 +346,7 @@ async function filterDraftPages_InvalidData(draftPageTitle,pageDescription,scena
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -381,7 +381,7 @@ async function deletePage_ValidData(pageToDelete,pageDescription,scenario_name) 
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -422,7 +422,7 @@ async function deleteAllPages_testing_purpose(){
 
   const browser = await playwright["chromium"].launch({
     headless: false,
-    slowMo: 500,
+    slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();

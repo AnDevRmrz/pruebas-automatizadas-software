@@ -1,7 +1,7 @@
 const { faker } = require("@faker-js/faker");
 const postInputJson = require("../data/post/post_data.json");
 const postLongTitleInputJson = require("../data/post/post_long_title_data.json");
-const postLongExcerptInputJson = require("../data/post/post_long_excerpt.json");
+const postLongExcerptInputJson = require("../data/post/post_long_excerpt_data.json");
 const API_KEY = "a74153e0";
 
 class PostInput {
