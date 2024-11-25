@@ -43,6 +43,27 @@ class TagInput {
     };
   }
 
+  createTagHugeRandomValues() {
+
+    let tagName = faker.lorem.sentence();
+    tagName = tagName.repeat(50);
+
+    let tagDescription = faker.lorem.paragraph();
+    tagDescription = tagDescription.repeat(50);
+
+    return {
+      tagName: tagName,
+      tagSlug: faker.lorem.word().toLowerCase(),
+      tagDescription: tagDescription,
+      tagHexColor: faker.color.rgb({prefix: ""}),
+      metaTitle: faker.lorem.sentence(),
+      metaDescription: faker.lorem.paragraph(),
+      metaUrl: faker.internet.url(),
+      xCardTitle: faker.lorem.sentence(),
+      xCardDescription: faker.lorem.paragraph()
+    };
+  }
+
   createTagPrioriValues() {
   
     let value = this.getRandomInput(this.tagInputJson);
@@ -51,6 +72,29 @@ class TagInput {
       tagName: value.tagName,
       tagSlug: value.tagSlug.toLowerCase().trim(),
       tagDescription: value.tagDescription,
+      tagHexColor: value.tagHexColor,
+      metaTitle: value.metaTitle,
+      metaDescription: value.metaDescription,
+      metaUrl: value.metaUrl,
+      xCardTitle: value.xCardTitle,
+      xCardDescription: value.xCardDescription,
+    };
+  }
+
+  createTagHugePrioriValues() {
+  
+    let value = this.getRandomInput(this.tagInputJson);
+
+    let tagName = value.tagName;
+    tagName = tagName.repeat(50);
+
+    let tagDescription = value.tagDescription;
+    tagDescription = tagDescription.repeat(50);
+  
+    return {
+      tagName: tagName,
+      tagSlug: value.tagSlug.toLowerCase().trim(),
+      tagDescription: tagDescription,
       tagHexColor: value.tagHexColor,
       metaTitle: value.metaTitle,
       metaDescription: value.metaDescription,
@@ -68,6 +112,29 @@ class TagInput {
       tagName: value.tagName,
       tagSlug: value.tagSlug.toLowerCase().trim(),
       tagDescription: value.tagDescription,
+      tagHexColor: value.tagHexColor,
+      metaTitle: value.metaTitle,
+      metaDescription: value.metaDescription,
+      metaUrl: value.metaUrl,
+      xCardTitle: value.xCardTitle,
+      xCardDescription: value.xCardDescription,
+    };
+  }
+
+  async createTagHugeDynamicValues() {
+
+    let value = await this.getValueFromAPI();
+
+    let tagName = value.tagName;
+    tagName = tagName.repeat(50);
+
+    let tagDescription = value.tagDescription;
+    tagDescription = tagDescription.repeat(50);
+  
+    return {
+      tagName: tagName,
+      tagSlug: value.tagSlug.toLowerCase().trim(),
+      tagDescription: tagDescription,
       tagHexColor: value.tagHexColor,
       metaTitle: value.metaTitle,
       metaDescription: value.metaDescription,

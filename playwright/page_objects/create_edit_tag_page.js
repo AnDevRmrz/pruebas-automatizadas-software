@@ -96,5 +96,17 @@ exports.CreateEditTag = class CreateEditTag {
     let confirmButton = await this.scenario.getPage().locator("button[data-test-button=confirm]");
     await confirmButton.click();    
   }
+
+  async getTagTitleErrorMessage() {
+
+    let errorMessage = await this.scenario.getPage().locator("span.error");
+    return await errorMessage.innerText();
+  }
+  
+  async getTagDescriptionErrorMessage() {
+
+    let errorMessage = await this.scenario.getPage().locator("#tag-description + p");
+    return await errorMessage.innerText();
+  }
   
 };

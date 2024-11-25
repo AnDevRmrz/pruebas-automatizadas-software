@@ -192,11 +192,79 @@ async function createTagWithXCardValues(input, scenarioDesc) {
   return ;
 }
 
+async function createTagWithHugeTitle(input, scenarioDesc) {
+  
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const context = await browser.newContext();
+  const page = await context.newPage();  
+  const scenario = new Scenario(page, scenarioDesc);
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf"
+  const tagName = input.tagName;
+  const tagSlug = input.tagSlug;
+  const tagDescription = input.tagDescription;
+  const tagHexColor = input.tagHexColor;
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listTagsPage = await dashboard.goToTags();
+  const createEditTagPage = await listTagsPage.goToNewTag();
+
+  // When
+  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription, tagHexColor);
+  
+  // Then
+  const errorMessage = await createEditTagPage.getTagTitleErrorMessage();  
+  expect(errorMessage === "Tag names cannot be longer than 191 characters.").toBeTruthy();  
+  await browser.close();
+  scenario.successful();
+  return ;
+}
+
+async function createTagWithHugeDescription(input, scenarioDesc) {
+  
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const context = await browser.newContext();
+  const page = await context.newPage();  
+  const scenario = new Scenario(page, scenarioDesc);
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf"
+  const tagName = input.tagName;
+  const tagSlug = input.tagSlug;
+  const tagDescription = input.tagDescription;
+  const tagHexColor = input.tagHexColor;
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listTagsPage = await dashboard.goToTags();
+  const createEditTagPage = await listTagsPage.goToNewTag();
+
+  // When
+  await createEditTagPage.saveTag(tagName, tagSlug, tagDescription, tagHexColor);
+  
+  // Then
+  const errorMessage = await createEditTagPage.getTagDescriptionErrorMessage();  
+  expect(errorMessage === "Description cannot be longer than 500 characters.").toBeTruthy();  
+  await browser.close();
+  scenario.successful();
+  return ;
+}
+
 module.exports = {
 
   createTag,
   editTag,
   deleteTag,
   createTagWithMetadata,
-  createTagWithXCardValues
+  createTagWithXCardValues,
+  createTagWithHugeTitle,
+  createTagWithHugeDescription
 }
