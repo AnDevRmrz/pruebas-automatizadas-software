@@ -1,3 +1,4 @@
+const fs = require('fs');
 const playwright = require("playwright");
 const { SignUpPage } = require("./playwright/page_objects/sign_up_page");
 const { CreatePage_ValidData_JSON, CreatePage_InvalidData_JSON, EditPage_ValidData_JSON, EditPage_InvalidData_JSON, PreviewPage_ValidData_JSON, FilterDraftPages_ValidData_JSON, FilterDraftPages_InvalidData_JSON, DeletePage_ValidData_JSON, PreviewPage_ButtonValidData_JSON, PreviewPage_ButtonInvalidData_JSON} = require("./playwright/input_data/page_input_data");
@@ -11,9 +12,23 @@ const { settingsInput } = require("./playwright/input_data/settings_input_data")
 const { membersInput } = require("./playwright/input_data/member_input_data");
 const { createVRTReport } = require('./vrt/report/report_generation');
 
+async function executeScenario(scenarioToExecute, input, scenarioName) {  
+
+  await scenarioToExecute(input, scenarioName, "chromium");
+  await scenarioToExecute(input, scenarioName, "firefox");
+  // Aca podemos executar la comparacion de screenshots (regression testing) utilizando el scenarioName para identificar la carpeta
+}
+
+function cleanResults() {
+
+  fs.rmSync("./test-results", { recursive: true, force: true });
+}
+
 (async () => {
 
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50, channel:'chrome'});
+  cleanResults();
+
+  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();
   const signUpPage = new SignUpPage(page);
@@ -21,8 +36,13 @@ const { createVRTReport } = require('./vrt/report/report_generation');
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
 
+  await executeScenario(createTag, tagInput.createTagPrioriValues(), "063_Create_Tag_1");
+
+  await executeScenario(createTag, tagInput.createTagPrioriValues(), "063_Create_Tag_2");
+  
+
   // Scenario 21
-  //await createPost(postInput.generatePostAPriori(),"021 Create Post - A-priori Data Pool");
+  // await createPost(postInput.generatePostAPriori(),"021 Create Post - A-priori Data Pool");
   // // Scenario 22
   // await editPost(postInput.generatePostAPriori(), postInput.generatePostAPriori(),"022 Edit Post - A-priori Data Pool");
   // // Scenario 23
