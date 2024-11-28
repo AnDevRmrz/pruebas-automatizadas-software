@@ -10,6 +10,7 @@ const { postInput } = require("./playwright/input_data/post_input_data");
 const { tagInput } = require("./playwright/input_data/tag_input_data");
 const { settingsInput } = require("./playwright/input_data/settings_input_data");
 const { membersInput } = require("./playwright/input_data/member_input_data");
+const { createVRTReport } = require('./vrt/report/report_generation');
 
 async function executeScenario(scenarioToExecute, input, scenarioName) {  
 
@@ -120,4 +121,6 @@ function cleanResults() {
   // await editMemberWithTooLongNote(membersInput.getMemberAPriori(), membersInput.getMemberTooLongNoteAPriori(), "117 - Edit Member With Note Longer Than 500 Characters - A-priori Data Pool");
   // // Scenario 120 - Edit Member With Name Longer Than 191 Characters - A-priori Data Pool
   // await editMemberWithTooLongName(membersInput.getMemberAPriori(), membersInput.getMemberTooLongNameAPriori(), "120 - Edit Member With Name Longer Than 191 Characters - A-priori Data Pool");
+
+  createVRTReport();
 })();
