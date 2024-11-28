@@ -2,7 +2,6 @@ const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
-const { faker } = require('@faker-js/faker');
 
 async function createPage_ValidData(pageTitle,pageDescription,scenario_name) {
 
