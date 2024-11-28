@@ -3,12 +3,12 @@ const { expect } = require('@playwright/test');
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
 
-async function createTag(input, scenarioDesc) {  
+async function createTag(input, scenarioDesc, browserType) {  
   
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const browser = await playwright[browserType].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";

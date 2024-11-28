@@ -5,6 +5,11 @@ class TagInput {
     this.tagInputJson = tagInputJson;
   }
 
+  getRandomInput(input) {
+    let randomIndex = Math.floor(Math.random() * input.length);
+    return input[randomIndex];
+  }
+
   createTagPrioriValues() {
     let value = this.getRandomInput(this.tagInputJson);
 
