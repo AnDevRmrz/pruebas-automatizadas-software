@@ -11,9 +11,10 @@ class Scenario {
   }
 
   async screenshot() {
-
+    
     this.counter = this.counter + 1;
-    let imageName = `screenshot_${this.counter}.png`;
+    let counterValue = this.counter.toString().padStart(3, "0");
+    let imageName = `screenshot_${counterValue}.png`;
     await this.page.screenshot({path: `test-results/${this.resultsFolder}/${this.browser}/${imageName}`});
   }
 

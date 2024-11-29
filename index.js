@@ -16,8 +16,7 @@ const { createVRTReport } = require('./vrt/report/report_generation');
 
   const part = process.argv[2];
 
-  if (part == 1 || part == 2)
-  {
+  if (part == 1 || part == 2) {
     let browserName = part == 1 ? 'chromium' : 'firefox';
 
     const browser = await playwright[browserName].launch({ headless: false, slowMo: 50});
@@ -111,8 +110,7 @@ const { createVRTReport } = require('./vrt/report/report_generation');
     // Scenario 41 - Settings - Set Site Timezone
     await settingsEditTimezone(null, "041 - Settings - Set Site Timezone", browserName);
   }
-  else if (part == 3)
-  {
+  else if (part == 3) {
     createVRTReport();
   }
 })();
