@@ -24,12 +24,12 @@ class Scenario {
 
   begin() {
 
-    console.log(chalk.blue(`Scenario: ${this.name}, Browser: ${this.browser}, Status: RUNNING.`));
+    console.log(chalk.blue(`Scenario: ${this.name}, Browser: ${this.browser.toUpperCase()}, Status: RUNNING.`));
   }
 
   successful() {
 
-    console.log(chalk.green(`Scenario: ${this.name}, Browser: ${this.browser}, Status: SUCCESSFUL.`));
+    console.log(chalk.green(`Scenario: ${this.name}, Browser: ${this.browser.toUpperCase()}, Status: SUCCESSFUL.`));
   }
 }
 

@@ -3,15 +3,15 @@ const { expect } = require("@playwright/test");
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
 
-async function settingsEditTitleAndDescription(input, scenarioDesc) {
+async function settingsEditTitleAndDescription(input, scenarioDesc, browserType) {
 
-  const browser = await playwright["chromium"].launch({
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -40,14 +40,14 @@ async function settingsEditTitleAndDescription(input, scenarioDesc) {
   return;
 }
 
-async function settingsEditTimezone() {
-  const browser = await playwright["chromium"].launch({
+async function settingsEditTimezone(input, scenarioDesc, browserType) {
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, "020 - Settings - Set Site Timezone");
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -72,15 +72,15 @@ async function settingsEditTimezone() {
   return;
 }
 
-async function settingsEditGeneralLanguage(input, scenarioDesc) {
+async function settingsEditGeneralLanguage(input, scenarioDesc, browserType) {
 
-  const browser = await playwright["chromium"].launch({
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -105,15 +105,15 @@ async function settingsEditGeneralLanguage(input, scenarioDesc) {
   return;
 }
 
-async function settingsEditGeneralLanguageHugeValue(input, scenarioDesc) {
+async function settingsEditGeneralLanguageHugeValue(input, scenarioDesc, browserType) {
 
-  const browser = await playwright["chromium"].launch({
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -137,15 +137,15 @@ async function settingsEditGeneralLanguageHugeValue(input, scenarioDesc) {
   return;
 }
 
-async function settingsEditMetaData(input, scenarioDesc) {
+async function settingsEditMetaData(input, scenarioDesc, browserType) {
 
-  const browser = await playwright["chromium"].launch({
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -171,15 +171,15 @@ async function settingsEditMetaData(input, scenarioDesc) {
   return;
 }
 
-async function settingsEditXCardData(input, scenarioDesc) {
+async function settingsEditXCardData(input, scenarioDesc, browserType) {
 
-  const browser = await playwright["chromium"].launch({
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -205,15 +205,15 @@ async function settingsEditXCardData(input, scenarioDesc) {
   return;
 }
 
-async function settingsEditFacebookData(input, scenarioDesc) {
+async function settingsEditFacebookData(input, scenarioDesc, browserType) {
 
-  const browser = await playwright["chromium"].launch({
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
