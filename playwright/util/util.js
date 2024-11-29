@@ -11,7 +11,7 @@ class Scenario {
   }
 
   async screenshot() {
-
+    
     this.counter = this.counter + 1;
     let counterValue = this.counter.toString().padStart(3, "0");
     let imageName = `screenshot_${counterValue}.png`;
@@ -25,12 +25,12 @@ class Scenario {
 
   begin() {
 
-    console.log(chalk.blue(`Scenario: ${this.name}, Browser: ${this.browser}, Status: RUNNING.`));
+    console.log(chalk.blue(`Scenario: ${this.name}, Browser: ${this.browser.toUpperCase()}, Status: RUNNING.`));
   }
 
   successful() {
 
-    console.log(chalk.green(`Scenario: ${this.name}, Browser: ${this.browser}, Status: SUCCESSFUL.`));
+    console.log(chalk.green(`Scenario: ${this.name}, Browser: ${this.browser.toUpperCase()}, Status: SUCCESSFUL.`));
   }
 }
 

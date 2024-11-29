@@ -1,130 +1,116 @@
-const fs = require('fs');
 const playwright = require("playwright");
 const { SignUpPage } = require("./playwright/page_objects/sign_up_page");
-const { CreatePage_ValidData_JSON, CreatePage_InvalidData_JSON, EditPage_ValidData_JSON, EditPage_InvalidData_JSON, PreviewPage_ValidData_JSON, FilterDraftPages_ValidData_JSON, FilterDraftPages_InvalidData_JSON, DeletePage_ValidData_JSON, PreviewPage_ButtonValidData_JSON, PreviewPage_ButtonInvalidData_JSON} = require("./playwright/input_data/page_input_data");
 const { createTag, editTag, deleteTag, createTagWithMetadata, createTagWithXCardValues, createTagWithHugeTitle, createTagWithHugeDescription } = require("./playwright/test_scenarios/tag");
-const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData, settingsEditGeneralLanguageHugeValue } = require("./playwright/test_scenarios/settings");
+const { settingsEditTitleAndDescription, settingsEditGeneralLanguage, settingsEditMetaData, settingsEditXCardData, settingsEditFacebookData, settingsEditGeneralLanguageHugeValue, settingsEditTimezone } = require("./playwright/test_scenarios/settings");
 const { createMember, createMemberWithInvalidEmail, createMemberWithEmptyEmail, createMemberWithTooLongNote, createMemberWithTooLongName, editMember, editMemberWithEmptyEmail, editMemberWithInvalidEmail, editMemberWithTooLongNote, editMemberWithTooLongName } = require("./playwright/test_scenarios/members");
 const { createPost, editPost, deletePost, createPostWithLongTitle, editPostWithLongTitle, createPostWithLongExcerpt, editPostWithLongExcerpt } = require("./playwright/test_scenarios/post");
+const { createPage_ValidData, createPage_InvalidData, editPage_validData, editPage_InvalidData, previewPage_ValidData, filterDraftPages_ValidData, filterDraftPages_InvalidData, deletePage_ValidData, previewPage_ButtonValidData, previewPage_ButtonInvalidData } = require("./playwright/test_scenarios/page");
+const { pageInput } = require("./playwright/input_data/page_input_data");
 const { postInput } = require("./playwright/input_data/post_input_data");
 const { tagInput } = require("./playwright/input_data/tag_input_data");
 const { settingsInput } = require("./playwright/input_data/settings_input_data");
 const { membersInput } = require("./playwright/input_data/member_input_data");
 const { createVRTReport } = require('./vrt/report/report_generation');
-const { multiFeatureInput } = require("./playwright/input_data/multi_feature_data");
-const { multiFeatureTest1, multiFeatureTest3 } = require("./playwright/test_scenarios/multi_features");
-
-async function executeScenario(scenarioToExecute, input, scenarioName) {  
-
-  await scenarioToExecute(input, scenarioName, "chromium");
-  await scenarioToExecute(input, scenarioName, "firefox");
-  // Aca podemos executar la comparacion de screenshots (regression testing) utilizando el scenarioName para identificar la carpeta
-}
-
-function cleanResults() {
-
-  fs.rmSync("./test-results", { recursive: true, force: true });
-}
 
 (async () => {
 
-  cleanResults();
+  const part = process.argv[2];
 
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  const signUpPage = new SignUpPage(page);
-  await signUpPage.goto();
-  await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
-  await browser.close();
-  
-  // await multiFeatureTest1(multiFeatureInput.getMultiFeatureInput(), "Multi_Feature_1", "chromium");
-  // await multiFeatureTest1(multiFeatureInput.getMultiFeatureInput(), "Multi_Feature_1", "firefox");
+  if (part == 1 || part == 2) {
+    let browserName = part == 1 ? 'chromium' : 'firefox';
 
-  await multiFeatureTest3(multiFeatureInput.getMultiFeatureInput(), "Multi_Feature_3", "chromium");
-  await multiFeatureTest3(multiFeatureInput.getMultiFeatureInput(), "Multi_Feature_3", "firefox");
-  
+    const browser = await playwright[browserName].launch({ headless: false, slowMo: 50});
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    const signUpPage = new SignUpPage(page);
+    await signUpPage.goto();
+    await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
+    await browser.close();
 
-  // Scenario 21
-  // await createPost(postInput.generatePostAPriori(),"021 Create Post - A-priori Data Pool");
-  // // Scenario 22
-  // await editPost(postInput.generatePostAPriori(), postInput.generatePostAPriori(),"022 Edit Post - A-priori Data Pool");
-  // // Scenario 23
-  // await deletePost(postInput.generatePostAPriori(),"023 Delete Post - A-priori Data Pool");
-  // // Scenario 24
-  // await createPostWithLongTitle(postInput.generatePostWithLongTitleAPriori(),"024 Create Post With a Title Longer Than 255 Characters - A-priori Data Pool");
-  // // Scenario 25
-  // await editPostWithLongTitle(postInput.generatePostAPriori(), postInput.generatePostWithLongTitleAPriori(),"025 Edit Post With a Title Longer Than 255 Characters -A-priori Data Pool");
-  // // Scenario 26
-  // await createPostWithLongExcerpt(postInput.generatePostWithLongExcerptAPriori(),"026 Create Post With a Excerpt Longer Than 300 Characters - A-priori Data Pool");  
-  // // Scenario 27
-  // await editPostWithLongExcerpt(postInput.generatePostAPriori(), postInput.generatePostWithLongExcerptAPriori(), "027 Edit Post With a Excerpt Longer Than 300 Characters - A-priori Data Pool");
-  // // Scenario 28 - Create Tag With Huge Title - A-priori Data Pool
-  // await createTagWithHugeTitle(tagInput.createTagHugePrioriValues(), "028 - Create Tag With Huge Title - A-priori Data Pool");
-  // // Scenario 29 - Create Tag With Huge Description - A-priori Data Pool
-  // await createTagWithHugeDescription(tagInput.createTagHugePrioriValues(), "029 - Create Tag With Huge Description - A-priori Data Pool");
-  // // Scenario 30 - Settings - Set General Language With Huge Value - A-priori Data Pool
-  // await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguagePrioriValue(), "030 - Settings - Set General Language With Huge Value - A-priori Data Pool");
-  // // Scenario 51
-  // await CreatePage_ValidData_JSON();
-  // // Scenario 52
-  // await CreatePage_InvalidData_JSON();
-  // // Scenario 53
-  // await EditPage_ValidData_JSON();
-  // // Scenario 54
-  // await EditPage_InvalidData_JSON();
-  // // Scenario 55
-  // await PreviewPage_ValidData_JSON();
-  // // Scenario 56
-  // await PreviewPage_ButtonValidData_JSON();
-  // // Scenario 57
-  // await PreviewPage_ButtonInvalidData_JSON();
-  // // Scenario 58
-  // await FilterDraftPages_ValidData_JSON();
-  // // Scenario 59
-  // await FilterDraftPages_InvalidData_JSON();
-  // // Scenario 60
-  // await DeletePage_ValidData_JSON();
-  //   // Scenario 63 - Create Tag - A-priori Data Pool
-  // await createTag(tagInput.createTagPrioriValues(), "063 - Create Tag - A-priori Data Pool");
-  // // Scenario 66 - Edit Tag - A-priori Data Pool
-  // await editTag(tagInput.editTagPrioriValues(), "066 - Edit Tag - A-priori Data Pool");
-  // // Scenario 69 - Delete Tag - A-priori Data Pool
-  // await deleteTag(tagInput.createTagPrioriValues(), "069 - Delete Tag - A-priori Data Pool");
-  // // Scenario 72 - Create Tag With Metadata - A-priori Data Pool
-  // await createTagWithMetadata(tagInput.createTagPrioriValues(), "072 - Create Tag With Metadata - A-priori Data Pool");
-  // // Scenario 75 - Create Tag With X Card - A-priori Data Pool
-  // await createTagWithXCardValues(tagInput.createTagPrioriValues(), "075 - Create Tag With X Card - A-priori Data Pool");  
-  // // Scenario 78 - Settings - Set General Title and Description - A-priori Data Pool
-  // await settingsEditTitleAndDescription(settingsInput.getPrioriValues(), "078 - Settings - Set General Title and Description - A-priori Data Pool");
-  // // Scenario 81 - Settings - Set General Language - A-priori Data Pool
-  // await settingsEditGeneralLanguage(settingsInput.getPrioriValues(), "081 - Settings - Set General Language - A-priori Data Pool");
-  // // Scenario 84 - Settings - Edit Meta Data - A-priori Data Pool
-  // await settingsEditMetaData(settingsInput.getPrioriValues(), "084 - Settings - Edit Meta Data - A-priori Data Pool");
-  // // Scenario 87 - Settings - Edit X Card Data - A-priori Data Pool
-  // await settingsEditXCardData(settingsInput.getPrioriValues(), "087 - Settings - Edit X Card Data - A-priori Data Pool");
-  // // Scenario 90 - Settings - Edit Facebook Data - A-priori Data Pool
-  // await settingsEditFacebookData(settingsInput.getPrioriValues(), "090 - Settings - Edit Facebook Data - A-priori Data Pool");
-  // // Scenario 93 - Create Member - A-priori Data Pool
-  // await createMember(membersInput.getMemberAPriori(), "093 - Create Member - A-priori Data Pool");
-  // // Scenario 96 - Create Member With Empty Email - A-priori Data Pool
-  // await createMemberWithEmptyEmail(membersInput.getMemberEmptyEmailAPriori(), "096 - Create Member With Empty Email - A-priori Data Pool");
-  // // Scenario 99 - Create Member With Invalid Email - A-priori Data Pool
-  // await createMemberWithInvalidEmail(membersInput.getMemberInvalidEmailAPriori(), "099 - Create Member With Invalid Email - A-priori Data Pool");
-  // // Scenario 102 - Create Member With Note Longer Than 500 Characters - A-priori Data Pool
-  // await createMemberWithTooLongNote(membersInput.getMemberTooLongNoteAPriori(), "102 - Create Member With Note Longer Than 500 Characters - A-priori Data Pool");
-  // // Scenario 105 - Create Member With Name Longer Than 191 Characters - A-priori Data Pool
-  // await createMemberWithTooLongName(membersInput.getMemberTooLongNameAPriori(), "105 - Create Member With Name Longer Than 191 Characters - A-priori Data Pool");
-  // // Scenario 108 - Edit Member - A-priori Data Pool
-  // await editMember(membersInput.getMemberAPriori(), membersInput.getMemberAPriori(), "108 - Edit Member - A-priori Data Pool");
-  // // Scenario 111 - Edit Member With Empty Email - A-priori Data Pool
-  // await editMemberWithEmptyEmail(membersInput.getMemberAPriori(), membersInput.getMemberEmptyEmailAPriori(), "111 - Edit Member With Empty Email - A-priori Data Pool");
-  // // Scenario 114 - Edit Member With Invalid Email - A-priori Data Pool
-  // await editMemberWithInvalidEmail(membersInput.getMemberAPriori(), membersInput.getMemberInvalidEmailAPriori(), "114 - Edit Member With Invalid Email - A-priori Data Pool");
-  // // Scenario 117 - Edit Member With Note Longer Than 500 Characters - A-priori Data Pool
-  // await editMemberWithTooLongNote(membersInput.getMemberAPriori(), membersInput.getMemberTooLongNoteAPriori(), "117 - Edit Member With Note Longer Than 500 Characters - A-priori Data Pool");
-  // // Scenario 120 - Edit Member With Name Longer Than 191 Characters - A-priori Data Pool
-  // await editMemberWithTooLongName(membersInput.getMemberAPriori(), membersInput.getMemberTooLongNameAPriori(), "120 - Edit Member With Name Longer Than 191 Characters - A-priori Data Pool");
-
-  createVRTReport();
+    // Scenario 01 - Create Post
+    await createPost(postInput.generatePostAPriori(), "001 - Create Post", browserName);
+    // Scenario 02 - Edit Post
+    await editPost({ create: postInput.generatePostAPriori(), edit: postInput.generatePostAPriori() }, "002 - Edit Post", browserName);
+    // Scenario 03 - Delete Post
+    await deletePost(postInput.generatePostAPriori(), "003 - Delete Post", browserName);
+    // Scenario 04 - Create Post With a Title Longer Than 255 Characters
+    await createPostWithLongTitle(postInput.generatePostWithLongTitleAPriori(), "004 - Create Post With a Title Longer Than 255 Characters", browserName);
+    // Scenario 05 - Edit Post With a Title Longer Than 255 Characters
+    await editPostWithLongTitle({ create: postInput.generatePostAPriori(), edit: postInput.generatePostWithLongTitleAPriori() }, "005 - Edit Post With a Title Longer Than 255 Characters", browserName);
+    // Scenario 06 - Create Post With a Excerpt Longer Than 300 Characters
+    await createPostWithLongExcerpt(postInput.generatePostWithLongExcerptAPriori(), "006 - Create Post With a Excerpt Longer Than 300 Characters", browserName);  
+    // Scenario 07 - Edit Post With a Excerpt Longer Than 300 Characters
+    await editPostWithLongExcerpt({ create: postInput.generatePostAPriori(), edit: postInput.generatePostWithLongExcerptAPriori() }, "007 - Edit Post With a Excerpt Longer Than 300 Characters", browserName);
+    // Scenario 08 - Create Tag With Huge Title
+    await createTagWithHugeTitle(tagInput.createTagHugePrioriValues(), "008 - Create Tag With Huge Title", browserName);
+    // Scenario 09 - Create Tag With Huge Description
+    await createTagWithHugeDescription(tagInput.createTagHugePrioriValues(), "009 - Create Tag With Huge Description", browserName);
+    // Scenario 10 - Settings - Set General Language With Huge Value
+    await settingsEditGeneralLanguageHugeValue(settingsInput.getHugeLanguagePrioriValue(), "010 - Settings - Set General Language With Huge Value", browserName);
+    // Scenario 11 - Create Page
+    await createPage_ValidData(pageInput.getValueFromJSON(), "011 - Create Page", browserName);
+    // Scenario 12 - Create Page Invalid Data
+    await createPage_InvalidData(pageInput.getValueFromJSON(), "012 - Create Page Invalid Data", browserName);
+    // Scenario 13 - Edit Page
+    await editPage_validData({ create: pageInput.getValueFromJSON(), edit: pageInput.getValueFromJSON() }, "013 - Edit Page", browserName);
+    // Scenario 14 - Edit Page Invalid Data
+    await editPage_InvalidData({ create: pageInput.getValueFromJSON(), edit: pageInput.getValueFromJSON() }, "014 - Edit Page Invalid Data", browserName);
+    // Scenario 15 - Preview Page
+    await previewPage_ValidData(pageInput.getValueFromJSON(), "015 - Preview Page", browserName);
+    // Scenario 16 - Preview Page Button
+    await previewPage_ButtonValidData(pageInput.getValueFromJSON(), "016 - Preview Page Button", browserName);
+    // Scenario 17 - Preview Page Button invalid Data
+    await previewPage_ButtonInvalidData(pageInput.getValueFromJSON(), "017 - Preview Page Button invalid Data", browserName);
+    // Scenario 18 - Filter Draft Page
+    await filterDraftPages_ValidData(pageInput.getValueFromJSON(), "018 - Filter Draft Page", browserName);
+    // Scenario 19 - Filter Draft Page Invalid Data
+    await filterDraftPages_InvalidData(pageInput.getValueFromJSON(), "019 - Filter Draft Page Invalid Data", browserName);
+    // Scenario 20 - Delete Page
+    await deletePage_ValidData(pageInput.getValueFromJSON(), "020 - Delete Page", browserName);
+    // Scenario 21 - Create Tag
+    await createTag(tagInput.createTagPrioriValues(), "021 - Create Tag", browserName);
+    // Scenario 22 - Edit Tag
+    await editTag(tagInput.editTagPrioriValues(), "022 - Edit Tag", browserName);
+    // Scenario 23 - Delete Tag
+    await deleteTag(tagInput.createTagPrioriValues(), "023 - Delete Tag", browserName);
+    // Scenario 24 - Create Tag With Metadata
+    await createTagWithMetadata(tagInput.createTagPrioriValues(), "024 - Create Tag With Metadata", browserName);
+    // Scenario 25 - Create Tag With X Card
+    await createTagWithXCardValues(tagInput.createTagPrioriValues(), "025 - Create Tag With X Card", browserName);  
+    // Scenario 26 - Settings - Set General Title and Description
+    await settingsEditTitleAndDescription(settingsInput.getPrioriValues(), "026 - Settings - Set General Title and Description", browserName);
+    // Scenario 27 - Settings - Set General Language
+    await settingsEditGeneralLanguage(settingsInput.getPrioriValues(), "027 - Settings - Set General Language", browserName);
+    // Scenario 28 - Settings - Edit Meta Data
+    await settingsEditMetaData(settingsInput.getPrioriValues(), "028 - Settings - Edit Meta Data", browserName);
+    // Scenario 29 - Settings - Edit X Card Data
+    await settingsEditXCardData(settingsInput.getPrioriValues(), "029 - Settings - Edit X Card Data", browserName);
+    // Scenario 30 - Settings - Edit Facebook Data
+    await settingsEditFacebookData(settingsInput.getPrioriValues(), "030 - Settings - Edit Facebook Data", browserName);
+    // Scenario 31 - Create Member
+    await createMember(membersInput.getMemberAPriori(), "031 - Create Member", browserName);
+    // Scenario 32 - Create Member With Empty Email
+    await createMemberWithEmptyEmail(membersInput.getMemberEmptyEmailAPriori(), "032 - Create Member With Empty Email", browserName);
+    // Scenario 33 - Create Member With Invalid Email
+    await createMemberWithInvalidEmail(membersInput.getMemberInvalidEmailAPriori(), "033 - Create Member With Invalid Email", browserName);
+    // Scenario 34 - Create Member With Note Longer Than 500 Characters
+    await createMemberWithTooLongNote(membersInput.getMemberTooLongNoteAPriori(), "034 - Create Member With Note Longer Than 500 Characters", browserName);
+    // Scenario 35 - Create Member With Name Longer Than 191 Characters
+    await createMemberWithTooLongName(membersInput.getMemberTooLongNameAPriori(), "035 - Create Member With Name Longer Than 191 Characters", browserName);
+    // Scenario 36 - Edit Member
+    await editMember({ create: membersInput.getMemberAPriori(), edit: membersInput.getMemberAPriori() }, "036 - Edit Member", browserName);
+    // Scenario 37 - Edit Member With Empty Email
+    await editMemberWithEmptyEmail({ create: membersInput.getMemberAPriori(), edit: membersInput.getMemberEmptyEmailAPriori() }, "037 - Edit Member With Empty Email", browserName);
+    // Scenario 38 - Edit Member With Invalid Email
+    await editMemberWithInvalidEmail({ create: membersInput.getMemberAPriori(), edit: membersInput.getMemberInvalidEmailAPriori() }, "038 - Edit Member With Invalid Email", browserName);
+    // Scenario 39 - Edit Member With Note Longer Than 500 Characters
+    await editMemberWithTooLongNote({ create: membersInput.getMemberAPriori(), edit: membersInput.getMemberTooLongNoteAPriori() }, "039 - Edit Member With Note Longer Than 500 Characters", browserName);
+    // Scenario 40 - Edit Member With Name Longer Than 191 Characters
+    await editMemberWithTooLongName({ create: membersInput.getMemberAPriori(), edit: membersInput.getMemberTooLongNameAPriori() }, "040 - Edit Member With Name Longer Than 191 Characters", browserName);
+    // Scenario 41 - Settings - Set Site Timezone
+    await settingsEditTimezone(null, "041 - Settings - Set Site Timezone", browserName);
+  }
+  else if (part == 3) {
+    createVRTReport();
+  }
 })();

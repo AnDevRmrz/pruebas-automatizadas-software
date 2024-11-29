@@ -80,7 +80,7 @@ function buildReportObject(directoryPath) {
   }
 
   return {
-    scenarioToTest: directoryPath.split("\\").pop(),
+    scenarioToTest: directoryPath.includes("\\") ? directoryPath.split("\\").pop() : directoryPath.split("/").pop(),
     imagesToCompare,
   };
 }
@@ -187,7 +187,7 @@ function generateHTMLIndex() {
         `<a href="${path.join(
           dir,
           "report.html"
-        )}" class="test-case-link">${dir.split("\\").pop()}</a>`
+        )}" class="test-case-link">${dir.includes("\\") ? dir.split("\\").pop() : dir.split("/").pop()}</a>`
     )
     .join("");
   return `

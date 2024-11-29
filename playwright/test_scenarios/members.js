@@ -3,14 +3,14 @@ const { expect } = require("@playwright/test");
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
 
-async function _before(scenarioName) {
-  const browser = await playwright["chromium"].launch({
+async function _before(scenarioName, browserType) {
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioName);
+  const scenario = new Scenario(page, scenarioName, browserType);
   scenario.begin();
 
   return { browser, scenario };
@@ -30,8 +30,8 @@ async function _login(scenario) {
   return await signInPage.signIn(email, password);
 }
 
-async function createMember(member, scenarioDesc) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function createMember(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -40,26 +40,24 @@ async function createMember(member, scenarioDesc) {
 
   // When
   await createEditMemberPage.saveMember(
-    member.name,
-    member.email,
-    member.label,
-    member.note
+    input.name,
+    input.email,
+    input.label,
+    input.note
   );
 
   // Then
   await listMembersPage.goto();
   const currentMembers = await listMembersPage.getMembersList();
   expect(
-    currentMembers.some(
-      (m) => m.name === member.name && m.email === member.email
-    )
+    currentMembers.some((m) => m.name === input.name && m.email === input.email)
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function createMemberWithEmptyEmail(member, scenarioDesc) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function createMemberWithEmptyEmail(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -68,10 +66,10 @@ async function createMemberWithEmptyEmail(member, scenarioDesc) {
 
   // When
   await createEditMemberPage.saveMember(
-    member.name,
-    member.email,
-    member.label,
-    member.note
+    input.name,
+    input.email,
+    input.label,
+    input.note
   );
   await createEditMemberPage.errorMessageIsDisplayed(
     "#member-email + p",
@@ -82,13 +80,13 @@ async function createMemberWithEmptyEmail(member, scenarioDesc) {
   await listMembersPage.goto();
   await createEditMemberPage.confirmLeavingPage();
   const currentMembers = await listMembersPage.getMembersList();
-  expect(currentMembers.every((m) => m.name !== member.name)).toBeTruthy();
+  expect(currentMembers.every((m) => m.name !== input.name)).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function createMemberWithInvalidEmail(member, scenarioDesc) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function createMemberWithInvalidEmail(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -97,10 +95,10 @@ async function createMemberWithInvalidEmail(member, scenarioDesc) {
 
   // When
   await createEditMemberPage.saveMember(
-    member.name,
-    member.email,
-    member.label,
-    member.note
+    input.name,
+    input.email,
+    input.label,
+    input.note
   );
   await createEditMemberPage.errorMessageIsDisplayed(
     "#member-email + p",
@@ -113,15 +111,15 @@ async function createMemberWithInvalidEmail(member, scenarioDesc) {
   const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.every(
-      (m) => m.name !== member.name && m.email !== member.email
+      (m) => m.name !== input.name && m.email !== input.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function createMemberWithTooLongNote(member, scenarioDesc) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function createMemberWithTooLongNote(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -130,10 +128,10 @@ async function createMemberWithTooLongNote(member, scenarioDesc) {
 
   // When
   await createEditMemberPage.saveMember(
-    member.name,
-    member.email,
-    member.label,
-    member.note
+    input.name,
+    input.email,
+    input.label,
+    input.note
   );
   await createEditMemberPage.errorMessageIsDisplayed(
     "#member-note + p",
@@ -146,15 +144,15 @@ async function createMemberWithTooLongNote(member, scenarioDesc) {
   const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.every(
-      (m) => m.name !== member.name && m.email !== member.email
+      (m) => m.name !== input.name && m.email !== input.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function createMemberWithTooLongName(member, scenarioDesc) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function createMemberWithTooLongName(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -163,10 +161,10 @@ async function createMemberWithTooLongName(member, scenarioDesc) {
 
   // When
   await createEditMemberPage.saveMember(
-    member.name,
-    member.email,
-    member.label,
-    member.note
+    input.name,
+    input.email,
+    input.label,
+    input.note
   );
   await createEditMemberPage.errorMessageIsDisplayed(
     "#member-name + p",
@@ -179,15 +177,15 @@ async function createMemberWithTooLongName(member, scenarioDesc) {
   const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.every(
-      (m) => m.name !== member.name && m.email !== member.email
+      (m) => m.name !== input.name && m.email !== input.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function editMember(memberToCreate, memberToEdit, scenarioDesc) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function editMember(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -196,38 +194,34 @@ async function editMember(memberToCreate, memberToEdit, scenarioDesc) {
 
   // When
   await createEditMemberPage.saveMember(
-    memberToCreate.name,
-    memberToCreate.email,
-    memberToCreate.label,
-    memberToCreate.note
+    input.create.name,
+    input.create.email,
+    input.create.label,
+    input.create.note
   );
   await listMembersPage.goto();
-  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await listMembersPage.editMember(input.create.name, input.create.email);
 
   // Then
   await createEditMemberPage.saveMember(
-    memberToEdit.name,
-    memberToEdit.email,
-    memberToEdit.label,
-    memberToEdit.note
+    input.edit.name,
+    input.edit.email,
+    input.edit.label,
+    input.edit.note
   );
   await listMembersPage.goto();
   const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
-      (m) => m.name === memberToEdit.name && m.email === memberToEdit.email
+      (m) => m.name === input.edit.name && m.email === input.edit.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function editMemberWithEmptyEmail(
-  memberToCreate,
-  memberToEdit,
-  scenarioDesc
-) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function editMemberWithEmptyEmail(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -236,18 +230,18 @@ async function editMemberWithEmptyEmail(
 
   // When
   await createEditMemberPage.saveMember(
-    memberToCreate.name,
-    memberToCreate.email,
-    memberToCreate.label,
-    memberToCreate.note
+    input.create.name,
+    input.create.email,
+    input.create.label,
+    input.create.note
   );
   await listMembersPage.goto();
-  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await listMembersPage.editMember(input.create.name, input.create.email);
   await createEditMemberPage.saveMember(
-    memberToEdit.name,
-    memberToEdit.email,
-    memberToEdit.label,
-    memberToEdit.note
+    input.edit.name,
+    input.edit.email,
+    input.edit.label,
+    input.edit.note
   );
   await createEditMemberPage.errorMessageIsDisplayed(
     "#member-email + p",
@@ -258,17 +252,13 @@ async function editMemberWithEmptyEmail(
   await listMembersPage.goto();
   await createEditMemberPage.confirmLeavingPage();
   const currentMembers = await listMembersPage.getMembersList();
-  expect(currentMembers.some((m) => m.name !== memberToEdit.name)).toBeTruthy();
+  expect(currentMembers.some((m) => m.name !== input.edit.name)).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function editMemberWithInvalidEmail(
-  memberToCreate,
-  memberToEdit,
-  scenarioDesc
-) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function editMemberWithInvalidEmail(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -277,18 +267,18 @@ async function editMemberWithInvalidEmail(
 
   // When
   await createEditMemberPage.saveMember(
-    memberToCreate.name,
-    memberToCreate.email,
-    memberToCreate.label,
-    memberToCreate.note
+    input.create.name,
+    input.create.email,
+    input.create.label,
+    input.create.note
   );
   await listMembersPage.goto();
-  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await listMembersPage.editMember(input.create.name, input.create.email);
   await createEditMemberPage.saveMember(
-    memberToEdit.name,
-    memberToEdit.email,
-    memberToEdit.label,
-    memberToEdit.note
+    input.edit.name,
+    input.edit.email,
+    input.edit.label,
+    input.edit.note
   );
   await createEditMemberPage.errorMessageIsDisplayed(
     "#member-email + p",
@@ -301,19 +291,15 @@ async function editMemberWithInvalidEmail(
   const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
-      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
+      (m) => m.name !== input.edit.name && m.email !== input.edit.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function editMemberWithTooLongNote(
-  memberToCreate,
-  memberToEdit,
-  scenarioDesc
-) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function editMemberWithTooLongNote(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -322,18 +308,18 @@ async function editMemberWithTooLongNote(
 
   // When
   await createEditMemberPage.saveMember(
-    memberToCreate.name,
-    memberToCreate.email,
-    memberToCreate.label,
-    memberToCreate.note
+    input.create.name,
+    input.create.email,
+    input.create.label,
+    input.create.note
   );
   await listMembersPage.goto();
-  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await listMembersPage.editMember(input.create.name, input.create.email);
   await createEditMemberPage.saveMember(
-    memberToEdit.name,
-    memberToEdit.email,
-    memberToEdit.label,
-    memberToEdit.note
+    input.edit.name,
+    input.edit.email,
+    input.edit.label,
+    input.edit.note
   );
   await createEditMemberPage.errorMessageIsDisplayed(
     "#member-note + p",
@@ -346,19 +332,15 @@ async function editMemberWithTooLongNote(
   const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
-      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
+      (m) => m.name !== input.edit.name && m.email !== input.edit.email
     )
   ).toBeTruthy();
 
   return await _after(browser, scenario);
 }
 
-async function editMemberWithTooLongName(
-  memberToCreate,
-  memberToEdit,
-  scenarioDesc
-) {
-  const { browser, scenario } = await _before(scenarioDesc);
+async function editMemberWithTooLongName(input, scenarioDesc, browserType) {
+  const { browser, scenario } = await _before(scenarioDesc, browserType);
 
   // Given
   const dashboard = await _login(scenario);
@@ -367,18 +349,18 @@ async function editMemberWithTooLongName(
 
   // When
   await createEditMemberPage.saveMember(
-    memberToCreate.name,
-    memberToCreate.email,
-    memberToCreate.label,
-    memberToCreate.note
+    input.create.name,
+    input.create.email,
+    input.create.label,
+    input.create.note
   );
   await listMembersPage.goto();
-  await listMembersPage.editMember(memberToCreate.name, memberToCreate.email);
+  await listMembersPage.editMember(input.create.name, input.create.email);
   await createEditMemberPage.saveMember(
-    memberToEdit.name,
-    memberToEdit.email,
-    memberToEdit.label,
-    memberToEdit.note
+    input.edit.name,
+    input.edit.email,
+    input.edit.label,
+    input.edit.note
   );
   await createEditMemberPage.errorMessageIsDisplayed(
     "#member-name + p",
@@ -391,7 +373,7 @@ async function editMemberWithTooLongName(
   const currentMembers = await listMembersPage.getMembersList();
   expect(
     currentMembers.some(
-      (m) => m.name !== memberToEdit.name && m.email !== memberToEdit.email
+      (m) => m.name !== input.edit.name && m.email !== input.edit.email
     )
   ).toBeTruthy();
 

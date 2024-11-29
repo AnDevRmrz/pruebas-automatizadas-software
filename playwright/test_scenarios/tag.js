@@ -37,12 +37,12 @@ async function createTag(input, scenarioDesc, browserType) {
   return ;
 }
 
-async function editTag(input, scenarioDesc) {
+async function editTag(input, scenarioDesc, browserType) {
   
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const browser = await playwright[browserType].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -80,12 +80,12 @@ async function editTag(input, scenarioDesc) {
   return ;
 }
 
-async function deleteTag(input, scenarioDesc) {
+async function deleteTag(input, scenarioDesc, browserType) {
   
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const browser = await playwright[browserType].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -118,12 +118,12 @@ async function deleteTag(input, scenarioDesc) {
   return ;
 }
 
-async function createTagWithMetadata(input, scenarioDesc) {  
+async function createTagWithMetadata(input, scenarioDesc, browserType) {  
   
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const browser = await playwright[browserType].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -156,12 +156,12 @@ async function createTagWithMetadata(input, scenarioDesc) {
   return ;
 }
 
-async function createTagWithXCardValues(input, scenarioDesc) {  
+async function createTagWithXCardValues(input, scenarioDesc, browserType) {  
   
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const browser = await playwright[browserType].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -192,12 +192,12 @@ async function createTagWithXCardValues(input, scenarioDesc) {
   return ;
 }
 
-async function createTagWithHugeTitle(input, scenarioDesc) {
+async function createTagWithHugeTitle(input, scenarioDesc, browserType) {
   
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const browser = await playwright[browserType].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -225,12 +225,12 @@ async function createTagWithHugeTitle(input, scenarioDesc) {
   return ;
 }
 
-async function createTagWithHugeDescription(input, scenarioDesc) {
+async function createTagWithHugeDescription(input, scenarioDesc, browserType) {
   
-  const browser = await playwright["chromium"].launch({ headless: false, slowMo: 50});
+  const browser = await playwright[browserType].launch({ headless: false, slowMo: 50});
   const context = await browser.newContext();
   const page = await context.newPage();  
-  const scenario = new Scenario(page, scenarioDesc);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
