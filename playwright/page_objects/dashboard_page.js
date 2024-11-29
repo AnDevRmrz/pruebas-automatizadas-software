@@ -3,6 +3,7 @@ const { SettingsPage } = require("./settings_page");
 const { ListMembersPage } = require("./list_members_page");
 const { ListFilterDeletePage } = require("./list_filter_delete_page");
 const { ListPostsPage } = require("./list_posts_page");
+const { ViewSitePage } = require("./view_site_page");
 
 exports.DashboardPage = class DashboardPage {
   constructor(scenario) {

@@ -11,6 +11,8 @@ const { tagInput } = require("./playwright/input_data/tag_input_data");
 const { settingsInput } = require("./playwright/input_data/settings_input_data");
 const { membersInput } = require("./playwright/input_data/member_input_data");
 const { createVRTReport } = require('./vrt/report/report_generation');
+const { multiFeatureTest1, multiFeatureTest2, multiFeatureTest3, multiFeatureTest4, multiFeatureTest5 } = require("./playwright/test_scenarios/multi_features");
+const { multiFeatureInput } = require("./playwright/input_data/multi_feature_data");
 
 (async () => {
 
@@ -109,6 +111,16 @@ const { createVRTReport } = require('./vrt/report/report_generation');
     await editMemberWithTooLongName({ create: membersInput.getMemberAPriori(), edit: membersInput.getMemberTooLongNameAPriori() }, "040 - Edit Member With Name Longer Than 191 Characters", browserName);
     // Scenario 41 - Settings - Set Site Timezone
     await settingsEditTimezone(null, "041 - Settings - Set Site Timezone", browserName);
+    // Scenario 42 - Create Tag - Create Post using Tag - Update Tag - Validate changes in Created Post
+    await multiFeatureTest1(multiFeatureInput.getMultiFeatureInput(), "042 - Create Tag - Create Post using Tag - Update Tag - Validate changes in Created Post", browserName);
+    // Scenario 43 - Create Tag - Create Page using Tag - Update Tag - Validate changes in Created Page
+    await multiFeatureTest2(multiFeatureInput.getMultiFeatureInput(), "043 - Create Tag - Create Page using Tag - Update Tag - Validate changes in Created Page", browserName);
+    // Scenario 44 - Create Tag - Create Post using Tag - Delete Tag - Validate changes in Created Post
+    await multiFeatureTest3(multiFeatureInput.getMultiFeatureInput(), "044 - Create Tag - Create Post using Tag - Delete Tag - Validate changes in Created Post", browserName);
+    // Scenario 45 - Create Tag - Create Page using Tag - Delete Tag - Validate changes in Created Page
+    await multiFeatureTest4(multiFeatureInput.getMultiFeatureInput(), "045 - Create Tag - Create Page using Tag - Delete Tag - Validate changes in Created Page", browserName);
+    // Scenario 46 - Change Settings Title and Description - Go to View Site - Validate new values
+    await multiFeatureTest5(multiFeatureInput.getMultiFeatureInput(), "046 - Change Settings Title and Description - Go to View Site - Validate new values", browserName);
   }
   else if (part == 3) {
     createVRTReport();
