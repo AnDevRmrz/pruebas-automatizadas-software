@@ -12,6 +12,7 @@ exports.DashboardPage = class DashboardPage {
     this.pageOption = scenario.getPage().locator("a[data-test-nav=pages]")
     this.membersOption = scenario.getPage().locator("a[data-test-nav=members]");
     this.postsOption = scenario.getPage().locator("a[data-test-nav=posts]");
+    this.viewSiteOption = scenario.getPage().locator("a[data-test-nav=site]");
   }
 
   async goto() {
@@ -53,5 +54,12 @@ exports.DashboardPage = class DashboardPage {
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
     return new ListPostsPage(this.scenario);
+  }
+
+  async goToViewSite() {
+    await this.viewSiteOption.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+    return new ViewSitePage(this.scenario);
   }
 };

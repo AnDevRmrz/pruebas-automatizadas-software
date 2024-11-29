@@ -11,6 +11,8 @@ const { tagInput } = require("./playwright/input_data/tag_input_data");
 const { settingsInput } = require("./playwright/input_data/settings_input_data");
 const { membersInput } = require("./playwright/input_data/member_input_data");
 const { createVRTReport } = require('./vrt/report/report_generation');
+const { multiFeatureInput } = require("./playwright/input_data/multi_feature_data");
+const { multiFeatureTest1, multiFeatureTest3 } = require("./playwright/test_scenarios/multi_features");
 
 async function executeScenario(scenarioToExecute, input, scenarioName) {  
 
@@ -35,10 +37,12 @@ function cleanResults() {
   await signUpPage.goto();
   await signUpPage.fillForm("title", "fullname", "alguien@hotmail.com", "123456#213asdf");
   await browser.close();
+  
+  // await multiFeatureTest1(multiFeatureInput.getMultiFeatureInput(), "Multi_Feature_1", "chromium");
+  // await multiFeatureTest1(multiFeatureInput.getMultiFeatureInput(), "Multi_Feature_1", "firefox");
 
-  await executeScenario(createTag, tagInput.createTagPrioriValues(), "063_Create_Tag_1");
-
-  await executeScenario(createTag, tagInput.createTagPrioriValues(), "063_Create_Tag_2");
+  await multiFeatureTest3(multiFeatureInput.getMultiFeatureInput(), "Multi_Feature_3", "chromium");
+  await multiFeatureTest3(multiFeatureInput.getMultiFeatureInput(), "Multi_Feature_3", "firefox");
   
 
   // Scenario 21

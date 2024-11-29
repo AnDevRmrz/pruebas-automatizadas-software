@@ -10,6 +10,7 @@ exports.CreateEditPostPage = class CreateEditPostPage {
       );
     this.postContentInput = scenario.getPage().locator(".kg-prose").first();
     this.excerptInput = scenario.getPage().locator("#custom-excerpt").first();
+    this.tagInput = scenario.getPage().locator("#tag-input input").first();
     this.publishButton = scenario
       .getPage()
       .locator('[data-test-button="publish-flow"]')
@@ -44,6 +45,14 @@ exports.CreateEditPostPage = class CreateEditPostPage {
     if (post.excerpt) {
       this.settingsButton.click();
       await this.excerptInput.fill(post.excerpt);
+    }
+
+    if (post.tag) {
+      this.settingsButton.click();
+      await this.tagInput.fill(post.tag);
+      await this.tagInput.press('Enter');
+      await new Promise((r) => setTimeout(r, 1000));
+      await this.scenario.screenshot();
     }
 
     await this.publishButton.click();
@@ -117,5 +126,25 @@ exports.CreateEditPostPage = class CreateEditPostPage {
     await this.leaveButton.click();
     await new Promise((r) => setTimeout(r, 1000));
     await this.scenario.screenshot();
+  }
+
+  async getCurrentTags() {
+
+    this.settingsButton.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+    const tagElements = await this.scenario.getPage().locator("#tag-input li span[data-test-selected-token]").all();
+    var tags = [];
+
+    for (const tagHtml of tagElements) {
+      
+      let name = await tagHtml.innerText();
+      
+      tags.push({
+        name: name
+      });
+    }
+
+    return tags;
   }
 };
