@@ -21,6 +21,11 @@ exports.CreatePagePage = class CreatePagePage {
       buttonInputUrl: '[data-testid="button-input-url"]',
       savingStatusText:'div[data-test-editor-post-status]'
     };
+    this.settingsButton = scenario
+      .getPage()
+      .locator('button[title="Settings"]')
+      .first();
+    this.tagInput = scenario.getPage().locator("#tag-input input").first();
   }
 
   async goto() {
@@ -68,7 +73,8 @@ exports.CreatePagePage = class CreatePagePage {
     interrupt = false,
     invalid = false,
     empty = false,
-    button = false
+    button = false,
+    tag = ""
   ) {
     try {
       const editPreviewPage = new EditPreviewPagePage(this.scenario);
@@ -111,6 +117,16 @@ exports.CreatePagePage = class CreatePagePage {
             } else {
               await this.fillTitle(title);
               await this.fillDescription(description);
+
+              if(tag) {
+
+                this.settingsButton.click();
+                await this.tagInput.fill(tag);
+                await this.tagInput.press('Enter');
+                await new Promise((r) => setTimeout(r, 1000));
+                await this.scenario.screenshot();
+              }
+
               await this.publishPage();
               await this.waitForLoad();
             }
@@ -225,5 +241,25 @@ exports.CreatePagePage = class CreatePagePage {
       errorText ===
       "Validation failed: Title cannot be longer than 255 characters."
     );
+  }
+
+  async getCurrentTags() {
+
+    this.settingsButton.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();
+    const tagElements = await this.scenario.getPage().locator("#tag-input li span[data-test-selected-token]").all();
+    var tags = [];
+
+    for (const tagHtml of tagElements) {
+      
+      let name = await tagHtml.innerText();
+      
+      tags.push({
+        name: name
+      });
+    }
+
+    return tags;
   }
 };

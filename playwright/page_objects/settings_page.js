@@ -9,6 +9,7 @@ exports.SettingsPage = class SettingsPage {
     this.editFacebookButton = scenario.getPage().locator("div[data-testid='facebook'] button");
 
     this.editTimezoneButton = scenario.getPage().locator("div[data-testid='timezone'] button");
+    this.exitButton = scenario.getPage().locator("button[data-testid='exit-settings']");
   }
 
   async goto() {
@@ -198,5 +199,12 @@ exports.SettingsPage = class SettingsPage {
 
     let errorMessage = await this.scenario.getPage().locator("div[data-testid='toast-error']");
     return await errorMessage.innerText();
+  }
+
+  async closeSettings() {
+
+    this.exitButton.click();
+    await new Promise((r) => setTimeout(r, 1000));
+    await this.scenario.screenshot();    
   }
 };
