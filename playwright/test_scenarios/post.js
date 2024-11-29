@@ -2,62 +2,15 @@ const { SignInPage } = require("../page_objects/sign_in_page");
 const { expect } = require("@playwright/test");
 const playwright = require("playwright");
 const { Scenario } = require("../util/util");
-const browsers = ["chromium", "firefox", "webkit"];
 
-async function createPost(post, scenarioDescription) {
-  for (const browserName of browsers) {
-    const browser = await playwright[browserName].launch({
-      headless: false,
-      slowMo: 50,
-    });
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    const scenario = new Scenario(
-      page,
-      scenarioDescription + " - " + browserName
-    );
-    scenario.begin();
-
-    const email = "alguien@hotmail.com";
-    const password = "123456#213asdf";
-    const expectedPostStatus = "Published";
-
-    // Given
-    const signInPage = new SignInPage(scenario);
-    await signInPage.goto();
-    const dashboard = await signInPage.signIn(email, password);
-    const listPostsPage = await dashboard.goToPosts();
-    const createPostPage = await listPostsPage.goToNewPost();
-
-    // When
-    await createPostPage.savePost(post);
-
-    // Then
-    expect(
-      await listPostsPage.verifyIfPostWasCreated(post.title, post.content)
-    ).toBeTruthy();
-
-    await listPostsPage.closeSuccessfulModal();
-    const currentPosts = await listPostsPage.getListOfPosts();
-    expect(
-      currentPosts.some(
-        (p) => p.title === post.title && p.status === expectedPostStatus
-      )
-    ).toBeTruthy();
-    await browser.close();
-    scenario.successful();
-  }
-  return;
-}
-
-async function createPostWithLongTitle(post, scenarioDescription) {
-  const browser = await playwright["chromium"].launch({
+async function createPost(input, scenarioDesc, browserType) {
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDescription);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -72,7 +25,48 @@ async function createPostWithLongTitle(post, scenarioDescription) {
   const createPostPage = await listPostsPage.goToNewPost();
 
   // When
-  await createPostPage.savePost(post, true);
+  await createPostPage.savePost(input);
+
+  // Then
+  expect(
+    await listPostsPage.verifyIfPostWasCreated(input.title, input.content)
+  ).toBeTruthy();
+
+  await listPostsPage.closeSuccessfulModal();
+  const currentPosts = await listPostsPage.getListOfPosts();
+  expect(
+    currentPosts.some(
+      (p) => p.title === input.title && p.status === expectedPostStatus
+    )
+  ).toBeTruthy();
+  await browser.close();
+  scenario.successful();
+  return;
+}
+
+async function createPostWithLongTitle(input, scenarioDesc, browserType) {
+  const browser = await playwright[browserType].launch({
+    headless: false,
+    slowMo: 50,
+  });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const scenario = new Scenario(page, scenarioDesc, browserType);
+  scenario.begin();
+
+  const email = "alguien@hotmail.com";
+  const password = "123456#213asdf";
+  const expectedPostStatus = "Published";
+
+  // Given
+  const signInPage = new SignInPage(scenario);
+  await signInPage.goto();
+  const dashboard = await signInPage.signIn(email, password);
+  const listPostsPage = await dashboard.goToPosts();
+  const createPostPage = await listPostsPage.goToNewPost();
+
+  // When
+  await createPostPage.savePost(input, true);
 
   // Then
   await createPostPage.checkErrorAlert(
@@ -83,7 +77,7 @@ async function createPostWithLongTitle(post, scenarioDescription) {
   const currentPosts = await listPostsPage.getListOfPosts();
   expect(
     currentPosts.some(
-      (p) => p.title === post.title && p.status === expectedPostStatus
+      (p) => p.title === input.title && p.status === expectedPostStatus
     )
   ).toBeFalsy();
   await browser.close();
@@ -91,14 +85,14 @@ async function createPostWithLongTitle(post, scenarioDescription) {
   return;
 }
 
-async function createPostWithLongExcerpt(post, scenarioDescription) {
-  const browser = await playwright["chromium"].launch({
+async function createPostWithLongExcerpt(input, scenarioDesc, browserType) {
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDescription);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -113,7 +107,7 @@ async function createPostWithLongExcerpt(post, scenarioDescription) {
   const createPostPage = await listPostsPage.goToNewPost();
 
   // When
-  await createPostPage.savePost(post, true);
+  await createPostPage.savePost(input, true);
 
   // Then
   await createPostPage.checkErrorAlert(
@@ -124,7 +118,7 @@ async function createPostWithLongExcerpt(post, scenarioDescription) {
   const currentPosts = await listPostsPage.getListOfPosts();
   expect(
     currentPosts.some(
-      (p) => p.title === post.title && p.status === expectedPostStatus
+      (p) => p.title === input.title && p.status === expectedPostStatus
     )
   ).toBeFalsy();
   await browser.close();
@@ -132,14 +126,14 @@ async function createPostWithLongExcerpt(post, scenarioDescription) {
   return;
 }
 
-async function editPost(postToCreate, postToEdit, scenarioDescription) {
-  const browser = await playwright["chromium"].launch({
+async function editPost(input, scenarioDesc, browserType) {
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDescription);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -152,21 +146,21 @@ async function editPost(postToCreate, postToEdit, scenarioDescription) {
   const dashboard = await signInPage.signIn(email, password);
   const listPostsPage = await dashboard.goToPosts();
   const createPostPage = await listPostsPage.goToNewPost();
-  await createPostPage.savePost(postToCreate);
+  await createPostPage.savePost(input.create);
   await listPostsPage.closeSuccessfulModal();
 
   // When
   const createEditPostPage = await listPostsPage.goToEditPost(
-    postToCreate.title
+    input.create.title
   );
-  await createEditPostPage.updatePost(postToEdit);
+  await createEditPostPage.updatePost(input.edit);
 
   // Then
   await listPostsPage.goto();
   const currentPosts = await listPostsPage.getListOfPosts();
   expect(
     currentPosts.some(
-      (p) => p.title === postToEdit.title && p.status === expectedPostStatus
+      (p) => p.title === input.edit.title && p.status === expectedPostStatus
     )
   ).toBeTruthy();
   await browser.close();
@@ -174,18 +168,14 @@ async function editPost(postToCreate, postToEdit, scenarioDescription) {
   return;
 }
 
-async function editPostWithLongTitle(
-  postToCreate,
-  postToEdit,
-  scenarioDescription
-) {
-  const browser = await playwright["chromium"].launch({
+async function editPostWithLongTitle(input, scenarioDesc, browserType) {
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDescription);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -198,14 +188,14 @@ async function editPostWithLongTitle(
   const dashboard = await signInPage.signIn(email, password);
   const listPostsPage = await dashboard.goToPosts();
   const createPostPage = await listPostsPage.goToNewPost();
-  await createPostPage.savePost(postToCreate);
+  await createPostPage.savePost(input.create);
   await listPostsPage.closeSuccessfulModal();
 
   // When
   const createEditPostPage = await listPostsPage.goToEditPost(
-    postToCreate.title
+    input.create.title
   );
-  await createEditPostPage.updatePost(postToEdit);
+  await createEditPostPage.updatePost(input.edit);
 
   // Then
   await createPostPage.checkErrorAlert(
@@ -216,7 +206,7 @@ async function editPostWithLongTitle(
   const currentPosts = await listPostsPage.getListOfPosts();
   expect(
     currentPosts.some(
-      (p) => p.title === postToEdit.title && p.status === expectedPostStatus
+      (p) => p.title === input.edit.title && p.status === expectedPostStatus
     )
   ).toBeFalsy();
   await browser.close();
@@ -224,18 +214,14 @@ async function editPostWithLongTitle(
   return;
 }
 
-async function editPostWithLongExcerpt(
-  postToCreate,
-  postToEdit,
-  scenarioDescription
-) {
-  const browser = await playwright["chromium"].launch({
+async function editPostWithLongExcerpt(input, scenarioDesc, browserType) {
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDescription);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
@@ -248,14 +234,14 @@ async function editPostWithLongExcerpt(
   const dashboard = await signInPage.signIn(email, password);
   const listPostsPage = await dashboard.goToPosts();
   const createPostPage = await listPostsPage.goToNewPost();
-  await createPostPage.savePost(postToCreate);
+  await createPostPage.savePost(input.create);
   await listPostsPage.closeSuccessfulModal();
 
   // When
   const createEditPostPage = await listPostsPage.goToEditPost(
-    postToCreate.title
+    input.create.title
   );
-  await createEditPostPage.updatePost(postToEdit);
+  await createEditPostPage.updatePost(input.edit);
 
   // Then
   await createPostPage.checkErrorAlert(
@@ -266,7 +252,7 @@ async function editPostWithLongExcerpt(
   const currentPosts = await listPostsPage.getListOfPosts();
   expect(
     currentPosts.some(
-      (p) => p.title === postToEdit.title && p.status === expectedPostStatus
+      (p) => p.title === input.edit.title && p.status === expectedPostStatus
     )
   ).toBeFalsy();
   await browser.close();
@@ -274,14 +260,14 @@ async function editPostWithLongExcerpt(
   return;
 }
 
-async function deletePost(post, scenarioDescription) {
-  const browser = await playwright["chromium"].launch({
+async function deletePost(post, scenarioDesc, browserType) {
+  const browser = await playwright[browserType].launch({
     headless: false,
     slowMo: 50,
   });
   const context = await browser.newContext();
   const page = await context.newPage();
-  const scenario = new Scenario(page, scenarioDescription);
+  const scenario = new Scenario(page, scenarioDesc, browserType);
   scenario.begin();
 
   const email = "alguien@hotmail.com";
