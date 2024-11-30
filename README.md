@@ -59,5 +59,7 @@ Si desea realizar una nueva ejecución de pruebas E2E con los dos navegadores, p
 - Si previamente se crea un elemento y, debido a la aleatoriedad de los datos, en otro escenario se utilizan los mismos datos en una prueba de eliminación, el test podría fallar. Esto ocurriría porque se realizaría una validación que contempla que el elemento ya no debería estar presente en el listado de objetos.
 
 ### Reporte VRT
+Para observar el resultado de los reporte generados, por favor dirijase a la siguiente ruta `%ruta de descarga de repo%/vrt/output` y abra el archivo `index.html`. Debera observar una página web como la siguiente:
+
 ![image](https://github.com/user-attachments/assets/d38f920d-b5af-48dc-804f-b03a031fde43)
 ![image](https://github.com/user-attachments/assets/3a5ca39c-1140-478f-ace7-b4f6c3957230)
