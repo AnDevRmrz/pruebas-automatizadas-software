@@ -33,11 +33,11 @@ En este componente tenemos que preparar las dependencias de 1 módulo Node js. B
 
 ### Ejecución pruebas E2E
 
-Las pruebas ejecutadas en Chromium y en Firefox no se pueden ejecutar de seguido ya que cada escenario estará iniciando sesión al principio. Cuando se inicia sesión más de 90 veces, Ghost tiene un mecanismo de bloqueo, por lo que no permitirá que se inicie sesión de nuevo.
+Las pruebas E2E en Chromium y en Firefox no se pueden ejecutar de seguido ya que cada escenario estará iniciando sesión al principio. Cuando se inicia sesión más de 90 veces, Ghost tiene un mecanismo de bloqueo, por lo que no permitirá que se inicie sesión de nuevo.
 
 Debido a lo anterior, se divide la ejecución dependiendo de la accion que se quiera ejecutar de la siguiente forma:
 
-Los siguientes comandos deben ejecutados en la ruta donde se descargo el repositorio
+Los siguientes comandos deben ser ejecutados en la ruta donde se descargó el repositorio
 
 Para ejecutar las pruebas E2E utilizando Chromium se debe correr el siguiente comando:
 
@@ -51,6 +51,8 @@ Cada ejecución de pruebas debe tener una instancia de Docker reiniciada (Cold S
 
 Para generar el reporte VRT se debe ejecutar el siguiente comando:
 - `node index.js 3`
+
+Si desea realizar una nueva ejecución de pruebas E2E con los dos navegadores, por favor elimina primero todo el contenido de la carpeta test-results.
 
 ### Consideraciones
 
